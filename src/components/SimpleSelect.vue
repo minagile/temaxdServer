@@ -1,0 +1,991 @@
+<template>
+  <div class="simple-select">
+    <p>首先，请告诉我们您需要什么类型的创意？</p>
+    <div class="progress" v-show="isPackageShow">
+      <span class="circle big"></span>
+      <span class="circle c"></span>
+      <span class="circle c"></span>
+      <span class="circle c"></span>
+      <span class="circle c"></span>
+      <span class="circle c"></span>
+    </div>
+    <div class="progress" v-show="!isPackageShow">
+      <span class="circle"></span>
+      <span class="circle"></span>
+      <span class="circle"></span>
+      <span class="circle"></span>
+      <span class="circle big"></span>
+      <span class="circle c"></span>
+    </div>
+    <div class="content" id="content">
+      <div class="classify" id="kinds">
+        <div class="classify-box" v-for="(item, index) in data" :key="index"
+        @click="chooseKind($event, index)"
+        @mouseenter="move($event, index)"
+        @mouseleave="leave($event, index)">
+          <div class="icon">
+            <img :src="imgIcon" alt="">
+          </div>
+          <div class="kind-name">
+            <img :src="item.img" alt="">
+            <span>{{item.title}}</span>
+          </div>
+        </div>
+        <div class="mouse-enter" id="detail">
+          <div class="classify-detail" v-for="(items, index) in data" :key="index">
+            <span class="arrow"></span>
+            <div class="cover">
+              <div class="popup" v-for="(item, i) in obj[index]" :key="i">
+                <img :src="item.imgsrc" alt="">
+                <span>{{item.text}}</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- click 单项选择 -->
+      <div class="deposit" v-show="isSingel">
+        <!-- 选中后出现的内容 -->
+        <div class="border" v-for="(data, index) in chooseList" :key="index">
+          <div class="choose">
+            <div class="left_part">
+              <h2>{{data.chooseObj.type}}</h2>
+              <!-- 点击切换选择 -->
+              <div class="kinds" v-for="(laberItem, i) in data.chooseObj.typeList" :key="i">
+                <div class="first" @click="selectType($event, i)">{{laberItem.listSingel}}</div>
+              </div>
+            </div>
+            <div class="right_part">
+              <div class="right_top">
+                <h6>请选择任务明细</h6>
+                <div class="changeTab">
+                  <div class="task" v-for="(laberItem, i) in data.chooseObj.typeList" :key="i">
+                    <div class="checkbox" v-for="(data, iIndex) in laberItem.selectList" :key="iIndex">
+                      <input type="checkbox" name="logo" :value="data" @click="taskChoose($event, i, index, iIndex, data.id)" />
+                      <span>{{data.name}}</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="right_bottom" v-if="isclick">
+                <h6>可填写确定数量和大概范围</h6>
+                <div class="range" v-for="(num, n) in datalist[index].select" :key="n">
+                  <div class="tit">{{num.text}}</div>
+                  <div class="add">
+                    <div class="num">
+                      <span @click="chooseNumOrRange($event)">数量</span>
+                      <div class="rangeChangeNum">
+                        <span @click="numberRange($event, 0)">数量</span>
+                        <span @click="numberRange($event, 1)">范围</span>
+                      </div>
+                      <div class="over">
+                        <div class="inputNum">
+                          <div class="range_box">
+                            <input type="number">
+                          </div>
+                          <div class="range_box">
+                            <input class="r" type="number">~<input class="r" type="number">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <span class="ge">个</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- click 套餐模式 -->
+      <div class="deposit model" v-show="!isSingel">
+        <!-- choose content -->
+        <div class="border" v-for="(data, index) in chooseList" :key="index">
+          <div class="choose">
+            <div class="left_part">
+              <h2>{{ data.chooseObj.type }}</h2>
+              <div class="level" v-for="(item, i) in data.chooseObj.level" :key="i">
+                <div class="first" @click="levelList($event, i)">{{ item.Title }}</div>
+              </div>
+            </div>
+            <div class="right_part">
+              <div class="right_top">
+                <h6>请选择任务明细</h6>
+                <div class="task">
+                  <div class="checkbox" v-for="(data, k) in data.chooseObj.list" :key="k">
+                    <input type="checkbox" name="logo" :value="data" @click="taskChoose($event, k, index)" />{{data}}
+                  </div>
+                </div>
+              </div>
+              <div class="choose_price">
+                <div class="all_price" v-for="(idata, iIndex) in data.chooseObj.level" :key="iIndex">
+                  <div class="price_c" v-for="(items, k) in idata.Price" :key="k" @click.stop="HowLong($event, items, index)">
+                    <div class="icon">
+                      <div class="circle_icon">{{items[1]}}</div>
+                    </div>
+                    <span>{{items[0]}}</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="remarks" >
+              <div class="remarkbox">
+                <div class="remarks-words" v-for="(item, i) in data.chooseObj.level" :key="i">{{item.Remarks}}</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="total-money" v-show="isClick">
+          <div class="server_model">服务模式</div>
+          <div class="choice">
+            <input class="laber_radio" type="radio" checked/>
+            <div class="laber_checked"></div>
+            <span>套餐</span>
+          </div>
+          <div class="tol">总计 {{ totalPrice }}元</div>
+        </div>
+      </div>
+      <div class="btn" v-show="isClick">
+        <router-link class="back"  v-show="!isSingel" to="introcompany">返回</router-link>
+        <a class="link" @click="nextPage">
+          <button>继 续</button>
+        </a>
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+// 单项数据
+import DataType from '../assets/singleList.json'
+// 套餐数据
+import PackageData from '../assets/levelPrice.json'
+// 图片
+import { ImgUrl, Graphic, Retailers, Interaction, PackingDesign, Category, Complete } from '../assets/img/index'
+export default {
+  name: 'simpleselect',
+  data () {
+    return {
+      data: [
+        {
+          'title':'平面',
+          'img': ImgUrl.plane
+        }, 
+        {
+          'title':'电商',
+          'img': ImgUrl.online
+        }, 
+        {
+          'title':'网络互动',
+          'img': ImgUrl.web
+        }, 
+        {
+          'title':'包装',
+          'img': ImgUrl.pack
+        }
+      ],
+      chooseList: [],
+      list: [],
+      // 鼠标移动显示
+      obj: [
+        [
+          {
+            'text':'品牌形象',
+            'imgsrc': Graphic.BrandImg
+          },
+          {
+            'text':'海报/平面广告',
+            'imgsrc': Graphic.Poster
+          },
+          {
+            'text':'画册/书籍',
+            'imgsrc': Graphic.Album
+          },
+          {
+            'text':'宣传品',
+            'imgsrc': Graphic.Propaganda
+          },
+          {
+            'text':'PPT/演示',
+            'imgsrc': Graphic.Demonstration
+          },
+          {
+            'text':'卡劵创意',
+            'imgsrc': Graphic.Originality
+          },
+          {
+            'text':'其他创意',
+            'imgsrc': Graphic.OtherIdeas
+          }
+        ],
+        [
+          {'text': '品牌形象', 'imgsrc': Retailers.onlineOne}
+        ],
+        [
+          {
+            'text': '网站WEB',
+            'imgsrc': Interaction.webOne
+          }, 
+          {
+            'text': '移动应用APP',
+            'imgsrc': Interaction.webSecond
+          }, 
+          {
+            'text': 'ICON/图标',
+            'imgsrc': Interaction.webThird
+          }, 
+          {
+            'text': 'Banner',
+            'imgsrc': Interaction.webFour
+          }
+        ],
+        [
+          {'text': '包装', 'imgsrc': PackingDesign.Packing}
+        ]
+      ],
+      // 存放选中的数据
+      selected: [],
+      isClick: false,
+      // 是否选择单项模式
+      isSingel: true,
+      Data: {},
+      totalPrice: 0,
+      firstPrice: 0,
+      secondPrice: 0,
+      thirdPrice: 0,
+      fourPrice: 0,
+      datalist: [{}, {}, {}, {}],
+      isclick: false,
+      imgIcon: Complete,
+      isPackageShow: true,
+      PackageSelectData: []
+    }
+  },
+  mounted () {
+    this.getType()
+  },
+  methods: {
+    // 选择数量或范围
+    chooseNumOrRange (e) {
+      e.path[0].nextElementSibling.style.display = 'block'
+    },
+    numberRange (e, data) {
+      console.log(e.path[2].children[0].innerHTML)
+      if (data === 0) {
+        e.path[2].children[0].innerHTML = '数量'
+        e.path[2].children[2].children[0].style.top = '0'
+        e.path[1].style.display = 'none'
+      } else if (data === 1) {
+        e.path[2].children[0].innerHTML = '范围'
+        e.path[2].children[2].children[0].style.top = '-30px'
+        e.path[1].style.display = 'none'
+      }
+    },
+    // 套餐 总价计算
+    HowLong (e, data, index) {
+      let target = e.currentTarget.parentNode.parentNode
+      target.style.display = 'none'
+      if (data[1].indexOf('/') === -1) {
+        if (index === 0) {
+          this.firstPrice = data[1]
+        } else if (index === 1) {
+          this.secondPrice = data[1]
+        } else if (index === 2) {
+          this.thirdPrice = data[1]
+        } else if (index === 3) {
+          this.fourPrice = data[1]
+        }
+      } else {
+        if (index === 0) {
+          this.firstPrice = data[1].split('/')[0]
+        } else if (index === 1) {
+          this.secondPrice = data[1].split('/')[0]
+        } else if (index === 2) {
+          this.thirdPrice = data[1].split('/')[0]
+        } else if (index === 3) {
+          this.fourPrice = data[1].split('/')[0]
+        }
+      }
+      // 总价
+      this.totalPrice = Number(this.firstPrice) + Number(this.secondPrice) + Number(this.thirdPrice) + Number(this.fourPrice)
+    },
+    // 下一页
+    nextPage () {
+      let type = localStorage.getItem('type')
+      if (type === 'individual') {
+        if (this.selected.length === 0) {
+          alert('您还没有选择您需要哪种类型的创意')
+        } else {
+          this.$router.push('/ChoosePage/Demand')
+        }
+      } else if (type === 'package') {
+        // this.$router.push('/ChoosePage/agreement')
+        let data = {
+          'TotalPrice': this.totalPrice
+        }
+        console.log(data)
+        // sessionStorage.setItem('PackageData', JSON.stringify(data))
+      }
+    },
+    getType () {
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        this.isPackageShow = false
+        this.Data = PackageData
+        this.isSingel = false
+        this.obj = [
+          [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}],
+          [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}],
+          [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}],
+          [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}]
+        ]
+      } else {
+        this.Data = DataType
+        this.isPackageShow = true
+        if (this.selected.length === 0) {
+          this.isNumShow = false
+        } else {
+          this.isNumShow = true
+        }
+      }
+    },
+    // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
+    taskChoose (e, i, index, iIndex, id) {
+      this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
+      // 判断是否选中
+      if (e.path[0].checked === true) {
+        this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id})
+        this.selected.forEach((m, n) => {
+          this.datalist.forEach((v, k) => {
+            if (k === m.whichBox) {
+              v.select.push({'text': m.text})
+            }
+          })
+        })
+      } else if (e.path[0].checked === false) {
+        this.selected.forEach((v, k) => {
+          if (v.whichBox === index && v.whichOne === iIndex && v.which === i) {
+            this.selected.splice(k, 1)
+          }
+        })
+        this.selected.forEach((m, n) => {
+          this.datalist.forEach((v, k) => {
+            if (k === m.whichBox) {
+              v.select.push({'text': m.text})
+            }
+          })
+        })
+      }
+      if (this.selected.length === 0) {
+        this.isclick = false
+      } else {
+        this.isclick = true
+      }
+      sessionStorage.setItem('select', JSON.stringify(this.selected))
+    },
+    // 移动鼠标
+    move (e, index) {
+      if (e.path[0].children[0].style.display === 'block') {
+        e.path[1].children[4].style.display = 'none'
+      } else {
+        e.path[1].children[4].style.display = 'block'
+        let detailArr = e.path[1].children[4].children
+        for (var j = 0; j < detailArr.length; j++) {
+          if (j === index) {
+            detailArr[j].style.display = 'block'
+            detailArr[index].children[0].style.left = 51 + j * 230 + 'px'
+          } else {
+            detailArr[j].style.display = 'none'
+          }
+        }
+      }
+    },
+    leave (e, index) {
+      e.path[1].children[4].style.display = 'none'
+    },
+    // 点击左侧列表
+    // 单项
+    selectType (e, i) {
+      let bgColor = e.path[2].children
+      for (var m = 1; m < bgColor.length; m++) {
+        if (m - 1 === i) {
+          bgColor[m].style.background = '#eaeaea'
+          bgColor[m].children[0].style.color = '#000'
+        } else {
+          bgColor[m].style.background = '#fff'
+          bgColor[m].children[0].style.color = '#666'
+        }
+      }
+      e.path[2].nextElementSibling.children[0].lastChild.style.top = 0.5 - i * 1.5 + 'rem'
+    },
+    // 套餐
+    levelList (e, i) {
+      let bgColor = e.path[2].children
+      for (var m = 1; m < bgColor.length; m++) {
+        if (m - 1 === i) {
+          bgColor[m].style.background = '#eaeaea'
+          bgColor[m].children[0].style.color = '#000'
+        } else {
+          bgColor[m].style.background = '#fff'
+          bgColor[m].children[0].style.color = '#666'
+        }
+      }
+      e.path[3].children[2].children[0].style.top = -i * 3.4 + 'rem'
+      e.path[3].children[1].children[1].style.top = -i * 3.5 + 'rem'
+      e.path[3].children[1].children[1].style.display = 'block'
+    },
+    // 点击事件
+    chooseKind (event, i) {
+      let kinds = document.getElementById('kinds')
+      let element = kinds.children[i].children[0]
+      // 勾选按钮
+      let chooseObj = {}
+      if (element.style.display !== 'block') {
+        element.style.display = 'block'
+        chooseObj = this.Data.data[i]
+        this.chooseList.push({chooseObj: chooseObj, id: i})
+      } else {
+        element.style.display = 'none'
+        this.chooseList.forEach((v, k) => {
+          if (v.id === i) {
+            this.chooseList.splice(k, 1)
+          }
+        })
+      }
+      if (this.chooseList.length === 0) {
+        this.isClick = false
+      } else {
+        this.isClick = true
+      }
+    }
+  }
+}
+</script>
+
+<style lang="less" escoped>
+.simple-select {
+  width: 8.1rem;
+  margin: 75px auto;
+  font-size: 12px;
+  p {
+    margin-bottom: 30px;
+    font-size: 20px;
+  }
+  .progress {
+    border-bottom: 1px solid #eaeaea;
+    margin-bottom: 30px;
+    position: relative;
+    height: 0;
+    font-size: 0;
+    .circle {
+      width: 12px;
+      height: 12px;
+      display: block;
+      background: #3cc8b4;
+      left: 0;
+      top: -5px;
+      position: absolute;
+      border-radius: 50%;
+      &:nth-of-type(2) {
+        left: 162px;
+      }
+      &:nth-of-type(3) {
+        left: 324px;
+      }
+      &:nth-of-type(4) {
+        left: 486px;
+      }
+      &:nth-of-type(5) {
+        left: 648px;
+      }
+      &:nth-of-type(6) {
+        left: 810px;
+      }
+    }
+    .big {
+      width: 18px;
+      height: 18px;
+      top: -9px;
+    }
+    .c {
+      width: 12px;
+      height: 12px;
+      top: -5px;
+      display: block;
+      background: #eaeaea;
+    }
+  }
+  .content {
+    width: 8.1rem;
+    min-height: 500px;
+    position: relative;
+    .classify {
+      width: 100%;
+      height: 142px;
+      position: relative;
+    }
+  }
+  .classify-box {
+    text-align: center;
+    float: left;
+    margin-right: 110px;
+    cursor: pointer;
+    width: 120px;
+    height: 140px;
+    // border: 1px solid #eaeaea;
+    box-shadow: 0 2px 8px 0 rgba(0, 0, 0, .1);
+    position: relative;
+    &:nth-of-type(4) {
+      margin-right: 0;
+    }
+    &:hover {
+      transform: scale(1.05);
+      box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .1);
+    }
+    .icon {
+      display: none;
+      width: 20px;
+      height: 20px;
+      // background: #eaeaea;
+      font-size: 10px;
+      position: absolute;
+      top: 0;
+      right: 0;
+      img {
+        display: block;
+        width: 100%;
+      }
+    }
+    .kind-name {
+      // padding-top: 100px;
+      img {
+        display: block;
+        width: 50px;
+        margin: 30px auto 20px;
+      }
+      span {
+        font-size: 16px;
+      }
+    }
+  }
+  .mouse-enter {
+    position: absolute;
+    top: 172px;
+    width: 810px;
+    height: 365px;
+    .classify-detail {
+      display: none;
+      width: 100%;
+      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 0;
+      z-index: 999;
+      clear: both;
+      background: #fff;
+      border-radius: 0.04rem;
+      border: 1px solid #eaeaea;
+      box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+      .arrow {
+        border-top: 7px solid #fff;
+        border-left: 7px solid #fff;
+        border-bottom: 7px solid rgba(255, 255, 255, 0);
+        border-right: 7px solid rgba(255, 255, 255, 0);
+        font-size: 0;
+        z-index: 998;
+        transform: rotate(45deg);
+        position: absolute;
+        top: -7px;
+        left: 51px;
+        box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+        z-index: 8
+      }
+      .cover {
+        background: #fff;
+        position: relative;
+        z-index: 9;
+        padding: 10px 0 0 10px;
+        overflow: hidden;
+      }
+      .popup {
+        float: left;
+        width: 124px;
+        margin: 10px 20px;
+        height: 150px;
+        // border: 1px solid #eaeaea;
+        background: #fff;
+        text-align: center;
+        img {
+          width: 80px;
+          margin: 20px auto;
+          display: block;
+        }
+        span {
+          text-align: center;
+        }
+      }
+    }
+  }
+  .border {
+    width: 8.1rem;
+    padding-bottom: 20px;
+    border-bottom: 1px solid #eaeaea;
+    background: #fff;
+    // margin: 0 auto;
+    .choose {
+      width: 100%;
+      min-height: 3.65rem;
+      margin-top: 30px;
+      border-radius: 0.04rem;
+      box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+      border: 1px solid #eaeaea;
+      overflow: hidden;
+      position: relative;
+      .left_part {
+        // float: left;
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 2rem;
+        height: 100%;
+        border-right: 1px solid #eaeaea;
+        box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+        h2 {
+          font-size: 18px;
+          padding-left: 0.45rem;
+          line-height: 65px;
+          font-weight: normal;
+          border-bottom: 1px solid #eaeaea;
+        }
+        .kinds {
+          width: 100%;
+          text-align: left;
+          text-indent: 45px;
+          line-height: 0.5rem;
+          .first {
+            cursor: pointer;
+            font-size: 14px;
+            color: #666;
+            &:hover {
+              color: #000;
+              background: #eaeaea;
+            }
+          }
+        }
+      }
+      .right_part {
+        width: 609px;
+        float: right;
+        .right_top {
+          height: 195px;
+          width: 100%;
+          position: relative;
+          overflow: hidden;
+          h6 {
+            font-size: 14px;
+            line-height: 50px;
+            padding-left: 35px;
+            font-weight: normal;
+          }
+          .changeTab {
+            width: 100%;
+            position: absolute;
+            top: 0.5rem;
+          }
+          .task {
+            padding-left: 35px;
+            width: 100%;
+            height: 1.5rem;
+            .checkbox {
+              float: left;
+              margin-right: 50px;
+              // height: 30px;
+              line-height: 40px;
+              font-size: 14px;
+              color: #666;
+              input {
+                width: 27px;
+                height: 15px;
+                display: inline-block;
+              }
+            }
+          }
+        }
+        .right_bottom {
+          width: 100%;
+          margin-bottom: 70px;
+          border-top: 1px solid #eaeaea;
+          h6 {
+            font-size: 12px;
+            line-height: 50px;
+            padding-left: 35px;
+            font-weight: normal;
+          }
+          .range {
+            padding-left: 48px;
+            margin-bottom: 20px;
+            .tit {
+              float: left;
+              font-size: 12px;
+              color: #8a8a8a;
+              line-height: 30px;
+              width: 0.6rem;
+              text-align: center;
+              white-space: nowrap;
+              text-overflow: ellipsis;
+              overflow: hidden;
+            }
+            .ge {
+              line-height: 0.3rem;
+              padding-left: 0.05rem;
+            }
+            .num {
+              float: left;
+              width: 402px;
+              height: 30px;
+              border: 1px solid #eaeaea;
+              margin-left: 20px;
+              position: relative;
+              .over {
+                position: absolute;
+                top: 0;
+                left: 94px;
+                width: 302px;
+                height: 30px;
+                overflow: hidden;
+              }
+              .inputNum {
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 280px;
+                line-height: 30px;
+                outline: none;
+                padding-left: 20px;
+                .range_box {
+                  input {
+                    width: 100%;
+                    height: 28px;
+                    border: 0;
+                  }
+                  .r {
+                    width: 110px;
+                    height: 28px;
+                    margin: 0 10px;
+                  }
+                }
+              }
+              .rangeChangeNum {
+                display: none;
+                position: absolute;
+                width: 90px;
+                background: #fff;
+                border: 1px solid #eaeaea;
+                border-radius: 4px;
+                top: 32px;
+                z-index: 9999;
+                span {
+                  float: none;
+                  &:hover {
+                    background: #eaeaea;
+                  }
+                }
+              }
+              span {
+                display: block;
+                float: left;
+                width: 90px;
+                line-height: 30px;
+                text-align: center;
+                border-right: 1px solid #eaeaea;
+                font-size: 12px;
+                color: #8a8a8a;
+                cursor: pointer;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  .model {
+    position: relative;
+    width: 8rem;
+    .border {
+      position: relative;
+    }
+    .left_part {
+      .level {
+        text-align: left;
+        text-indent: 0.45rem;
+        line-height: 0.5rem;
+        .first {
+          width: 100%;
+          height: 0.5rem;
+          cursor: pointer;
+          color: #666;
+          &:hover {
+            color: #000;
+            background: #eaeaea;
+          }
+        }
+      }
+    }
+    .right_part {
+      height: 100%;
+      position: relative;
+      .right_top {
+        height: 100% !important;
+      }
+      .choose_price {
+        position: absolute;
+        width: 100%;
+        // height: 3.5rem;
+        top: 0;
+        background: #fff;
+        .all_price {
+          width: 100%;
+          display: flex;
+          justify-content: space-around;
+          align-items: center;
+          height: 3.5rem;
+        }
+        .price_c {
+          width: 1.3rem;
+          height: 1.5rem;
+          border: 1px solid #eaeaea;
+          // float: left;
+          cursor: pointer;
+          .icon {
+            height: 0.4rem;
+            width: 100%;
+            background: #eaeaea;
+            padding: 0.3rem 0;
+            .circle_icon {
+              width: 0.4rem;
+              height: 0.4rem;
+              background: #fff;
+              border-radius: 50%;
+              margin: 0 auto;
+              line-height: 0.4rem;
+              text-align: center;
+            }
+          }
+        }
+      }
+    }
+    .remarks {
+      width: 1.8rem;
+      padding: 0.1rem;
+      position: absolute;
+      right: -2.02rem;
+      border: 1px solid #eaeaea;
+      height: 3.3rem;
+      overflow: hidden;
+      .remarkbox {
+        position: relative;
+      }
+      .remarks-words {
+        height: 3.4rem;
+      }
+    }
+    .total-money {
+      height: 0.8rem;
+      border-bottom: 1px solid #eaeaea;
+      width: 8.1rem;
+      .server_model {
+        width: 0.7rem;
+        text-align: center;
+        line-height: 0.8rem;
+        float: left;
+      }
+      .choice {
+        float: left;
+        padding-left: 0.4rem;
+        line-height: 0.8rem;
+        position: relative;
+        .laber_checked {
+          width: 14px;
+          height: 14px;
+          // background: rgba(0, 0, 0, .4);
+          position: absolute;
+          top: 0;
+          margin-top: -8px;
+          left: 38px;
+          border-radius: 50%;
+        }
+        .laber_radio:checked + .laber_checked {
+          top: 50%;
+          background: #eaeaea;
+          border: 1px solid #eaeaea;
+          cursor: pointer;
+          &:hover {
+            border: 1px solid #3cc8b4;
+          }
+        }
+        .laber_radio:checked + .laber_checked::after {
+          position: absolute;
+          content: "";
+          width: 8px;
+          height: 8px;
+          top: 3px;
+          left: 3px;
+          border-radius: 50%;
+          background: #3cc8b4;
+        }
+        span {
+          padding-left: 0.1rem;
+        }
+      }
+      .tol {
+        float: right;
+        line-height: 0.8rem;
+      }
+    }
+  }
+  // .classify-box:hover ~ .mouse-enter {
+  //   display: block;
+  // }
+  .btn {
+    width: 100%;
+    display: block;
+    height: 0.7rem;
+    .back {
+      font-size: 0.14rem;
+      padding: 0.4rem 0 0 0.2rem;
+      height: 0.33rem;
+      float: left;
+      display: block;
+      width: 0.8rem;
+      cursor: pointer;
+      color: #000;
+    }
+    .link {
+      width: 1.5rem;
+      display: block;
+      height: 0.7rem;
+      float: right;
+      button {
+        display: block;
+        margin-top: 0.37rem;
+        width: 1.5rem;
+        height: 0.4rem;
+        border: 0;
+        line-height: 0.4rem;
+        background-color: #3cc8b4;
+        color: rgba(255, 255, 255, 1);
+        font-size: 0.16rem;
+        text-align: center;
+        font-family: Roboto;
+        border-radius: 0.03rem;
+        cursor: pointer;
+        outline: none;
+        transition: 0.3s;
+        &:hover {
+          background: #39beab;
+        }
+      }
+    }
+  }
+}
+</style>

@@ -1,0 +1,267 @@
+{
+  "title": "单项选择后显示的内容集合",
+  "data": [
+  {
+    "type": "平面设计",
+    "typeList": [{
+        "listSingel": "品牌形象",
+        "selectList": [
+          {
+            "name": "LOGO",
+            "id": 1
+          },
+          {
+            "name": "VI",
+            "id": 2
+          }
+        ]
+      },
+      {
+        "listSingel": "海报/平面海报",
+        "selectList": [
+          {
+            "name": "主视觉KV",
+            "id": 3
+          },
+          {
+            "name": "海报设计",
+            "id": 4
+          },
+          {
+            "name": "平面广告设计",
+            "id": 5
+          },
+          {
+            "name": "Banner",
+            "id": 6
+          },
+          {
+            "name": "动态海报/广告设计",
+            "id": 7
+          },
+          {
+            "name": "3D渲染海报/广告设计",
+            "id": 8
+          }
+        ]
+      },
+      {
+        "listSingel": "画册/书装",
+        "selectList": [
+          {
+            "name": "企业画册/产品画册设计",
+            "id": 9
+          },
+          {
+            "name": "书籍设计",
+            "id": 10
+          }
+        ]
+      },
+      {
+        "listSingel": "宣传品",
+        "selectList": [
+          {
+            "name": "宣传单页（DM类）",
+            "id": 11
+          },
+          {
+            "name": "折页",
+            "id": 12
+          },
+          {
+            "name": "易拉宝/展架",
+            "id": 13
+          },
+          {
+            "name": "手提袋",
+            "id": 14
+          },
+          {
+            "name": "菜单",
+            "id": 15
+          }
+        ]
+      },
+      {
+        "listSingel": "卡券设计",
+        "selectList": [
+          {
+            "name": "卡券设计",
+            "id": 16
+          }
+        ]
+      },
+      {
+        "listSingel": "PPT",
+        "selectList": [
+          {
+            "name": "PPT",
+            "id": 17
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "电商",
+    "typeList": [{
+      "listSingel": "电商创意",
+      "selectList": [
+        {
+          "name": "电商创意",
+          "id": 18
+        },
+        {
+          "name": "首页",
+          "id": 19
+        },
+        {
+          "name": "详情页",
+          "id": 20
+        },
+        {
+          "name": "Banner",
+          "id": 21
+        },
+        {
+          "name": "专题活动页",
+          "id": 22
+        },
+        {
+          "name": "海报",
+          "id": 23
+        },
+        {
+          "name": "促销",
+          "id": 24
+        }
+      ]
+    }]
+  }, 
+  {
+    "type": "网络互动",
+    "typeList": [{
+        "listSingel": "网站 web",
+        "selectList": [
+          {
+            "name": "网站首页",
+            "id": 25
+          },
+          {
+            "name": "网站内页",
+            "id": 26
+          },
+          {
+            "name": "专题活动页",
+            "id": 27
+          },
+          {
+            "name": "网站交互/原型设计",
+            "id": 28
+          }
+        ]
+      },
+      {
+        "listSingel": "移动应用 APP",
+        "selectList": [
+          {
+            "name": "引导页",
+            "id": 29
+          },
+          {
+            "name": "移动应用 UI 设计",
+            "id": 30
+          },
+          {
+            "name": "移动应用主界面设计",
+            "id": 31
+          },
+          {
+            "name": "移动应用内页设计",
+            "id": 32
+          },
+          {
+            "name": "启动页/闪屏设计",
+            "id": 33
+          }
+        ]
+      },
+      {
+        "listSingel": "ICON 图标",
+        "selectList": [
+          {
+            "name": "ICON 图标",
+            "id": 34
+          }
+        ]
+      },
+      {
+        "listSingel": "UI 动效",
+        "selectList": [
+          {
+            "name": "UI 动效",
+            "id": 35
+          }
+        ]
+      },
+      {
+        "listSingel": "Banner",
+        "selectList": [
+          {
+            "name": "Banner",
+            "id": 36
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "包装",
+    "typeList": [{
+      "listSingel": "包装创意",
+      "selectList": [
+        {
+          "name": "日用品",
+          "id": 37
+        },
+        {
+          "name": "文体用品",
+          "id": 38
+        },
+        {
+          "name": "工艺品",
+          "id": 39
+        },
+        {
+          "name": "音像品",
+          "id": 40
+        },
+        {
+          "name": "土特产",
+          "id": 41
+        },
+        {
+          "name": "电子电器",
+          "id": 42
+        },
+        {
+          "name": "油漆涂料类包装设计",
+          "id": 43
+        },
+        {
+          "name": "礼品类包装设计",
+          "id": 44
+        },
+        {
+          "name": "纺织服装",
+          "id": 45
+        },
+        {
+          "name": "玩具类包装设计",
+          "id": 46
+        }
+      ]
+    }]
+  }]
+}
