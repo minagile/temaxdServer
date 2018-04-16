@@ -319,11 +319,11 @@ export default {
           this.$router.push('/ChoosePage/Demand')
         }
       } else if (type === 'package') {
-        // this.$router.push('/ChoosePage/agreement')
+        this.$router.push('/ChoosePage/agreement')
         let data = {
           'TotalPrice': this.totalPrice
         }
-        console.log(data)
+        // console.log(data)
         // sessionStorage.setItem('PackageData', JSON.stringify(data))
       }
     },
