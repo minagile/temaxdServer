@@ -37,10 +37,10 @@
         </div>
         <div class="btn">
           <router-link class="back" to="introcompany">返回</router-link>
-          <a class="link">
-            <router-link class="link" :to="{name: 'Agreement', params: {price: Total}}">
-              <button>继 续</button>
-            </router-link>
+          <a class="link" @click="nextpage">
+            <!-- <router-link class="link" :to="{name: 'Agreement', params: {price: Total}}"> -->
+            <button>继 续</button>
+            <!-- </router-link> -->
           </a>
         </div>
       </div>
@@ -61,8 +61,21 @@ export default {
   },
   mounted () {
     this.handleData()
+    this.$route.params.doc_id
   },
   methods: {
+    nextpage () {
+      if (this.Total === 0) {
+        alert('您还没有选择价格')
+      } else {
+        this.$router.push({
+          name: 'Agreement',
+          params: {
+            price: [this.Total, this.$route.params.doc_id]
+          }
+        })
+      }
+    },
     handleData () {
       let selectData = JSON.parse(sessionStorage.getItem('select'))
       allPrice.data.forEach(m => {
@@ -114,7 +127,7 @@ export default {
         this.value.forEach((m, n) => {
           total += Number(m.Price)
         })
-        console.log(total)
+        // console.log(total)
         this.Total = total
       }
     }

@@ -60,9 +60,9 @@
                 <h6>请选择任务明细</h6>
                 <div class="changeTab">
                   <div class="task" v-for="(laberItem, i) in data.chooseObj.typeList" :key="i">
-                    <div class="checkbox" v-for="(data, iIndex) in laberItem.selectList" :key="iIndex">
-                      <input type="checkbox" name="logo" :value="data" @click="taskChoose($event, i, index, iIndex, data.id)" />
-                      <span>{{data.name}}</span>
+                    <div class="checkbox" v-for="(m, iIndex) in laberItem.selectList" :key="iIndex">
+                      <input type="checkbox" name="logo" :value="m" @click="taskChoose($event, i, index, iIndex, m.id, data.chooseObj.type, laberItem)" />
+                      <span>{{m.name}}</span>
                     </div>
                   </div>
                 </div>
@@ -81,7 +81,7 @@
                       <div class="over">
                         <div class="inputNum">
                           <div class="range_box">
-                            <input type="number">
+                            <input type="number" @input="writeNumber($event, index)">
                           </div>
                           <div class="range_box">
                             <input class="r" type="number">~<input class="r" type="number">
@@ -258,13 +258,21 @@ export default {
       isclick: false,
       imgIcon: Complete,
       isPackageShow: true,
-      PackageSelectData: []
+      PackageSelectData: [],
+      keynumber: ''
     }
   },
   mounted () {
     this.getType()
   },
   methods: {
+    writeNumber (event, index) {
+      this.selected.forEach((v, k) => {
+        if (v.text === event.path[6].children[0].textContent) {
+          v.value = event.path[0].value
+        }
+      })
+    },
     // 选择数量或范围
     chooseNumOrRange (e) {
       e.path[0].nextElementSibling.style.display = 'block'
@@ -316,15 +324,14 @@ export default {
         if (this.selected.length === 0) {
           alert('您还没有选择您需要哪种类型的创意')
         } else {
-          this.$router.push('/ChoosePage/Demand')
+          this.$router.push({name: 'Demand', params: {designs_type: this.selected}})
         }
       } else if (type === 'package') {
-        this.$router.push('/ChoosePage/agreement')
         let data = {
-          'TotalPrice': this.totalPrice
+          'TotalPrice': this.totalPrice,
+          'select': this.selected
         }
-        // console.log(data)
-        // sessionStorage.setItem('PackageData', JSON.stringify(data))
+        this.$router.push({name: 'Agreement', params: {designs_type: data}})
       }
     },
     getType () {
@@ -350,11 +357,12 @@ export default {
       }
     },
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
-    taskChoose (e, i, index, iIndex, id) {
+    taskChoose (e, i, index, iIndex, id, data, erdata) {
       this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
       // 判断是否选中
       if (e.path[0].checked === true) {
-        this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id})
+        this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
+        console.log(this.selected)
         this.selected.forEach((m, n) => {
           this.datalist.forEach((v, k) => {
             if (k === m.whichBox) {

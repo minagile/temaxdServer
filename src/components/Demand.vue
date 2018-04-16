@@ -227,18 +227,18 @@ export default {
       this.remnant = 500 - val
     },
     getData () {
-      // if (this.keyword !== '' && this.progress !== '' && this.element !== '' && this.desc !== '' && this.style.length !== 0) {
-        this.$router.push('/ChoosePage/SpecificDemand')
-      // }
-      let data = {
+      let data = [this.$route.params.designs_type, {
         'ProjectName': this.keyword,
         'ProjectProgress': this.progress,
         'HasElement': this.element,
         'TargetUser': this.desc,
         'Industry': this.industry,
         'Style': this.style
-      }
-      console.log(data)
+      }]
+      // if (this.keyword !== '' && this.progress !== '' && this.element !== '' && this.desc !== '' && this.style.length !== 0) {
+        this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+      // }
+      // sessionStorage.setItem('Demand', JSON.stringify(data))
     }
   }
 }

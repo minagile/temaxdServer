@@ -24,7 +24,7 @@
           <div class="cash default">
             <input class="laber_radio" type="radio" name="pay" checked />
             <div class="laber_checked"></div>
-            <span>¥ 50000</span>
+            <span>¥ {{price}}</span>
           </div>
         </div>
         <div class="pay_way">
@@ -44,7 +44,7 @@
             <input class="laber_radio" type="radio" name="ser" checked />
             <div class="laber_checked"></div>
             <span>单项</span>
-            <div class="total">总计 ¥ 50000 元</div>
+            <div class="total">总计 ¥ {{price}} 元</div>
           </div>
         </div>
         <div class="btn">
@@ -66,11 +66,26 @@ export default {
   name: 'singleprice',
   data () {
     return {
-      isPay: false
+      isPay: false,
+      price: ''
     }
+  },
+  mounted () {
+    this.price = this.$route.params.price[0]
   },
   methods: {
     payMoney () {
+      let that = this
+      that.$http.get('https://www.temaxd.com/addDoc', {
+        params: {
+          docId: this.$route.params.price[1],
+          offer: 11111,
+          contract: 11111,
+          payment_state: 0
+        }
+      }).then((res) => {
+        console.log(res)
+      })
       this.isPay = true
       let iTimer = setInterval(() => {
         window.location.href = 'https://account.teambition.com/login'

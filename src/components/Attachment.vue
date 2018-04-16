@@ -1,6 +1,6 @@
 <template>
   <div class="attachment">
-    <div class="file" v-if="!isBtn">
+    <div class="file" >
       <p>请添加项目附件和补充信息</p>
       <div class="progress" v-show="isPackageShow">
         <span class="circle"></span>
@@ -27,8 +27,9 @@
                 <img src="../assets/img/upload.png" alt="">
                 <div class="text">上传文件</div>
               </div>
-              <input type="file" multiple>
+              <input type="file" @change="upLoadFile" multiple>
             </div>
+            {{path.name}}
           </div>
         </div>
         <div class="pro-progress target">
@@ -44,9 +45,9 @@
         </div>
         <div class="btn">
           <router-link class="back" to="SpecificDemand">返回</router-link>
-          <router-link class="link" :to="{path: '/ChoosePage/introcompany'}">
+          <a class="link" @click="next">
             <button>继 续</button>
-          </router-link>
+          </a>
         </div>
       </div>
     </div>
@@ -58,16 +59,27 @@ export default {
   name: 'attachment',
   data () {
     return {
-      isBtn: false,
       desc: '',
       remnant: 500,
-      isPackageShow: true
+      isPackageShow: true,
+      path: ''
     }
   },
   mounted () {
     this.getType()
   },
   methods: {
+    upLoadFile (e) {
+      console.log(e.target.files)
+      this.path = e.target.files[0]
+      let zipFormData = new FormData()
+      zipFormData.append('file', e.target.files[0]) //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
+      // this.path.type
+      let config = { headers: { 'Content-Type': 'multipart/form-data' } }
+      this.$http.post('https://www.temaxd.com/uploadFile?fileName=' + this.path.name, zipFormData, config).then(function (response) {
+        console.log(response.data)
+      })
+    },
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
@@ -77,7 +89,7 @@ export default {
       }
     },
     next () {
-      this.isBtn = true
+      this.$router.push({name: 'IntroCompany', params: {Introcompany: [this.$route.params.attachment, {'file': this.path.name, 'info': this.desc}]}})
     },
     descInput () {
       let val = this.desc.length

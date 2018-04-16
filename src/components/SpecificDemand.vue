@@ -180,9 +180,6 @@
       </div>
       <div class="btn">
         <router-link class="back" to="Demand">返回</router-link>
-        <!-- <router-link :to="{path: '/ChoosePage/attachment'}" @click="getData">
-          <button>继 续</button>
-        </router-link> -->
         <a @click="getData">
           <button>继 续</button>
         </a>
@@ -273,23 +270,21 @@ export default {
         method: 'GET',
         url: 'http://www.temaxd.com/regionQuery'
       }).then((res) => {
-        // console.log(res.body)
-        // this.CountryData = [res.body]
         this.CountryData.push(res.body)
       }).catch(err => {
         console.log(err)
       })
     },
     getData () {
-      this.$router.push('/ChoosePage/attachment')
-      let SpecificDemandData = {
+      let SpecificDemandData = [this.$route.params.SpecificDemand, {
         'BeginTime': this.beginTime,
         'ProCycle': this.proCycle,
         'Invoice': this.invoice,
         'ProPrice': this.proPrice,
         'WorkPlace': this.workPlace
-      }
-      sessionStorage.setItem('SpecificDemandData', JSON.stringify(SpecificDemandData))
+      }]
+      this.$router.push({name: 'Attachment', params: {attachment: SpecificDemandData}})
+      // sessionStorage.setItem('SpecificDemandData', JSON.stringify(SpecificDemandData))
     }
   }
 }

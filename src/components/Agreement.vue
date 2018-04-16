@@ -10,9 +10,9 @@
         <span class="circle"></span>
         <span class="big-circle"></span>
       </div>
-      <div class="content">
+      <div class="content" >
         <div class="special">
-          <div class="contract">
+          <div class="contract" id="content">
             <h2>TEMAX设计专用合同</h2>
             <div>
               <div class="party">甲方：<input class="company_name" type="text" /></div>
@@ -41,7 +41,7 @@
                 <div class="second strip">
                   <div class="strip_title">第二条 费用</div>
                   <div class="strip_content">
-                    设计费用总计为：人民币￥<span class="cash">{{ price }}</span>元，(大写：<span class="cash">{{ price | intToChinese }}</span>)。
+                    设计费用总计为：人民币￥<span class="cash">{{ price[0] }}</span>元，(大写：<span class="cash">{{ price[0] | intToChinese }}</span>)。
                   </div>
                 </div>
                 <div class="third strip">
@@ -75,8 +75,8 @@
                       <div class="ser_con">
                         <div class="indent">
                           <div>1.1 付款期限：</div>
-                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的<span class="cash">50%</span>即人民币￥<span class="cash">{{ price * 0.5 }}</span>元(大写：<span class="cash">{{ price * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
-                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的50%，即人民币￥<span class="cash">{{ price * 0.5 }}</span>元，大写：<span class="cash">{{ price * 0.5 | intToChinese }}</span>)。</p>
+                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的<span class="cash">50%</span>即人民币￥<span class="cash">{{ price[0] * 0.5 }}</span>元(大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
+                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的50%，即人民币￥<span class="cash">{{ price[0] * 0.5 }}</span>元，大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。</p>
                         </div>
                         <p class="indent">1.2 设计工期：从<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日至<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日，共计 <span class="cash">1111</span> 个工作日。</p>
                         <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" />个工作日内设计出甲方<input class="short" type="text" />设计（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
@@ -90,8 +90,8 @@
                       <div class="ser_con">
                         <div class="indent">
                           <div>2.1 付款期限：</div>
-                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price * 0.85 }}</span>元(大写：<span class="cash">{{ price * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
-                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price * 0.15 }}</span>元，大写：<span class="cash">{{ price * 0.15 | intToChinese }}</span>）。</p>
+                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price[0] * 0.85 }}</span>元(大写：<span class="cash">{{ price[0] * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
+                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price[0] * 0.15 }}</span>元，大写：<span class="cash">{{ price[0] * 0.15 | intToChinese }}</span>）。</p>
                         </div>
                         <p class="indent">2.2 设计工期：从<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日至<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日。</p>
                         <p class="indent">2.3 甲方在设计工期内需提前1~3天提出设计要求，乙方需根据设计内容制定设计周期并在与甲方确认沟通后开始制作。</p>
@@ -191,7 +191,7 @@
         </div>
         <div class="btn">
           <a class="back" @click="backPage">返回</a>
-          <router-link class="link" to="singleprice">
+          <router-link class="link" :to="{name: 'SinglePrice', params: {price: price}}">
             <button>继 续</button>
           </router-link>
         </div>
@@ -213,7 +213,7 @@ export default {
   },
   mounted () {
     this.price = this.$route.params.price
-    // console.log(this.$route.params.price)
+    // console.log(document.getElementById('content').innerText)
   },
   methods: {
     backPage () {
