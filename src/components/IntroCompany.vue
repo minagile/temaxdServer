@@ -92,7 +92,7 @@ export default {
   },
   mounted () {
     this.getType()
-    // console.log(this.$route.params.Introcompany)
+    console.log(this.$route.params.Introcompany)
   },
   methods: {
     getType () {

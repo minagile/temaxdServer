@@ -15,7 +15,7 @@
           <div class="contract" id="content">
             <h2>TEMAX设计专用合同</h2>
             <div>
-              <div class="party">甲方：<input class="company_name" type="text" /></div>
+              <div class="party">甲方：<input class="company_name" type="text" v-model="cName" /><span style="display:none;">{{cName}}</span></div>
               <div class="party">乙方：上海扁诞网络科技有限公司</div> 
               <div class="contrat_con">
                 <p>依据《中华人民共和国合同法》和有关法规的规定，乙方接受甲方的委托，就委托设计事项，双方经协商一致，签订本合同，信守执行以下内容：</p>
@@ -262,7 +262,8 @@ export default {
       yearp: '',
       monthp: '',
       datep: '',
-      Data: ''
+      Data: '',
+      cName: ''
     }
   },
   mounted () {
@@ -289,7 +290,10 @@ export default {
         this.isPackageShow = false
         this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
         this.sOrP = '套餐'
-        this.price = this.$route.params.price[0]
+        // this.price = this.$route.params.price[0]
+        let total = JSON.parse(sessionStorage.getItem('total'))
+        this.price = total.TotalPrice
+        // console.log(total)
       } else {
         this.isPackageShow = true
         this.listco = ['单项合作']

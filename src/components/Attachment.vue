@@ -89,7 +89,14 @@ export default {
       }
     },
     next () {
-      this.$router.push({name: 'IntroCompany', params: {Introcompany: [this.$route.params.attachment, {'file': this.path.name, 'info': this.desc}]}})
+      this.$router.push({
+        name: 'IntroCompany',
+        params: {
+          Introcompany: [
+            this.$route.params.attachment, {'file': this.path.name, 'info': this.desc}
+          ]
+        }
+      })
     },
     descInput () {
       let val = this.desc.length

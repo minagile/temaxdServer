@@ -382,12 +382,12 @@ export default {
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
               designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
-              project_name: data[0][0].ProjectName, // 项目名称
-              project_phase: data[0][0].ProjectProgress, // 项目阶段
-              project_element: data[0][0].HasElement, // 项目元素
-              target_user: data[0][0].TargetUser, //目标用户
-              industry_field: data[0][0].Industry, // 行业领域
-              creative_style: JSON.stringify(data[0][0].Style), // 创意风格
+              project_name: data[0][0][0].ProjectName, // 项目名称
+              project_phase: data[0][0][0].ProjectProgress, // 项目阶段
+              project_element: data[0][0][0].HasElement, // 项目元素
+              target_user: data[0][0][0].TargetUser, //目标用户
+              industry_field: data[0][0][0].Industry, // 行业领域
+              creative_style: JSON.stringify(data[0][0][0].Style), // 创意风格
               project_start_time: data[0][1].BeginTime, // 开始时间
               project_cycle: data[0][1].ProCycle, // 项目周期
               project_budget: data[0][1].ProPrice, // 项目预算
@@ -401,7 +401,11 @@ export default {
               contact_information: this.$route.params.introduceCompany.contact_information // 公司联系人信息
             }
           }).then((res) => {
-            sessionStorage.setItem('docId', JSON.parse(res.data.split(':')[1]))
+            sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
+            sessionStorage.setItem('total', JSON.stringify({
+              'TotalPrice': this.totalPrice,
+              'select': this.selected
+            }))
             this.$router.push({name: 'Agreement', params: {price: [this.totalPrice, res.data.split(':')[1]]}})
           }).catch(err => {
             console.log(err)
@@ -412,7 +416,7 @@ export default {
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        // console.log(this.$route.params)
+        console.log(this.$route.params)
         this.isPackageShow = false
         this.Data = PackageData
         this.isSingel = false
@@ -1031,6 +1035,9 @@ export default {
           margin-top: -8px;
           left: 38px;
           border-radius: 50%;
+        }
+        input {
+          opacity: 0;
         }
         .laber_radio:checked + .laber_checked {
           top: 50%;

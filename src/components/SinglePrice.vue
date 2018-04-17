@@ -83,7 +83,7 @@ export default {
       if (type === 'package') {
         that.$http.post('https://www.temaxd.com/addDoc', {
           params: {
-            docId: JSON.stringify(sessionStorage.getItem('docId')),
+            docId: sessionStorage.getItem('docId'),
             contract: this.$route.params.data,
             payment_state: 0
           }
@@ -97,7 +97,7 @@ export default {
       } else {
         that.$http.post('https://www.temaxd.com/addDoc', {
           params: {
-            docId: JSON.stringify(sessionStorage.getItem('docId')),
+            docId: sessionStorage.getItem('docId'),
             offer: JSON.stringify(this.$route.params.offer),
             contract: this.$route.params.data,
             payment_state: 0
@@ -143,13 +143,16 @@ export default {
         border-radius: 50%;
       }
       .laber_radio:checked + .laber_checked {
-        top: 11px;
+        top: 10px;
         background: #eaeaea;
         border: 1px solid #eaeaea;
         cursor: pointer;
         &:hover {
           border: 1px solid #3cc8b4;
         }
+      }
+      .laber_radio {
+        opacity: 0;
       }
       .laber_radio:checked + .laber_checked::after {
         position: absolute;
@@ -246,6 +249,18 @@ export default {
             border: 0;
             outline: none;
             padding-left: 0.1rem;
+          }
+          input::-webkit-input-placeholder{
+            color: #000
+          }
+          input::-moz-placeholder{
+            color:#000;
+          }
+          input:-moz-placeholder{
+            color:#000;
+          }
+          input:-ms-input-placeholder{
+            color:#000;
           }
         }
       }

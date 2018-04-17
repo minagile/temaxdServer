@@ -238,6 +238,7 @@ export default {
         height: 0.24rem;
         line-height: 0.24rem;
         border-radius: 0.02rem;
+        opacity: 0;
         // img {
         //   width: 100%;
         //   display: block;
