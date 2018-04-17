@@ -78,7 +78,7 @@
         </div>
       </div>
       <div class="pro-pro ele">
-        <div class="title">项目周期</div>
+        <div class="title">项目预算</div>
         <div class="progress-con">
           <div class="choose-progress">
             <span class="default">
@@ -277,14 +277,26 @@ export default {
       })
     },
     getData () {
-      let SpecificDemandData = [this.$route.params.SpecificDemand, {
-        'BeginTime': this.beginTime,
-        'ProCycle': this.proCycle,
-        'Invoice': this.invoice,
-        'ProPrice': this.proPrice,
-        'WorkPlace': this.workPlace
-      }]
-      this.$router.push({name: 'Attachment', params: {attachment: SpecificDemandData}})
+      if (this.beginTime === '') {
+        alert('您还没有选择项目开始时间')
+      } else if (this.proCycle === '') {
+        alert('您还没有选择项目周期')
+      } else if (this.proPrice === '') {
+        alert('您还没有选择项目预算')
+      } else if (this.invoice === '') {
+        alert('您还没有选择是否需要发票')
+      } else if (this.workPlace === '') {
+        alert('您还没有选择工作地点')
+      } else {
+        let SpecificDemandData = [this.$route.params.SpecificDemand, {
+          'BeginTime': this.beginTime,
+          'ProCycle': this.proCycle,
+          'Invoice': this.invoice,
+          'ProPrice': this.proPrice,
+          'WorkPlace': this.workPlace
+        }]
+        this.$router.push({name: 'Attachment', params: {attachment: SpecificDemandData}})
+      }
       // sessionStorage.setItem('SpecificDemandData', JSON.stringify(SpecificDemandData))
     }
   }

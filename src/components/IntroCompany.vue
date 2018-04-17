@@ -92,7 +92,7 @@ export default {
   },
   mounted () {
     this.getType()
-    console.log(this.$route.params.Introcompany)
+    // console.log(this.$route.params.Introcompany)
   },
   methods: {
     getType () {
@@ -106,53 +106,70 @@ export default {
     // 下一页
     nextPage () {
       let type = localStorage.getItem('type')
-      if (type === 'individual') {
-        // 存入数据
-        let that = this
-        let data = this.$route.params.Introcompany
-        let style = ''
-        data[0][0][1].Style.forEach(v => {
-          style += v + ','
-        })
-        that.$http.get('https://www.temaxd.com/addDoc', {
-          params: {
-            designs_type: JSON.stringify([['单项'], data[0][0][0]]), // 设计类型
-            project_name: data[0][0][1].ProjectName, // 项目名称
-            project_phase: data[0][0][1].ProjectProgress, // 项目阶段
-            project_element: data[0][0][1].HasElement, // 项目元素
-            target_user: data[0][0][1].TargetUser, //目标用户
-            industry_field: data[0][0][1].Industry, // 行业领域
-            creative_style: style, // 创意风格
-            project_start_time: data[0][1].BeginTime, // 开始时间
-            project_cycle: data[0][1].ProCycle, // 项目周期
-            project_budget: data[0][1].ProPrice, // 项目预算
-            invoice: data[0][1].Invoice, // 发票
-            work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
-            attachment: data[1].file, // 补充附件(选填)
-            supp_info: data[1].info, // 补充信息
-            company_name: this.companyName, // 公司名称
-            company_profile: this.desc, // 公司简介
-            company_url: this.companyWeb, // 公司网址
-            contact_information: this.name + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
+      if (this.companyName === '') {
+        alert('您还没有填写公司名称')
+      } else if (this.desc === '') {
+        alert('您还没有填写公司简介')
+      } else if (this.companyWeb === '') {
+        alert('您还没有填写网站地址')
+      } else if (this.name === '') {
+        alert('您还没有填写姓名')
+      } else if (this.position === '') {
+        alert('您还没有填写地址')
+      } else if (this.mail === '') {
+        alert('您还没有填写邮箱')
+      } else if (this.phone === '') {
+        alert('您还没有填写电话')
+      } else {
+        if (type === 'individual') {
+          // 存入数据
+          let that = this
+          let data = this.$route.params.Introcompany
+          let style = ''
+          data[0][0][1].Style.forEach(v => {
+            style += v + ','
+          })
+          that.$http.get('https://www.temaxd.com/addDoc', {
+            params: {
+              designs_type: JSON.stringify([['单项'], data[0][0][0]]), // 设计类型
+              project_name: data[0][0][1].ProjectName, // 项目名称
+              project_phase: data[0][0][1].ProjectProgress, // 项目阶段
+              project_element: data[0][0][1].HasElement, // 项目元素
+              target_user: data[0][0][1].TargetUser, //目标用户
+              industry_field: data[0][0][1].Industry, // 行业领域
+              creative_style: style, // 创意风格
+              project_start_time: data[0][1].BeginTime, // 开始时间
+              project_cycle: data[0][1].ProCycle, // 项目周期
+              project_budget: data[0][1].ProPrice, // 项目预算
+              invoice: data[0][1].Invoice, // 发票
+              work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
+              attachment: data[1].file, // 补充附件(选填)
+              supp_info: data[1].info, // 补充信息
+              company_name: this.companyName, // 公司名称
+              company_profile: this.desc, // 公司简介
+              company_url: this.companyWeb, // 公司网址
+              contact_information: this.name + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
+            }
+          }).then((res) => {
+            sessionStorage.setItem('docId', JSON.parse(res.data.split(':')[1]))
+            this.$router.push({name: 'Quotation', params: {docId: res.data.split(':')[1]}})
+          }).catch(err => {
+            console.log(err)
+          })
+        } else if (type === 'package') {
+          let data = {
+            'company_name': this.companyName,
+            'company_profile': this.desc,
+            'company_url': this.companyWeb,
+            'contact_information': this.name + '/' + this.position + '/' + this.mail + '/' + this.phone
           }
-        }).then((res) => {
-          this.$router.push({name: 'Quotation', params: {doc_id: res.data.split(':')[1]}})
-        }).catch(err => {
-          console.log(err)
-        })
-      } else if (type === 'package') {
-        let data = {
-          'company_name': this.companyName,
-          'company_profile': this.desc,
-          'company_url': this.companyWeb,
-          'contact_information': this.name + '/' + this.position + '/' + this.mail + '/' + this.phone
+          this.$router.push({name: 'SimpleSelect',
+            params: {
+              selectData: this.$route.params.Introcompany,
+              introduceCompany: data
+            }
+          })
         }
-        this.$router.push({name: 'SimpleSelect',
-          params: {
-            selectData: this.$route.params.Introcompany,
-            introduceCompany: data
-          }
-        })
       }
     },
     descInput () {

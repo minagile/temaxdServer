@@ -71,40 +71,45 @@ export default {
     }
   },
   mounted () {
-    this.price = this.$route.params.price[0]
-    console.log(this.$route.params.data)
+    this.price = this.$route.params.price
+    console.log(this.$route.params)
   },
   methods: {
     payMoney () {
       let type = localStorage.getItem('type')
-      this.isPay = true
+      // this.isPay = true
       let that = this
+      let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       if (type === 'package') {
-        that.$http.get('https://www.temaxd.com/addDoc', {
+        that.$http.post('https://www.temaxd.com/addDoc', {
           params: {
-            docId: this.$route.params.price[1],
+            docId: JSON.stringify(sessionStorage.getItem('docId')),
             contract: this.$route.params.data,
             payment_state: 0
           }
-        }).then((res) => {
+        }, config).then((res) => {
           console.log(res)
+          // let iTimer = setInterval(() => {
+          //   window.location.href = 'https://account.teambition.com/login'
+          //   clearInterval(iTimer)
+          // }, 3000)
         })
       } else {
-        that.$http.get('https://www.temaxd.com/addDoc', {
+        that.$http.post('https://www.temaxd.com/addDoc', {
           params: {
-            docId: this.$route.params.price[1],
-            offer: 11111,
+            docId: JSON.stringify(sessionStorage.getItem('docId')),
+            offer: JSON.stringify(this.$route.params.offer),
             contract: this.$route.params.data,
             payment_state: 0
           }
-        }).then((res) => {
+        }, config).then((res) => {
           console.log(res)
+          // let iTimer = setInterval(() => {
+          //   window.location.href = 'https://account.teambition.com/login'
+          //   clearInterval(iTimer)
+          // }, 3000)
         })
       }
-      let iTimer = setInterval(() => {
-        window.location.href = 'https://account.teambition.com/login'
-        clearInterval(iTimer)
-      }, 3000)
     }
   }
 }

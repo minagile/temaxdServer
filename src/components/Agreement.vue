@@ -32,7 +32,7 @@
                     <div class="event">
                       <div class="t">2．{{sOrP}}模式</div>
                       <span class="choose" v-for="(data, index) in listco" :key="index">
-                        <input type="radio" @click="chooseCoopration($event)" name="choose"/>
+                        <input type="radio" @click="chooseCoopration($event, index)" name="choose"/>
                         <span>{{ data }}</span>
                       </span>
                     </div>
@@ -79,8 +79,8 @@
                             (1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的
                             <span class="cash">50%</span>
                             即人民币￥
-                            <span class="cash">{{ price[0] * 0.5 }}</span>
-                            元(大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。
+                            <span class="cash">{{ price * 0.5 }}</span>
+                            元(大写：<span class="cash">{{ price * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。
                           </p>
                           <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的50%，即人民币￥<span class="cash">{{ price * 0.5 }}</span>元，大写：<span class="cash">{{ price * 0.5 | intToChinese }}</span>)。</p>
                         </div>
@@ -106,7 +106,7 @@
                         <div class="indent">
                           <div>2.1 付款期限：</div>
                           <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price * 0.85 }}</span>元(大写：<span class="cash">{{ price * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
-                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price[0] * 0.15 }}</span>元，大写：<span class="cash">{{ price * 0.15 | intToChinese }}</span>）。</p>
+                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price * 0.15 }}</span>元，大写：<span class="cash">{{ price * 0.15 | intToChinese }}</span>）。</p>
                         </div>
                         <p class="indent">2.2 设计工期：从
                           <input class="short" type="text" v-model="year"/><span style="display:none">{{ year }}</span>年
@@ -289,7 +289,7 @@ export default {
         this.isPackageShow = false
         this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
         this.sOrP = '套餐'
-        this.price = this.$route.params.price
+        this.price = this.$route.params.price[0]
       } else {
         this.isPackageShow = true
         this.listco = ['单项合作']
@@ -298,13 +298,19 @@ export default {
       }
     },
     next () {
-      this.$router.push({
-        name: 'SinglePrice',
-        params: {
-          price: this.price,
-          data: this.Data
-        }
-      })
+      if (this.Data === '') {
+        alert('请选择是否需要纸质版')
+      } else {
+        this.$router.push({
+          name: 'SinglePrice',
+          params: {
+            price: this.price,
+            docId: this.$route.params.price[1],
+            data: this.Data,
+            offer: this.$route.params.price[2]
+          }
+        })
+      }
       // console.log(this.Data)
     },
     chooseEvent (ev) {
@@ -327,16 +333,35 @@ export default {
       }
       // console.log(this.design)
     },
-    chooseCoopration (ev) {
-      if (ev.path[0].checked === true) {
-        this.cooperation.push(ev.path[1].innerText)
-      } else {
-        this.cooperation.forEach((v, k) => {
-          if (v === ev.path[1].innerText) {
-            this.cooperation.splice(k, 1)
+    chooseCoopration (ev, index) {
+      // console.log(index)
+      if (ev.path[2].children.length > 2) {
+        let date = new Date()
+        if (index === 0 || index === 3) {
+          this.yearp = date.getFullYear() + 1
+          this.monthp = date.getMonth() + 1
+          this.datep = date.getDate()
+        } else if (index === 1) {
+          this.yearp = date.getFullYear()
+          this.datep = date.getDate()
+          this.monthp = date.getMonth() + 1
+          if (this.monthp > 11) {
+            this.monthp = date.getMonth() - 10
+            this.yearp = date.getFullYear() + 1
+          } else {
+            this.monthp = date.getMonth() + 2
           }
-        })
-        // console.log(this.cooperation)
+        } else if (index === 2) {
+          this.yearp = date.getFullYear()
+          this.datep = date.getDate()
+          this.monthp = date.getMonth() + 1
+          if (this.monthp > 8) {
+            this.monthp = date.getMonth() - 7
+            this.yearp = date.getFullYear() + 1
+          } else {
+            this.monthp = date.getMonth() + 5
+          }
+        }
       }
     },
     backPage () {

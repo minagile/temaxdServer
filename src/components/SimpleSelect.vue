@@ -47,7 +47,7 @@
       <div class="deposit" v-show="isSingel">
         <!-- 选中后出现的内容 -->
         <div class="border" v-for="(data, index) in chooseList" :key="index">
-          <div class="choose">
+          <div class="choose" style="overflow:hidden;">
             <div class="left_part">
               <h2>{{data.chooseObj.type}}</h2>
               <!-- 点击切换选择 -->
@@ -81,10 +81,10 @@
                       <div class="over">
                         <div class="inputNum">
                           <div class="range_box">
-                            <input type="number" @input="writeNumber($event, index)">
+                            <input type="number" @input="writeNumber($event, index)" />
                           </div>
-                          <div class="range_box">
-                            <input class="r" type="number">~<input class="r" type="number">
+                          <div class="range_box" @change="writeRange($event, index)">
+                            <input class="r" type="number"><span style="display:none;">{{bLNum}}</span>~<input class="r" type="number"><span style="display:none;">{{bRNum}}</span>
                           </div>
                         </div>
                       </div>
@@ -125,7 +125,7 @@
                         <img :src="longList[k].imgUrl" alt="">
                       <!-- </div> -->
                     <!-- </div> -->
-                    <span>{{items[1]}}</span>
+                    <!-- <span>{{items[1]}}</span> -->
                     <span>{{items[0]}}</span>
                   </div>
                 </div>
@@ -133,7 +133,9 @@
             </div>
             <div class="remarks" >
               <div class="remarkbox">
-                <div class="remarks-words" v-for="(item, i) in data.chooseObj.level" :key="i">{{item.Remarks}}</div>
+                <div class="remarks-words" v-for="(item, i) in data.chooseObj.level" :key="i">
+                  <p v-for="(data, index) in item.Remarks.split(' ')" :key="index">{{data}}</p>
+                </div>
               </div>
             </div>
           </div>
@@ -277,7 +279,10 @@ export default {
         {
           imgUrl: howLong.year
         }
-      ]
+      ],
+      numberNum: '',
+      bLNum: 0,
+      bRNum: ''
     }
   },
   mounted () {
@@ -285,11 +290,28 @@ export default {
   },
   methods: {
     writeNumber (event, index) {
+      this.numberNum = event.path[0].value
       this.selected.forEach((v, k) => {
         if (v.text === event.path[6].children[0].textContent) {
-          v.value = event.path[0].value
+          v.value = this.numberNum
         }
       })
+      // console.log(this.selected)
+    },
+    writeRange (event, index) {
+      // console.log(event)
+      this.bLNum = event.path[1].children[0].value
+      this.bRNum = event.path[1].children[2].value
+      if (Number(this.bLNum) > Number(this.bRNum)) {
+        alert('请填写正确的范围')
+      } else  {
+        // console.log(event.path[1].textContent)
+        this.selected.forEach((v, k) => {
+          if (v.text === event.path[6].children[0].textContent) {
+            v.value = event.path[1].textContent + this.bRNum
+          }
+        })
+      }
     },
     // 选择数量或范围
     chooseNumOrRange (e) {
@@ -341,49 +363,56 @@ export default {
       if (type === 'individual') {
         if (this.selected.length === 0) {
           alert('您还没有选择您需要哪种类型的创意')
+        } else if (this.numberNum === '' && this.bRNum === '') {
+          alert('您还有数量尚未填写')
         } else {
           this.$router.push({name: 'Demand', params: {designs_type: this.selected}})
         }
       } else if (type === 'package') {
-        let sdata = {
-          'TotalPrice': this.totalPrice,
-          'select': this.selected
-        }
-        // 存入数据
-        let that = this
-        let data = this.$route.params.selectData
-        that.$http.get('https://www.temaxd.com/addDoc', {
-          params: {
-            designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
-            project_name: data[0][0].ProjectName, // 项目名称
-            project_phase: data[0][0].ProjectProgress, // 项目阶段
-            project_element: data[0][0].HasElement, // 项目元素
-            target_user: data[0][0].TargetUser, //目标用户
-            industry_field: data[0][0].Industry, // 行业领域
-            creative_style: JSON.stringify(data[0][0].Style), // 创意风格
-            project_start_time: data[0][1].BeginTime, // 开始时间
-            project_cycle: data[0][1].ProCycle, // 项目周期
-            project_budget: data[0][1].ProPrice, // 项目预算
-            invoice: data[0][1].Invoice, // 发票
-            work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
-            attachment: data[1].file, // 补充附件(选填)
-            supp_info: data[1].info, // 补充信息
-            company_name: this.$route.params.introduceCompany.company_name, // 公司名称
-            company_profile: this.$route.params.introduceCompany.company_profile, // 公司简介
-            company_url: this.$route.params.introduceCompany.company_url, // 公司网址
-            contact_information: this.$route.params.introduceCompany.contact_information // 公司联系人信息
+        if (this.totalPrice === 0) {
+          alert('您还没有选择你需要的创意类型')
+        } else {
+          let sdata = {
+            'TotalPrice': this.totalPrice,
+            'select': this.selected
           }
-        }).then((res) => {
-          this.$router.push({name: 'Agreement', params: {doc_id: res.data.split(':')[1], price: this.totalPrice}})
-        }).catch(err => {
-          console.log(err)
-        })
+          // 存入数据
+          let that = this
+          let data = this.$route.params.selectData
+          that.$http.get('https://www.temaxd.com/addDoc', {
+            params: {
+              designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
+              project_name: data[0][0].ProjectName, // 项目名称
+              project_phase: data[0][0].ProjectProgress, // 项目阶段
+              project_element: data[0][0].HasElement, // 项目元素
+              target_user: data[0][0].TargetUser, //目标用户
+              industry_field: data[0][0].Industry, // 行业领域
+              creative_style: JSON.stringify(data[0][0].Style), // 创意风格
+              project_start_time: data[0][1].BeginTime, // 开始时间
+              project_cycle: data[0][1].ProCycle, // 项目周期
+              project_budget: data[0][1].ProPrice, // 项目预算
+              invoice: data[0][1].Invoice, // 发票
+              work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
+              attachment: data[1].file, // 补充附件(选填)
+              supp_info: data[1].info, // 补充信息
+              company_name: this.$route.params.introduceCompany.company_name, // 公司名称
+              company_profile: this.$route.params.introduceCompany.company_profile, // 公司简介
+              company_url: this.$route.params.introduceCompany.company_url, // 公司网址
+              contact_information: this.$route.params.introduceCompany.contact_information // 公司联系人信息
+            }
+          }).then((res) => {
+            sessionStorage.setItem('docId', JSON.parse(res.data.split(':')[1]))
+            this.$router.push({name: 'Agreement', params: {price: [this.totalPrice, res.data.split(':')[1]]}})
+          }).catch(err => {
+            console.log(err)
+          })
+        }
       }
     },
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        console.log(this.$route.params)
+        // console.log(this.$route.params)
         this.isPackageShow = false
         this.Data = PackageData
         this.isSingel = false
@@ -406,7 +435,6 @@ export default {
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
     taskChoose (e, i, index, iIndex, id, data, erdata) {
       this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
-      console.log(e)
       // 判断是否选中
       if (e.path[0].checked === true) {
         let type = localStorage.getItem('type')
@@ -415,7 +443,6 @@ export default {
         } else {
           this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
         }
-        console.log(this.selected)
         this.selected.forEach((m, n) => {
           this.datalist.forEach((v, k) => {
             if (k === m.whichBox) {
@@ -492,12 +519,18 @@ export default {
           bgColor[m].children[0].style.color = '#666'
         }
       }
-      e.path[3].children[2].children[0].style.top = -i * 3.4 + 'rem'
+      e.path[3].children[2].children[0].style.top = -i * 3.55 + 'rem'
       e.path[3].children[1].children[1].style.top = -i * 3.5 + 'rem'
       e.path[3].children[1].children[1].style.display = 'block'
     },
     // 点击事件
     chooseKind (event, i) {
+      let detail = document.getElementById('detail')
+      if (detail.style.display === 'none') {
+        detail.style.display = 'block'
+      } else {
+        detail.style.display = 'none'
+      }
       let kinds = document.getElementById('kinds')
       let element = kinds.children[i].children[0]
       // 勾选按钮
@@ -660,21 +693,27 @@ export default {
         top: -7px;
         left: 51px;
         box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
-        z-index: 8
+        z-index: 8;
       }
       .cover {
         background: #fff;
         position: relative;
+        height: 98%;
         z-index: 9;
-        padding: 10px 0 0 10px;
+        padding: 10px 0 0 5px;
         overflow: hidden;
+        // display: flex;
+        // justify-content: space-around;
+        // align-items: center;
+        // flex-wrap: wrap;
       }
       .popup {
         float: left;
         width: 124px;
-        margin: 10px 20px;
+        margin: 10px 18px;
         height: 150px;
         // border: 1px solid #eaeaea;
+        box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
         background: #fff;
         text-align: center;
         img {
@@ -684,6 +723,7 @@ export default {
         }
         span {
           text-align: center;
+          font-size: 14px;
         }
       }
     }
@@ -701,7 +741,7 @@ export default {
       border-radius: 0.04rem;
       box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
       border: 1px solid #eaeaea;
-      overflow: hidden;
+      // overflow: hidden;
       position: relative;
       .left_part {
         // float: left;
@@ -894,7 +934,8 @@ export default {
       }
     }
     .right_part {
-      height: 100%;
+      height: 3.65rem;
+      overflow: hidden;
       position: relative;
       .right_top {
         height: 100% !important;
@@ -915,13 +956,16 @@ export default {
         .price_c {
           width: 1.3rem;
           height: 1.5rem;
-          border: 1px solid #eaeaea;
+          // border: 1px solid #eaeaea;
+          box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
           // float: left;
           cursor: pointer;
+          font-size: 14px;
+          text-align: center;
           img {
-            width: 70%;
+            width: 46%;
             display: block;
-            margin: 0 auto;
+            margin: 20px auto 20px;
           }
           .icon {
             height: 0.4rem;
@@ -947,13 +991,20 @@ export default {
       position: absolute;
       right: -2.02rem;
       border: 1px solid #eaeaea;
-      height: 3.3rem;
+      background: #fff;
+      top: 0;
+      box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+      height: 3.45rem;
       overflow: hidden;
+      p{
+        font-size: 12px;
+        margin: 0;
+      }
       .remarkbox {
         position: relative;
       }
       .remarks-words {
-        height: 3.4rem;
+        height: 3.55rem;
       }
     }
     .total-money {

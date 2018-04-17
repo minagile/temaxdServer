@@ -25,7 +25,8 @@
           <table border="1">
             <tr v-for="(v, j) in item.list" :key="j">
               <td v-for="(m, n) in v" :key="n">
-                <div @click="chooseData($event, m, n, j, i)">{{ m }}</div><div class="chooseMoney">勾</div>
+                <div @click="chooseData($event, m, n, j, i)">{{ m }}</div>
+                <img class="chooseMoney" :src="imgUrl" />
               </td>
             </tr>
           </table>
@@ -38,9 +39,7 @@
         <div class="btn">
           <router-link class="back" to="introcompany">返回</router-link>
           <a class="link" @click="nextpage">
-            <!-- <router-link class="link" :to="{name: 'Agreement', params: {price: Total}}"> -->
             <button>继 续</button>
-            <!-- </router-link> -->
           </a>
         </div>
       </div>
@@ -50,18 +49,20 @@
 
 <script>
 import allPrice from '../assets/allPrice.json'
+import { Complete } from '../assets/img/index';
 export default {
   name: 'quotation',
   data () {
     return {
       value: [],
       Data: [],
-      Total: 0
+      Total: 0,
+      imgUrl: Complete
     }
   },
   mounted () {
     this.handleData()
-    this.$route.params.doc_id
+    console.log(this.$route.params.docId)
   },
   methods: {
     nextpage () {
@@ -71,7 +72,7 @@ export default {
         this.$router.push({
           name: 'Agreement',
           params: {
-            price: [this.Total, this.$route.params.doc_id]
+            price: [this.Total, this.$route.params.docId, this.value]
           }
         })
       }
@@ -113,7 +114,7 @@ export default {
             }
           }
         }
-        let correct = e.path[0].nextSibling
+        let correct = e.path[0].nextElementSibling
         if (correct.style.display !== 'block') {
           correct.style.display = 'block'
         }
@@ -122,7 +123,8 @@ export default {
             this.value.splice(n, 1)
           }
         })
-        this.value.push({'Price': data, 'Index': k})
+        this.value.push({'Price': data, 'Index': k, 'level': e.path[3].children[0].children[index].textContent, 'first': e.path[4].children[0].children[0].textContent})
+        // console.log(e.path[4].children[0].children[0].textContent)
         let total = 0
         this.value.forEach((m, n) => {
           total += Number(m.Price)
@@ -231,11 +233,15 @@ export default {
         position: absolute;
         top: 0;
         right: 0;
-        background: #eaeaea;
+        background: #fff;
         width: 0.24rem;
         height: 0.24rem;
         line-height: 0.24rem;
         border-radius: 0.02rem;
+        // img {
+        //   width: 100%;
+        //   display: block;
+        // }
       }
       &:hover {
         // border: 1px solid #0ff000;
@@ -270,7 +276,7 @@ export default {
             position: absolute;
             top: 0;
             right: 0;
-            background: #eaeaea;
+            background: #fff;
             width: 0.24rem;
             height: 0.24rem;
             border-radius: 0.02rem;

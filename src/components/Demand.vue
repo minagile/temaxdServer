@@ -176,12 +176,11 @@ export default {
       }
     },
     industryClick () {
-      // console.log(document.getElementById('industry_field'))
       let oBtn = document.getElementById('industry_field').children
       for (var i = 0; i < oBtn.length; i++) {
         this.areaBtnList.forEach((v, k) => {
           if (v.id === i) {
-            oBtn[i].style.background = 'rgb(247, 247, 247)'
+            // oBtn[i].style.background = 'rgb(247, 247, 247)'
           }
         })
       }
@@ -193,6 +192,9 @@ export default {
     },
     fieldChoose (index, data) {
       if (this.areaBtnList.length < 2) {
+        this.areaBtnList.push({'text': data, 'id': index})
+      } else {
+        this.areaBtnList.splice(0, 1)
         this.areaBtnList.push({'text': data, 'id': index})
       }
       this.isListShow = false
@@ -228,30 +230,41 @@ export default {
     },
     getData () {
       let type = localStorage.getItem('type')
-      if (type === 'package') {
-        let data = [{
-          'ProjectName': this.keyword,
-          'ProjectProgress': this.progress,
-          'HasElement': this.element,
-          'TargetUser': this.desc,
-          'Industry': this.industry,
-          'Style': this.style
-        }]
-        this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+      if (this.keyword === '') {
+        alert('您还没有填写项目名称')
+      } else if (this.progress === '') {
+        alert('您还没有选择项目阶段')
+      } else if (this.element === '') {
+        alert('您还没有选择元素')
+      } else if (this.desc === '') {
+        alert('您还没有填写目标用户')
+      } else if (this.areaBtnList.length === 0) {
+        alert('您还没有选择行业领域')
+      } else if (this.style.length === 0) {
+        alert('您还没有选择创意风格')
       } else {
-        let data = [this.$route.params.designs_type, {
-          'ProjectName': this.keyword,
-          'ProjectProgress': this.progress,
-          'HasElement': this.element,
-          'TargetUser': this.desc,
-          'Industry': this.industry,
-          'Style': this.style
-        }]
-        this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+        if (type === 'package') {
+          let data = [{
+            'ProjectName': this.keyword,
+            'ProjectProgress': this.progress,
+            'HasElement': this.element,
+            'TargetUser': this.desc,
+            'Industry': JSON.stringify(this.areaBtnList),
+            'Style': this.style
+          }]
+          this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+        } else {
+          let data = [this.$route.params.designs_type, {
+            'ProjectName': this.keyword,
+            'ProjectProgress': this.progress,
+            'HasElement': this.element,
+            'TargetUser': this.desc,
+            'Industry': JSON.stringify(this.areaBtnList),
+            'Style': this.style
+          }]
+          this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+        }
       }
-      // if (this.keyword !== '' && this.progress !== '' && this.element !== '' && this.desc !== '' && this.style.length !== 0) {
-        
-      // }
     }
   }
 }
