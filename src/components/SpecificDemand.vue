@@ -211,6 +211,7 @@ export default {
   mounted () {
     this.getPlace()
     this.getType()
+    console.log(this.$route.params.SpecificDemand)
   },
   methods: {
     getType () {

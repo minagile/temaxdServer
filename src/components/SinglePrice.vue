@@ -72,21 +72,35 @@ export default {
   },
   mounted () {
     this.price = this.$route.params.price[0]
+    console.log(this.$route.params.data)
   },
   methods: {
     payMoney () {
-      let that = this
-      that.$http.get('https://www.temaxd.com/addDoc', {
-        params: {
-          docId: this.$route.params.price[1],
-          offer: 11111,
-          contract: 11111,
-          payment_state: 0
-        }
-      }).then((res) => {
-        console.log(res)
-      })
+      let type = localStorage.getItem('type')
       this.isPay = true
+      let that = this
+      if (type === 'package') {
+        that.$http.get('https://www.temaxd.com/addDoc', {
+          params: {
+            docId: this.$route.params.price[1],
+            contract: this.$route.params.data,
+            payment_state: 0
+          }
+        }).then((res) => {
+          console.log(res)
+        })
+      } else {
+        that.$http.get('https://www.temaxd.com/addDoc', {
+          params: {
+            docId: this.$route.params.price[1],
+            offer: 11111,
+            contract: this.$route.params.data,
+            payment_state: 0
+          }
+        }).then((res) => {
+          console.log(res)
+        })
+      }
       let iTimer = setInterval(() => {
         window.location.href = 'https://account.teambition.com/login'
         clearInterval(iTimer)

@@ -227,18 +227,31 @@ export default {
       this.remnant = 500 - val
     },
     getData () {
-      let data = [this.$route.params.designs_type, {
-        'ProjectName': this.keyword,
-        'ProjectProgress': this.progress,
-        'HasElement': this.element,
-        'TargetUser': this.desc,
-        'Industry': this.industry,
-        'Style': this.style
-      }]
-      // if (this.keyword !== '' && this.progress !== '' && this.element !== '' && this.desc !== '' && this.style.length !== 0) {
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        let data = [{
+          'ProjectName': this.keyword,
+          'ProjectProgress': this.progress,
+          'HasElement': this.element,
+          'TargetUser': this.desc,
+          'Industry': this.industry,
+          'Style': this.style
+        }]
         this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+      } else {
+        let data = [this.$route.params.designs_type, {
+          'ProjectName': this.keyword,
+          'ProjectProgress': this.progress,
+          'HasElement': this.element,
+          'TargetUser': this.desc,
+          'Industry': this.industry,
+          'Style': this.style
+        }]
+        this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+      }
+      // if (this.keyword !== '' && this.progress !== '' && this.element !== '' && this.desc !== '' && this.style.length !== 0) {
+        
       // }
-      // sessionStorage.setItem('Demand', JSON.stringify(data))
     }
   }
 }

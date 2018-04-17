@@ -114,7 +114,6 @@ export default {
         data[0][0][1].Style.forEach(v => {
           style += v + ','
         })
-        console.log(style)
         that.$http.get('https://www.temaxd.com/addDoc', {
           params: {
             designs_type: JSON.stringify([['单项'], data[0][0][0]]), // 设计类型
@@ -137,13 +136,23 @@ export default {
             contact_information: this.name + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
           }
         }).then((res) => {
-          // console.log(res.data.split(':')[1])
           this.$router.push({name: 'Quotation', params: {doc_id: res.data.split(':')[1]}})
         }).catch(err => {
           console.log(err)
         })
       } else if (type === 'package') {
-        this.$router.push('/ChoosePage/SimpleSelect')
+        let data = {
+          'company_name': this.companyName,
+          'company_profile': this.desc,
+          'company_url': this.companyWeb,
+          'contact_information': this.name + '/' + this.position + '/' + this.mail + '/' + this.phone
+        }
+        this.$router.push({name: 'SimpleSelect',
+          params: {
+            selectData: this.$route.params.Introcompany,
+            introduceCompany: data
+          }
+        })
       }
     },
     descInput () {

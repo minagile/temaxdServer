@@ -67,10 +67,10 @@ export default {
   },
   mounted () {
     this.getType()
+    console.log(this.$route.params.attachment)
   },
   methods: {
     upLoadFile (e) {
-      console.log(e.target.files)
       this.path = e.target.files[0]
       let zipFormData = new FormData()
       zipFormData.append('file', e.target.files[0]) //filename是键，file是值，就是要传的文件，test.zip是要传的文件名

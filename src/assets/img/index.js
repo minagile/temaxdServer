@@ -25,6 +25,11 @@ import _middle from './l_2.png'
 import _senior from './l_3.png'
 import _super from './l_4.png'
 
+import _year from './year.png'
+import _quater from './quater.png'
+import _month from './month.png'
+import _time from './time.png'
+
 import complete from './complete.png'
 
 export const plane = _plane
@@ -53,6 +58,11 @@ export const Primary = _primary
 export const Middle = _middle
 export const Senior = _senior
 export const Super = _super
+
+export const year = _year
+export const quater = _quater
+export const month = _month
+export const time = _time
 
 export const ImgUrl = {
   plane,
@@ -94,3 +104,10 @@ export const Category = {
 }
 
 export const Complete = complete
+
+export const howLong = {
+  year,
+  quater,
+  month,
+  time
+}

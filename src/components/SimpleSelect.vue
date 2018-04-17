@@ -120,9 +120,12 @@
               <div class="choose_price">
                 <div class="all_price" v-for="(idata, iIndex) in data.chooseObj.level" :key="iIndex">
                   <div class="price_c" v-for="(items, k) in idata.Price" :key="k" @click.stop="HowLong($event, items, index)">
-                    <div class="icon">
-                      <div class="circle_icon">{{items[1]}}</div>
-                    </div>
+                    <!-- <div class="icon"> -->
+                      <!-- <div class="circle_icon"> -->
+                        <img :src="longList[k].imgUrl" alt="">
+                      <!-- </div> -->
+                    <!-- </div> -->
+                    <span>{{items[1]}}</span>
                     <span>{{items[0]}}</span>
                   </div>
                 </div>
@@ -161,7 +164,7 @@ import DataType from '../assets/singleList.json'
 // 套餐数据
 import PackageData from '../assets/levelPrice.json'
 // 图片
-import { ImgUrl, Graphic, Retailers, Interaction, PackingDesign, Category, Complete } from '../assets/img/index'
+import { ImgUrl, Graphic, Retailers, Interaction, PackingDesign, Category, Complete, howLong } from '../assets/img/index'
 export default {
   name: 'simpleselect',
   data () {
@@ -259,7 +262,22 @@ export default {
       imgIcon: Complete,
       isPackageShow: true,
       PackageSelectData: [],
-      keynumber: ''
+      keynumber: '',
+      indexi: 0,
+      longList: [
+        {
+          imgUrl: howLong.time
+        },
+        {
+          imgUrl: howLong.month
+        },
+        {
+          imgUrl: howLong.quater
+        },
+        {
+          imgUrl: howLong.year
+        }
+      ]
     }
   },
   mounted () {
@@ -327,16 +345,45 @@ export default {
           this.$router.push({name: 'Demand', params: {designs_type: this.selected}})
         }
       } else if (type === 'package') {
-        let data = {
+        let sdata = {
           'TotalPrice': this.totalPrice,
           'select': this.selected
         }
-        this.$router.push({name: 'Agreement', params: {designs_type: data}})
+        // 存入数据
+        let that = this
+        let data = this.$route.params.selectData
+        that.$http.get('https://www.temaxd.com/addDoc', {
+          params: {
+            designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
+            project_name: data[0][0].ProjectName, // 项目名称
+            project_phase: data[0][0].ProjectProgress, // 项目阶段
+            project_element: data[0][0].HasElement, // 项目元素
+            target_user: data[0][0].TargetUser, //目标用户
+            industry_field: data[0][0].Industry, // 行业领域
+            creative_style: JSON.stringify(data[0][0].Style), // 创意风格
+            project_start_time: data[0][1].BeginTime, // 开始时间
+            project_cycle: data[0][1].ProCycle, // 项目周期
+            project_budget: data[0][1].ProPrice, // 项目预算
+            invoice: data[0][1].Invoice, // 发票
+            work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
+            attachment: data[1].file, // 补充附件(选填)
+            supp_info: data[1].info, // 补充信息
+            company_name: this.$route.params.introduceCompany.company_name, // 公司名称
+            company_profile: this.$route.params.introduceCompany.company_profile, // 公司简介
+            company_url: this.$route.params.introduceCompany.company_url, // 公司网址
+            contact_information: this.$route.params.introduceCompany.contact_information // 公司联系人信息
+          }
+        }).then((res) => {
+          this.$router.push({name: 'Agreement', params: {doc_id: res.data.split(':')[1], price: this.totalPrice}})
+        }).catch(err => {
+          console.log(err)
+        })
       }
     },
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
+        console.log(this.$route.params)
         this.isPackageShow = false
         this.Data = PackageData
         this.isSingel = false
@@ -359,9 +406,15 @@ export default {
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
     taskChoose (e, i, index, iIndex, id, data, erdata) {
       this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
+      console.log(e)
       // 判断是否选中
       if (e.path[0].checked === true) {
-        this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
+        let type = localStorage.getItem('type')
+        if (type === 'package') {
+          this.selected.push({'whichBox': index, 'which': i, 'text': e.path[1].innerText, 'classify': e.path[5].children[0].children[0].innerText, 'second': e.path[5].children[0].children[this.indexi + 1].textContent})
+        } else {
+          this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
+        }
         console.log(this.selected)
         this.selected.forEach((m, n) => {
           this.datalist.forEach((v, k) => {
@@ -428,6 +481,7 @@ export default {
     },
     // 套餐
     levelList (e, i) {
+      this.indexi = i
       let bgColor = e.path[2].children
       for (var m = 1; m < bgColor.length; m++) {
         if (m - 1 === i) {
@@ -864,11 +918,16 @@ export default {
           border: 1px solid #eaeaea;
           // float: left;
           cursor: pointer;
+          img {
+            width: 70%;
+            display: block;
+            margin: 0 auto;
+          }
           .icon {
             height: 0.4rem;
             width: 100%;
-            background: #eaeaea;
-            padding: 0.3rem 0;
+            // background: #eaeaea;
+            // padding: 0.3rem 0;
             .circle_icon {
               width: 0.4rem;
               height: 0.4rem;

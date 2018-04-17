@@ -25,14 +25,14 @@
                     <div class="event">
                       <div class="t">1．委托事项</div>
                       <span class="choose" v-for="(data, index) in list" :key="index">
-                        <input type="checkbox" >
+                        <input type="checkbox" @click="chooseEvent($event)" />
                         <span>{{ data }}</span>
                       </span>
                     </div>
                     <div class="event">
-                      <div class="t">2．合作模式</div>
+                      <div class="t">2．{{sOrP}}模式</div>
                       <span class="choose" v-for="(data, index) in listco" :key="index">
-                        <input type="checkbox" />
+                        <input type="radio" @click="chooseCoopration($event)" name="choose"/>
                         <span>{{ data }}</span>
                       </span>
                     </div>
@@ -41,7 +41,7 @@
                 <div class="second strip">
                   <div class="strip_title">第二条 费用</div>
                   <div class="strip_content">
-                    设计费用总计为：人民币￥<span class="cash">{{ price[0] }}</span>元，(大写：<span class="cash">{{ price[0] | intToChinese }}</span>)。
+                    设计费用总计为：人民币￥<span class="cash">{{ price }}</span>元，(大写：<span class="cash">{{ price | intToChinese }}</span>)。
                   </div>
                 </div>
                 <div class="third strip">
@@ -70,30 +70,52 @@
                   <div class="strip_title">第四条 服务与周期及交付方式</div>
                   <div class="different_type">根据甲方选择的不同服务类型，甲乙方还应遵守以下专用条款:</div>
                   <div class="strip_content">
-                    <div class="service">
+                    <div class="service" v-if="isPackageShow">
                       <div class="t">1．【单项服务】</div>
                       <div class="ser_con">
                         <div class="indent">
                           <div>1.1 付款期限：</div>
-                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的<span class="cash">50%</span>即人民币￥<span class="cash">{{ price[0] * 0.5 }}</span>元(大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
-                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的50%，即人民币￥<span class="cash">{{ price[0] * 0.5 }}</span>元，大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。</p>
+                          <p>
+                            (1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的
+                            <span class="cash">50%</span>
+                            即人民币￥
+                            <span class="cash">{{ price[0] * 0.5 }}</span>
+                            元(大写：<span class="cash">{{ price[0] * 0.5 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。
+                          </p>
+                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的50%，即人民币￥<span class="cash">{{ price * 0.5 }}</span>元，大写：<span class="cash">{{ price * 0.5 | intToChinese }}</span>)。</p>
                         </div>
-                        <p class="indent">1.2 设计工期：从<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日至<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日，共计 <span class="cash">1111</span> 个工作日。</p>
-                        <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" />个工作日内设计出甲方<input class="short" type="text" />设计（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
-                        <p class="indent">1.4 经过甲方最终确认的终稿，乙方在收到甲方余款结清后的有关凭据后<span class="cash">1111</span>个工作日内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
+                        <p class="indent">
+                          1.2 设计工期：从
+                          <input class="short" type="text" v-model="year" /><span style="display:none">{{ year }}</span>年
+                          <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
+                          <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日至
+                          <input class="short" type="text" v-model="yearl" /><span style="display:none">{{ yearl }}</span>年
+                          <input class="short" type="text" v-model="monthl" /><span style="display:none">{{ monthl }}</span>月
+                          <input class="short" type="text" v-model="datel" /><span style="display:none">{{ datel }}</span>日，共计 
+                          <span class="cash">{{ workDay }}</span> 个工作日。
+                        </p>
+                        <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" v-model="workDay" />个工作日内设计出甲方<span class="cash">{{design}}</span>（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
+                        <p class="indent">1.4 经过甲方最终确认的终稿，乙方在收到甲方余款结清后的有关凭据后<span class="cash">{{ workDay }}</span>个工作日内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
                         <p class="indent">1.5 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
                         <p class="indent">1.6 如发生人力不可抗拒因素或甲方原因导致乙方不能按时开工或者设计期间中止，由双方协商，设计工期顺延。</p>
                       </div>
                     </div>
-                    <div class="service">
-                      <div class="t">2. 【套餐服务】</div>
+                    <div class="service" v-if="!isPackageShow">
+                      <div class="t">1. 【套餐服务】</div>
                       <div class="ser_con">
                         <div class="indent">
                           <div>2.1 付款期限：</div>
-                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price[0] * 0.85 }}</span>元(大写：<span class="cash">{{ price[0] * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
-                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price[0] * 0.15 }}</span>元，大写：<span class="cash">{{ price[0] * 0.15 | intToChinese }}</span>）。</p>
+                          <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price * 0.85 }}</span>元(大写：<span class="cash">{{ price * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
+                          <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price[0] * 0.15 }}</span>元，大写：<span class="cash">{{ price * 0.15 | intToChinese }}</span>）。</p>
                         </div>
-                        <p class="indent">2.2 设计工期：从<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日至<input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日。</p>
+                        <p class="indent">2.2 设计工期：从
+                          <input class="short" type="text" v-model="year"/><span style="display:none">{{ year }}</span>年
+                          <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
+                          <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日
+                          至<input class="short" type="text" v-model="yearp" /><span style="display:none">{{ yearp }}</span>年
+                          <input class="short" type="text" v-model="monthp" /><span style="display:none">{{ monthp }}</span>月
+                          <input class="short" type="text" v-model="datep" /><span style="display:none">{{ datep }}</span>日。
+                        </p>
                         <p class="indent">2.3 甲方在设计工期内需提前1~3天提出设计要求，乙方需根据设计内容制定设计周期并在与甲方确认沟通后开始制作。</p>
                         <p class="indent">2.4 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
                         <p class="indent">2.5 经过甲方最终确认的终稿，乙方需在服务期内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
@@ -157,20 +179,28 @@
                     <p class="indent">3．双方之间发生争议的，双方应当进行友好协商解决，在无法通过协商解决的情况下，任何一方均可向仲裁委员会申请仲裁处理。</p>
                     <p class="indent">4．本协议书未尽事宜，甲乙双方应持积极态度友好协商解决，并达成书面的补充协议。</p>
                     <p class="indent">5．本协议书一式二份，甲乙双方各执一份，具有同等的法律效力。</p>
-                    <p class="indent">6．其他约定事项：<input class="other_things" type="text" v-model="keyword" @input="calculate($event, keyword)" /></p>
+                    <p class="indent">6．其他约定事项：<input class="other_things" type="text" v-model="keyword" @input="calculate($event, keyword)" /><span style="display:none">{{ keyword }}</span></p>
                   </div>
                 </div>
               </div>
               <div class="confirm">
                 <div class="first_party l">
                   <div>甲方：（签字/盖章）</div>
-                  <div>授权人： <input type="text" /></div>
-                  <div><input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日 </div>
+                  <div>授权人： <input type="text" v-model="FirstPartyName"/><span style="display:none">{{ FirstPartyName }}</span></div>
+                  <div>
+                    <input class="short" type="text" v-model="FirstPartyyear"/><span style="display:none">{{ FirstPartyyear }}</span>年
+                    <input class="short" type="text" v-model="FirstPartymonth"/><span style="display:none">{{ FirstPartymonth }}</span>月
+                    <input class="short" type="text" v-model="FirstPartydate"/><span style="display:none">{{ FirstPartydate }}</span>日
+                  </div>
                 </div>
                 <div class="second_party l">
                   <div>乙方：（签字/盖章）</div>
-                  <div>授权人：<input type="text" /></div>
-                  <div><input class="short" type="text" />年<input class="short" type="text" />月<input class="short" type="text" />日 </div>
+                  <div>授权人：<input type="text" v-model="SecondPartyName"/><span style="display:none">{{ SecondPartyName }}</span></div>
+                  <div>
+                    <input class="short" type="text" v-model="SecondPartyyear"/><span style="display:none">{{ SecondPartyyear }}</span>年
+                    <input class="short" type="text" v-model="SecondPartymonth"/><span style="display:none">{{ SecondPartymonth }}</span>月
+                    <input class="short" type="text" v-model="SecondPartydate"/><span style="display:none">{{ SecondPartydate }}</span>日
+                  </div>
                 </div>   
               </div>
               </div>
@@ -178,12 +208,12 @@
           <div class="is_paper">
             <span>是否提供纸质版</span>
             <span class="default">
-              <input class="choose_radio" type="radio" name="ispaper">
+              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="是">
               <div class="radio_checked"></div>
             </span>
             <span>是</span>
             <span class="default">
-              <input class="choose_radio" type="radio" name="ispaper">
+              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="否">
               <div class="radio_checked"></div>
             </span>
             <span>否</span>
@@ -191,9 +221,9 @@
         </div>
         <div class="btn">
           <a class="back" @click="backPage">返回</a>
-          <router-link class="link" :to="{name: 'SinglePrice', params: {price: price}}">
+          <a class="link" @click="next">
             <button>继 续</button>
-          </router-link>
+          </a>
         </div>
       </div>
     </div>
@@ -206,16 +236,109 @@ export default {
   data () {
     return {
       list: ['平面设计', '电子商务设计', '网络互动设计', '包装设计', '高端定制'],
-      listco: ['单项合作', '次数合作', '月度合作', '季度合作', '年度合作'],
+      listco: ['次数合作', '月度合作', '季度合作', '年度合作'],
       price: 0,
-      keyword: ''
+      keyword: '',
+      entrustment: [],
+      cooperation: [],
+      design: '',
+      year: '',
+      month: '',
+      date: '',
+      workDay: 0,
+      isPackageShow: false,
+      sOrP: '',
+      FirstPartyName: '',
+      SecondPartyName: '',
+      FirstPartyyear: '',
+      FirstPartymonth: '',
+      FirstPartydate: '',
+      SecondPartyyear: '',
+      SecondPartymonth: '',
+      SecondPartydate: '',
+      yearl: '',
+      monthl: '',
+      datel: '',
+      yearp: '',
+      monthp: '',
+      datep: '',
+      Data: ''
     }
   },
   mounted () {
-    this.price = this.$route.params.price
-    // console.log(document.getElementById('content').innerText)
+    let date = new Date()
+    this.year = date.getFullYear()
+    this.month = date.getMonth() + 1
+    this.date = date.getDate()
+    this.FirstPartyyear = date.getFullYear()
+    this.FirstPartymonth = date.getMonth() + 1
+    this.FirstPartydate = date.getDate()
+    this.SecondPartyyear = date.getFullYear()
+    this.SecondPartymonth = date.getMonth() + 1
+    this.SecondPartydate = date.getDate()
+    this.getType()
   },
   methods: {
+    isPaper (ev) {
+      // console.log(ev.path[0].value)
+      this.Data = document.getElementById('content').textContent + '/' + ev.path[0].value
+    },
+    getType () {
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        this.isPackageShow = false
+        this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
+        this.sOrP = '套餐'
+        this.price = this.$route.params.price
+      } else {
+        this.isPackageShow = true
+        this.listco = ['单项合作']
+        this.sOrP = '单项'
+        this.price = this.$route.params.price[0]
+      }
+    },
+    next () {
+      this.$router.push({
+        name: 'SinglePrice',
+        params: {
+          price: this.price,
+          data: this.Data
+        }
+      })
+      // console.log(this.Data)
+    },
+    chooseEvent (ev) {
+      this.design = ''
+      if (ev.path[0].checked === true) {
+        this.entrustment.push(ev.path[1].innerText)
+        this.entrustment.forEach(v => {
+          this.design += v
+        })
+      } else {
+        this.entrustment.forEach((v, k) => {
+          if (v === ev.path[1].innerText) {
+            this.entrustment.splice(k, 1)
+          }
+        })
+        this.entrustment.forEach(v => {
+          this.design += v
+        })
+        // console.log(this.entrustment)
+      }
+      // console.log(this.design)
+    },
+    chooseCoopration (ev) {
+      if (ev.path[0].checked === true) {
+        this.cooperation.push(ev.path[1].innerText)
+      } else {
+        this.cooperation.forEach((v, k) => {
+          if (v === ev.path[1].innerText) {
+            this.cooperation.splice(k, 1)
+          }
+        })
+        // console.log(this.cooperation)
+      }
+    },
     backPage () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
