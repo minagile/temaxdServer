@@ -211,15 +211,31 @@ export default {
   mounted () {
     this.getPlace()
     this.getType()
-    console.log(this.$route.params.SpecificDemand)
+    // console.log(JSON.parse(sessionStorage.getItem('specific_demand_data')))
   },
   methods: {
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
         this.isPackageShow = false
+        let specificData = JSON.parse(sessionStorage.getItem('specific_demand_data_pack'))
+        if (specificData) {
+          this.beginTime = specificData[1].BeginTime
+          this.proCycle = specificData[1].ProCycle
+          this.invoice = specificData[1].Invoice
+          this.proPrice = specificData[1].ProPrice
+          this.workPlace = specificData[1].WorkPlace
+        }
       } else {
         this.isPackageShow = true
+        let specificData = JSON.parse(sessionStorage.getItem('specific_demand_data'))
+        if (specificData) {
+          this.beginTime = specificData[2].BeginTime
+          this.proCycle = specificData[2].ProCycle
+          this.invoice = specificData[2].Invoice
+          this.proPrice = specificData[2].ProPrice
+          this.workPlace = specificData[2].WorkPlace
+        }
       }
     },
     // 工作地点
@@ -288,16 +304,31 @@ export default {
       } else if (this.workPlace === '') {
         alert('您还没有选择工作地点')
       } else {
-        let SpecificDemandData = [this.$route.params.SpecificDemand, {
+        let type = localStorage.getItem('type')
+        let specific = {
           'BeginTime': this.beginTime,
           'ProCycle': this.proCycle,
           'Invoice': this.invoice,
           'ProPrice': this.proPrice,
           'WorkPlace': this.workPlace
-        }]
-        this.$router.push({name: 'Attachment', params: {attachment: SpecificDemandData}})
+        }
+        if (type === 'package') {
+          let SpecificDemandData = [
+            JSON.parse(sessionStorage.getItem('page_demand_data_pack')),
+            specific
+          ]
+          this.$router.push('/ChoosePage/attachment')
+          sessionStorage.setItem('specific_demand_data_pack', JSON.stringify(SpecificDemandData))
+        } else {
+          let SpecificDemandData = [
+            JSON.parse(sessionStorage.getItem('page_select_data')).select,
+            JSON.parse(sessionStorage.getItem('page_demand_data')),
+            specific
+          ]
+          this.$router.push('/ChoosePage/attachment')
+          sessionStorage.setItem('specific_demand_data', JSON.stringify(SpecificDemandData))
+        }
       }
-      // sessionStorage.setItem('SpecificDemandData', JSON.stringify(SpecificDemandData))
     }
   }
 }

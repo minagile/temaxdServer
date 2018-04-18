@@ -67,7 +67,7 @@ export default {
   },
   mounted () {
     this.getType()
-    console.log(this.$route.params.attachment)
+    // console.log(this.$route.params.attachment)
   },
   methods: {
     upLoadFile (e) {
@@ -84,19 +84,46 @@ export default {
       let type = localStorage.getItem('type')
       if (type === 'package') {
         this.isPackageShow = false
+        let attach = JSON.parse(sessionStorage.getItem('file_data_pack'))
+        if (attach) {
+          this.desc = attach[1].info
+          if (this.path !== '') {
+            this.path.name = attach[1].file
+          }
+        }
       } else {
         this.isPackageShow = true
+        let attach = JSON.parse(sessionStorage.getItem('file_data'))
+        if (attach) {
+          this.desc = attach[1].info
+          if (this.path !== '') {
+            this.path.name = attach[1].file
+          }
+        }
       }
     },
     next () {
       this.$router.push({
         name: 'IntroCompany',
-        params: {
-          Introcompany: [
-            this.$route.params.attachment, {'file': this.path.name, 'info': this.desc}
-          ]
-        }
+        // params: {
+        //   Introcompany: [
+        //     JSON.parse(sessionStorage.getItem('specific_demand_data')),
+        //     {'file': this.path.name, 'info': this.desc}
+        //   ]
+        // }
       })
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        sessionStorage.setItem('file_data_pack', JSON.stringify(
+          [JSON.parse(sessionStorage.getItem('specific_demand_data_pack')),
+          {'file': this.path.name, 'info': this.desc}]
+        ))
+      } else {
+        sessionStorage.setItem('file_data', JSON.stringify(
+          [JSON.parse(sessionStorage.getItem('specific_demand_data')),
+          {'file': this.path.name, 'info': this.desc}]
+        ))
+      }
     },
     descInput () {
       let val = this.desc.length

@@ -14,6 +14,13 @@ export default {
 * {
   margin: 0;
   padding: 0;
+  font-size: 14px;
+}
+input {
+  font-size: 14px;
+}
+div {
+  font-size: 14px;
 }
 a {
   text-decoration: none;

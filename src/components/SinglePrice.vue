@@ -67,27 +67,44 @@ export default {
   data () {
     return {
       isPay: false,
-      price: ''
+      price: '',
+      data: {}
     }
   },
   mounted () {
-    this.price = this.$route.params.price
-    console.log(this.$route.params)
+    // this.price = this.$route.params.price
+    // console.log(this.$route.params)
+    this.getType()
   },
   methods: {
+    getType () {
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        this.data = JSON.parse(sessionStorage.getItem('agreement_data_pack'))
+        if (this.data) {
+          this.price = this.data.price
+        }
+      } else {
+        this.data = JSON.parse(sessionStorage.getItem('agreement_data'))
+        if (this.data) {
+          this.price = this.data.price
+        }
+      }
+    },
     payMoney () {
       let type = localStorage.getItem('type')
       // this.isPay = true
       let that = this
-      let config = { headers: { 'Content-Type': 'multipart/form-data' } }
+      // let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       if (type === 'package') {
-        that.$http.post('https://www.temaxd.com/addDoc', {
+        console.log(JSON.stringify(this.data))
+        that.$http.get('https://www.temaxd.com/addDoc', {
           params: {
             docId: sessionStorage.getItem('docId'),
-            contract: this.$route.params.data,
+            contract: JSON.stringify(this.data),
             payment_state: 0
           }
-        }, config).then((res) => {
+        }).then((res) => {
           console.log(res)
           // let iTimer = setInterval(() => {
           //   window.location.href = 'https://account.teambition.com/login'
@@ -95,14 +112,15 @@ export default {
           // }, 3000)
         })
       } else {
-        that.$http.post('https://www.temaxd.com/addDoc', {
+        // console.log(JSON.parse(sessionStorage.getItem('quotation_data'))[2])
+        that.$http.get('https://www.temaxd.com/addDoc', {
           params: {
             docId: sessionStorage.getItem('docId'),
-            offer: JSON.stringify(this.$route.params.offer),
-            contract: this.$route.params.data,
+            offer: JSON.stringify(JSON.parse(sessionStorage.getItem('quotation_data'))[2]),
+            contract: JSON.stringify(this.data),
             payment_state: 0
           }
-        }, config).then((res) => {
+        }).then((res) => {
           console.log(res)
           // let iTimer = setInterval(() => {
           //   window.location.href = 'https://account.teambition.com/login'

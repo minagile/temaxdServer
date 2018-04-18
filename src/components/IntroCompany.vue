@@ -55,7 +55,7 @@
             <td><div>联系人信息</div></td>
             <td>
               <div class="contact">
-                <div class="info"><input type="text" placeholder="姓名" v-model="name" /></div>
+                <div class="info"><input type="text" placeholder="姓名" v-model="fullname" /></div>
                 <div class="info"><input type="text" placeholder="职位" v-model="position" /></div>
                 <div class="info"><input type="mail" placeholder="邮箱" v-model="mail" /></div>
                 <div class="info"><input type="text" placeholder="电话" v-model="phone" /></div>
@@ -81,7 +81,7 @@ export default {
     return {
       desc: '',
       remnant: 500,
-      name: '',
+      fullname: '',
       position: '',
       mail: '',
       phone: '',
@@ -92,15 +92,36 @@ export default {
   },
   mounted () {
     this.getType()
-    console.log(this.$route.params.Introcompany)
+    // console.log(JSON.parse(sessionStorage.getItem('file_data')))
   },
   methods: {
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
         this.isPackageShow = false
+        let data = JSON.parse(sessionStorage.getItem('intro_data_pack'))
+        console.log(data)
+        if (data) {
+          this.companyName = data[1].company_name
+          this.desc = data[1].company_profile
+          this.companyWeb = data[1].company_url
+          this.fullname = data[1].contact_name
+          this.position = data[1].contact_position
+          this.mail = data[1].contact_mail
+          this.phone = data[1].contact_phone
+        }
       } else {
         this.isPackageShow = true
+        let data = JSON.parse(sessionStorage.getItem('intro_data'))
+        if (data) {
+          this.companyName = data.company_name
+          this.desc = data.company_profile
+          this.companyWeb = data.company_url
+          this.fullname = data.contact_name
+          this.position = data.contact_position
+          this.mail = data.contact_mail
+          this.phone = data.contact_phone
+        }
       }
     },
     // 下一页
@@ -112,7 +133,7 @@ export default {
         alert('您还没有填写公司简介')
       } else if (this.companyWeb === '') {
         alert('您还没有填写网站地址')
-      } else if (this.name === '') {
+      } else if (this.fullname === '') {
         alert('您还没有填写姓名')
       } else if (this.position === '') {
         alert('您还没有填写地址')
@@ -122,37 +143,44 @@ export default {
         alert('您还没有填写电话')
       } else {
         if (type === 'individual') {
+          sessionStorage.setItem('intro_data', JSON.stringify(
+            {
+              'company_name': this.companyName,
+              'company_profile': this.desc,
+              'company_url': this.companyWeb,
+              'contact_name': this.fullname,
+              'contact_position': this.position,
+              'contact_mail': this.mail,
+              'contact_phone': this.phone
+            }
+          ))
           // 存入数据
           let that = this
-          let data = this.$route.params.Introcompany
-          let style = ''
-          data[0][0][1].Style.forEach(v => {
-            style += v + ','
-          })
+          let data = JSON.parse(sessionStorage.getItem('file_data'))
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
-              designs_type: JSON.stringify([['单项'], data[0][0][0]]), // 设计类型
-              project_name: data[0][0][1].ProjectName, // 项目名称
-              project_phase: data[0][0][1].ProjectProgress, // 项目阶段
-              project_element: data[0][0][1].HasElement, // 项目元素
-              target_user: data[0][0][1].TargetUser, //目标用户
-              industry_field: data[0][0][1].Industry, // 行业领域
-              creative_style: style, // 创意风格
-              project_start_time: data[0][1].BeginTime, // 开始时间
-              project_cycle: data[0][1].ProCycle, // 项目周期
-              project_budget: data[0][1].ProPrice, // 项目预算
-              invoice: data[0][1].Invoice, // 发票
-              work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
+              designs_type: JSON.stringify([['单项'], data[0][0]]), // 设计类型
+              project_name: data[0][1].ProjectName, // 项目名称
+              project_phase: data[0][1].ProjectProgress, // 项目阶段
+              project_element: data[0][1].HasElement, // 项目元素
+              target_user: data[0][1].TargetUser, //目标用户
+              industry_field: data[0][1].Industry, // 行业领域
+              creative_style: JSON.stringify(data[0][1].Style), // 创意风格
+              project_start_time: data[0][2].BeginTime, // 开始时间
+              project_cycle: data[0][2].ProCycle, // 项目周期
+              project_budget: data[0][2].ProPrice, // 项目预算
+              invoice: data[0][2].Invoice, // 发票
+              work_place: data[0][2].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
               attachment: data[1].file, // 补充附件(选填)
               supp_info: data[1].info, // 补充信息
               company_name: this.companyName, // 公司名称
               company_profile: this.desc, // 公司简介
               company_url: this.companyWeb, // 公司网址
-              contact_information: this.name + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
+              contact_information: this.fullname + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
             }
           }).then((res) => {
-            sessionStorage.setItem('docId', JSON.parse(res.data.split(':')[1]))
-            this.$router.push({name: 'Quotation', params: {docId: res.data.split(':')[1]}})
+            sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
+            this.$router.push({name: 'Quotation'})
           }).catch(err => {
             console.log(err)
           })
@@ -161,7 +189,7 @@ export default {
             'company_name': this.companyName,
             'company_profile': this.desc,
             'company_url': this.companyWeb,
-            'contact_information': this.name + '/' + this.position + '/' + this.mail + '/' + this.phone
+            'contact_information': this.fullname + '/' + this.position + '/' + this.mail + '/' + this.phone
           }
           this.$router.push({name: 'SimpleSelect',
             params: {
@@ -169,6 +197,17 @@ export default {
               introduceCompany: data
             }
           })
+          sessionStorage.setItem('intro_data_pack', JSON.stringify(
+            [JSON.parse(sessionStorage.getItem('file_data_pack')), {
+              'company_name': this.companyName,
+              'company_profile': this.desc,
+              'company_url': this.companyWeb,
+              'contact_name': this.fullname,
+              'contact_position': this.position,
+              'contact_mail': this.mail,
+              'contact_phone': this.phone
+            }]
+          ))
         }
       }
     },

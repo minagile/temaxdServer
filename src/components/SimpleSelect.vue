@@ -20,9 +20,9 @@
     <div class="content" id="content">
       <div class="classify" id="kinds">
         <div class="classify-box" v-for="(item, index) in data" :key="index"
-        @click="chooseKind($event, index)"
-        @mouseenter="move($event, index)"
-        @mouseleave="leave($event, index)">
+          @click="chooseKind($event, index)"
+          @mouseenter="move($event, index)"
+          @mouseleave="leave($event, index)">
           <div class="icon">
             <img :src="imgIcon" alt="">
           </div>
@@ -83,9 +83,9 @@
                           <div class="range_box">
                             <input type="number" @input="writeNumber($event, index)" />
                           </div>
-                          <div class="range_box" @change="writeRange($event, index)">
+                          <!-- <div class="range_box" @change="writeRange($event, index)">
                             <input class="r" type="number"><span style="display:none;">{{bLNum}}</span>~<input class="r" type="number"><span style="display:none;">{{bRNum}}</span>
-                          </div>
+                          </div> -->
                         </div>
                       </div>
                     </div>
@@ -282,7 +282,8 @@ export default {
       ],
       numberNum: '',
       bLNum: 0,
-      bRNum: ''
+      bRNum: '',
+      clickTime: 0
     }
   },
   mounted () {
@@ -315,7 +316,11 @@ export default {
     },
     // 选择数量或范围
     chooseNumOrRange (e) {
-      e.path[0].nextElementSibling.style.display = 'block'
+      // if (e.path[0].nextElementSibling.style.display === 'block') {
+      //   e.path[0].nextElementSibling.style.display = 'none'
+      // } else {
+      //   e.path[0].nextElementSibling.style.display = 'block'
+      // }
     },
     numberRange (e, data) {
       console.log(e.path[2].children[0].innerHTML)
@@ -366,6 +371,12 @@ export default {
         } else if (this.numberNum === '' && this.bRNum === '') {
           alert('您还有数量尚未填写')
         } else {
+          let pageData = {
+            list: this.chooseList,
+            select: this.selected,
+            datalist: this.datalist
+          }
+          sessionStorage.setItem('page_select_data', JSON.stringify(pageData))
           this.$router.push({name: 'Demand', params: {designs_type: this.selected}})
         }
       } else if (type === 'package') {
@@ -376,9 +387,11 @@ export default {
             'TotalPrice': this.totalPrice,
             'select': this.selected
           }
+          sessionStorage.setItem('page_select_data_pack', JSON.stringify([sdata, this.chooseList, this.datalist]))
           // 存入数据
           let that = this
-          let data = this.$route.params.selectData
+          let data = JSON.parse(sessionStorage.getItem('intro_data_pack'))
+          console.log(data)
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
               designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
@@ -388,25 +401,26 @@ export default {
               target_user: data[0][0][0].TargetUser, //目标用户
               industry_field: data[0][0][0].Industry, // 行业领域
               creative_style: JSON.stringify(data[0][0][0].Style), // 创意风格
-              project_start_time: data[0][1].BeginTime, // 开始时间
-              project_cycle: data[0][1].ProCycle, // 项目周期
-              project_budget: data[0][1].ProPrice, // 项目预算
-              invoice: data[0][1].Invoice, // 发票
-              work_place: data[0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
-              attachment: data[1].file, // 补充附件(选填)
-              supp_info: data[1].info, // 补充信息
-              company_name: this.$route.params.introduceCompany.company_name, // 公司名称
-              company_profile: this.$route.params.introduceCompany.company_profile, // 公司简介
-              company_url: this.$route.params.introduceCompany.company_url, // 公司网址
-              contact_information: this.$route.params.introduceCompany.contact_information // 公司联系人信息
+              project_start_time: data[0][0][1].BeginTime, // 开始时间
+              project_cycle: data[0][0][1].ProCycle, // 项目周期
+              project_budget: data[0][0][1].ProPrice, // 项目预算
+              invoice: data[0][0][1].Invoice, // 发票
+              work_place: data[0][0][1].WorkPlace.replace(' / ', '-').replace(' / ', '-'), // 工作地点
+              // attachment: data[0][1].file, // 补充附件(选填)
+              supp_info: data[0][1].info, // 补充信息
+              company_name: data[1].company_name, // 公司名称
+              company_profile: data[1].company_profile, // 公司简介
+              company_url: data[1].company_url, // 公司网址
+              contact_information: data[1].contact_name + '/' + data[1].contact_position + '/' + data[1].contact_mail + '/' + data[1].contact_phone // 公司联系人信息
             }
           }).then((res) => {
+            console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
             sessionStorage.setItem('total', JSON.stringify({
               'TotalPrice': this.totalPrice,
               'select': this.selected
             }))
-            this.$router.push({name: 'Agreement', params: {price: [this.totalPrice, res.data.split(':')[1]]}})
+            this.$router.push({name: 'Agreement'})
           }).catch(err => {
             console.log(err)
           })
@@ -416,7 +430,7 @@ export default {
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        console.log(this.$route.params)
+        // console.log(this.$route.params)
         this.isPackageShow = false
         this.Data = PackageData
         this.isSingel = false
@@ -426,6 +440,14 @@ export default {
           [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}],
           [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}]
         ]
+        // let pageData = JSON.parse(sessionStorage.getItem('page_select_data_pack'))
+        // if (pageData) {
+        //   this.totalPrice = pageData[0].TotalPrice
+        //   this.selected = pageData[0].select
+        //   this.datalist = pageData[2]
+        //   this.chooseList = pageData[1]
+        //   this.isClick = true
+        // }
       } else {
         this.Data = DataType
         this.isPackageShow = true
@@ -434,6 +456,13 @@ export default {
         } else {
           this.isNumShow = true
         }
+        // let pageData = JSON.parse(sessionStorage.getItem('page_select_data'))
+        // if (pageData) {
+        //   this.chooseList = pageData.list
+        //   this.selected = pageData.select
+        //   this.datalist = pageData.datalist
+        //   this.isClick = true
+        // }
       }
     },
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
@@ -529,6 +558,8 @@ export default {
     },
     // 点击事件
     chooseKind (event, i) {
+      this.clickTime++
+      // console.log(this.clickTime)
       let detail = document.getElementById('detail')
       if (detail.style.display === 'none') {
         detail.style.display = 'block'
@@ -542,6 +573,17 @@ export default {
       if (element.style.display !== 'block') {
         element.style.display = 'block'
         chooseObj = this.Data.data[i]
+        // if (this.clickTime === 1) {
+        //   this.chooseList.forEach((v, k) => {
+        //     if (v.id === i) {
+        //       console.log(v)
+        //     } else {
+        //       this.chooseList.push({chooseObj: chooseObj, id: i})
+        //     }
+        //   })
+        // } else {
+        //   this.chooseList.push({chooseObj: chooseObj, id: i})
+        // }
         this.chooseList.push({chooseObj: chooseObj, id: i})
       } else {
         element.style.display = 'none'
@@ -672,6 +714,7 @@ export default {
     top: 172px;
     width: 810px;
     height: 365px;
+    border-radius: 0.04rem;
     .classify-detail {
       display: none;
       width: 100%;
@@ -706,6 +749,7 @@ export default {
         z-index: 9;
         padding: 10px 0 0 5px;
         overflow: hidden;
+        border-radius: 0.04rem;
         // display: flex;
         // justify-content: space-around;
         // align-items: center;
@@ -768,6 +812,9 @@ export default {
           text-align: left;
           text-indent: 45px;
           line-height: 0.5rem;
+          &:nth-of-type(1) {
+            background: rgba(234, 234, 234, 1);
+          }
           .first {
             cursor: pointer;
             font-size: 14px;
@@ -921,10 +968,14 @@ export default {
       position: relative;
     }
     .left_part {
+      box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
       .level {
         text-align: left;
         text-indent: 0.45rem;
         line-height: 0.5rem;
+        &:nth-of-type(1) {
+          background: #eaeaea;
+        }
         .first {
           width: 100%;
           height: 0.5rem;

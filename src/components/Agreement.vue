@@ -89,13 +89,13 @@
                           <input class="short" type="text" v-model="year" /><span style="display:none">{{ year }}</span>年
                           <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
                           <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日至
-                          <input class="short" type="text" v-model="yearl" /><span style="display:none">{{ yearl }}</span>年
-                          <input class="short" type="text" v-model="monthl" /><span style="display:none">{{ monthl }}</span>月
-                          <input class="short" type="text" v-model="datel" /><span style="display:none">{{ datel }}</span>日，共计 
-                          <span class="cash">{{ workDay }}</span> 个工作日。
+                          <input class="short" type="text" v-model="yearp" /><span style="display:none">{{ yearp }}</span>年
+                          <input class="short" type="text" v-model="monthp" /><span style="display:none">{{ monthp }}</span>月
+                          <input class="short" type="text" v-model="datep" /><span style="display:none">{{ datep }}</span>日，共计 
+                          <input class="short" type="text" v-model="howLong" /> 个工作日。
                         </p>
                         <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" v-model="workDay" />个工作日内设计出甲方<span class="cash">{{design}}</span>（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
-                        <p class="indent">1.4 经过甲方最终确认的终稿，乙方在收到甲方余款结清后的有关凭据后<span class="cash">{{ workDay }}</span>个工作日内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
+                        <p class="indent">1.4 经过甲方最终确认的终稿，乙方在收到甲方余款结清后的有关凭据后<input class="short" type="text" v-model="beginWork" />个工作日内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
                         <p class="indent">1.5 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
                         <p class="indent">1.6 如发生人力不可抗拒因素或甲方原因导致乙方不能按时开工或者设计期间中止，由双方协商，设计工期顺延。</p>
                       </div>
@@ -104,11 +104,11 @@
                       <div class="t">1. 【套餐服务】</div>
                       <div class="ser_con">
                         <div class="indent">
-                          <div>2.1 付款期限：</div>
+                          <div>1.1 付款期限：</div>
                           <p>(1) 甲方需在合同签订之日起两个工作日内支付委托设计总费用的85%即人民币￥<span class="cash">{{ price * 0.85 }}</span>元(大写：<span class="cash">{{ price * 0.85 | intToChinese }}</span>)。（乙方收到甲方的银行划帐凭据后作为设计的开始时间）。</p>
                           <p>(2) 合作时间结束后，甲方需在三天内签名或盖章确认，确认后甲方应当即付清设计费用的全部余款（总费用的15%，即人民币￥<span class="cash">{{ price * 0.15 }}</span>元，大写：<span class="cash">{{ price * 0.15 | intToChinese }}</span>）。</p>
                         </div>
-                        <p class="indent">2.2 设计工期：从
+                        <p class="indent">1.2 设计工期：从
                           <input class="short" type="text" v-model="year"/><span style="display:none">{{ year }}</span>年
                           <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
                           <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日
@@ -116,10 +116,10 @@
                           <input class="short" type="text" v-model="monthp" /><span style="display:none">{{ monthp }}</span>月
                           <input class="short" type="text" v-model="datep" /><span style="display:none">{{ datep }}</span>日。
                         </p>
-                        <p class="indent">2.3 甲方在设计工期内需提前1~3天提出设计要求，乙方需根据设计内容制定设计周期并在与甲方确认沟通后开始制作。</p>
-                        <p class="indent">2.4 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
-                        <p class="indent">2.5 经过甲方最终确认的终稿，乙方需在服务期内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
-                        <p class="indent">2.6 如发生人力不可抗拒因素或甲方原因导致乙方不能按时开工或者设计期间中止，由双方协商，设计工期顺延。</p>
+                        <p class="indent">1.3 甲方在设计工期内需提前1~3天提出设计要求，乙方需根据设计内容制定设计周期并在与甲方确认沟通后开始制作。</p>
+                        <p class="indent">1.4 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
+                        <p class="indent">1.5 经过甲方最终确认的终稿，乙方需在服务期内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
+                        <p class="indent">1.6 如发生人力不可抗拒因素或甲方原因导致乙方不能按时开工或者设计期间中止，由双方协商，设计工期顺延。</p>
                       </div>
                     </div>
                   </div>
@@ -245,7 +245,7 @@ export default {
       year: '',
       month: '',
       date: '',
-      workDay: 0,
+      workDay: '',
       isPackageShow: false,
       sOrP: '',
       FirstPartyName: '',
@@ -256,14 +256,14 @@ export default {
       SecondPartyyear: '',
       SecondPartymonth: '',
       SecondPartydate: '',
-      yearl: '',
-      monthl: '',
-      datel: '',
       yearp: '',
       monthp: '',
       datep: '',
       Data: '',
-      cName: ''
+      cName: '',
+      coo: '',
+      beginWork: '',
+      howLong: ''
     }
   },
   mounted () {
@@ -282,7 +282,7 @@ export default {
   methods: {
     isPaper (ev) {
       // console.log(ev.path[0].value)
-      this.Data = document.getElementById('content').textContent + '/' + ev.path[0].value
+      this.Data = ev.path[0].value
     },
     getType () {
       let type = localStorage.getItem('type')
@@ -290,32 +290,70 @@ export default {
         this.isPackageShow = false
         this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
         this.sOrP = '套餐'
-        // this.price = this.$route.params.price[0]
         let total = JSON.parse(sessionStorage.getItem('total'))
         this.price = total.TotalPrice
-        // console.log(total)
+        let agreeData = JSON.parse(sessionStorage.getItem('agreement_data_pack'))
+        if (agreeData) {
+          this.cName = agreeData.first_part
+          this.keyword = agreeData.Event
+          this.FirstPartyName = agreeData.first_part_p
+          this.SecondPartyName = agreeData.second_part_p
+        }
       } else {
         this.isPackageShow = true
         this.listco = ['单项合作']
         this.sOrP = '单项'
-        this.price = this.$route.params.price[0]
+        this.price = JSON.parse(sessionStorage.getItem('quotation_data'))[0]
+        let agreeData = JSON.parse(sessionStorage.getItem('agreement_data'))
+        if (agreeData) {
+          this.cName = agreeData.first_part
+          this.keyword = agreeData.Event
+          this.FirstPartyName = agreeData.first_part_p
+          this.SecondPartyName = agreeData.second_part_p
+          this.workDay = agreeData.work_day
+          this.beginWork = agreeData.begin_work
+          this.howLong = agreeData.howlong
+        }
       }
     },
     next () {
+      let type = localStorage.getItem('type')
       if (this.Data === '') {
         alert('请选择是否需要纸质版')
       } else {
-        this.$router.push({
-          name: 'SinglePrice',
-          params: {
-            price: this.price,
-            docId: this.$route.params.price[1],
-            data: this.Data,
-            offer: this.$route.params.price[2]
+        if (type === 'package') {
+          let packData = {
+            'first_part': this.cName,
+            'price': this.price,
+            'design': this.design,
+            'paper': this.Data,
+            'cooperation': this.coo,
+            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
+            'Event': this.keyword,
+            'first_part_p': this.FirstPartyName,
+            'second_part_p': this.SecondPartyName
           }
-        })
+          sessionStorage.setItem('agreement_data_pack', JSON.stringify(packData))
+          this.$router.push({name: 'SinglePrice'})
+        } else {
+          let packData = {
+            'first_part': this.cName,
+            'price': this.price,
+            'design': this.design,
+            'paper': this.Data,
+            'cooperation': this.coo,
+            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
+            'Event': this.keyword,
+            'first_part_p': this.FirstPartyName,
+            'second_part_p': this.SecondPartyName,
+            'work_day': this.workDay,
+            'begin_work': this.beginWork,
+            'howlong': this.howLong
+          }
+          sessionStorage.setItem('agreement_data', JSON.stringify(packData))
+          this.$router.push({name: 'SinglePrice'})
+        }
       }
-      // console.log(this.Data)
     },
     chooseEvent (ev) {
       this.design = ''
@@ -338,7 +376,8 @@ export default {
       // console.log(this.design)
     },
     chooseCoopration (ev, index) {
-      // console.log(index)
+      // console.log(ev)
+      this.coo = ev.path[1].innerText
       if (ev.path[2].children.length > 2) {
         let date = new Date()
         if (index === 0 || index === 3) {
@@ -540,7 +579,7 @@ export default {
           word-wrap: break-word;
         }
         &.short {
-          width: 30px;
+          width: 40px;
           text-align: center;
         }
       }

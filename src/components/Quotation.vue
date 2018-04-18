@@ -25,7 +25,7 @@
           <table border="1">
             <tr v-for="(v, j) in item.list" :key="j">
               <td v-for="(m, n) in v" :key="n">
-                <div @click="chooseData($event, m, n, j, i)">{{ m }}</div>
+                <div @click="chooseData($event, m, n, j, i, item.id)">{{ m }}</div>
                 <img class="chooseMoney" :src="imgUrl" />
               </td>
             </tr>
@@ -62,23 +62,26 @@ export default {
   },
   mounted () {
     this.handleData()
-    console.log(this.$route.params.docId)
+    // console.log(this.$route.params.docId)
   },
   methods: {
     nextpage () {
       if (this.Total === 0) {
         alert('您还没有选择价格')
       } else {
+        sessionStorage.setItem('quotation_data', JSON.stringify([this.Total, JSON.parse(sessionStorage.getItem('docId')), this.value]))
         this.$router.push({
           name: 'Agreement',
           params: {
-            price: [this.Total, this.$route.params.docId, this.value]
+            price: [this.Total, JSON.parse(sessionStorage.getItem('docId')), this.value]
           }
         })
       }
     },
     handleData () {
       let selectData = JSON.parse(sessionStorage.getItem('select'))
+      // let quotationData = JSON.parse(sessionStorage.getItem('quotation_data'))
+      // console.log(quotationData)
       allPrice.data.forEach(m => {
         m.Code.forEach(n => {
           n.data.forEach(x => {
@@ -89,15 +92,15 @@ export default {
             }
             selectData.forEach((v, k) => {
               if (v.Id === x.id) {
-                // console.log(x)
                 this.Data.push(x)
               }
             })
           })
         })
       })
+      // console.log(this.Data)
     },
-    chooseData (e, data, index, iIndex, k) {
+    chooseData (e, data, index, iIndex, k, id) {
       if (!/[\u4e00-\u9fa5]/.test(data)) {
         let oTr = e.path[3].children
         for (var i = 0; i < oTr.length; i++) {
@@ -123,7 +126,7 @@ export default {
             this.value.splice(n, 1)
           }
         })
-        this.value.push({'Price': data, 'Index': k, 'level': e.path[3].children[0].children[index].textContent, 'first': e.path[4].children[0].children[0].textContent})
+        this.value.push({'Price': data, 'Index': k, 'level': e.path[3].children[0].children[index].textContent, 'first': e.path[4].children[0].children[0].textContent, 'id': id})
         // console.log(e.path[4].children[0].children[0].textContent)
         let total = 0
         this.value.forEach((m, n) => {

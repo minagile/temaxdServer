@@ -157,6 +157,7 @@ export default {
   mounted () {
     this.getDemandData()
     this.getType()
+    // console.log(JSON.parse(sessionStorage.getItem('page_select_data')).select)
   },
   methods: {
     backPage () {
@@ -171,8 +172,26 @@ export default {
       let type = localStorage.getItem('type')
       if (type === 'package') {
         this.isPackageShow = false
+        let demand = JSON.parse(sessionStorage.getItem('page_demand_data_pack'))
+        if (demand) {
+          this.keyword = demand.ProjectName
+          this.progress = demand.ProjectProgress
+          this.element = demand.HasElement
+          this.desc = demand.TargetUser
+          this.areaBtnList = JSON.parse(demand.Industry)
+          this.style = demand.Style
+        }
       } else {
         this.isPackageShow = true
+        let demand = JSON.parse(sessionStorage.getItem('page_demand_data'))
+        if (demand) {
+          this.keyword = demand.ProjectName
+          this.progress = demand.ProjectProgress
+          this.element = demand.HasElement
+          this.desc = demand.TargetUser
+          this.areaBtnList = JSON.parse(demand.Industry)
+          this.style = demand.Style
+        }
       }
     },
     industryClick () {
@@ -253,8 +272,16 @@ export default {
             'Style': this.style
           }]
           this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+          sessionStorage.setItem('page_demand_data_pack', JSON.stringify({
+            'ProjectName': this.keyword,
+            'ProjectProgress': this.progress,
+            'HasElement': this.element,
+            'TargetUser': this.desc,
+            'Industry': JSON.stringify(this.areaBtnList),
+            'Style': this.style
+          }))
         } else {
-          let data = [this.$route.params.designs_type, {
+          let data = [JSON.parse(sessionStorage.getItem('page_select_data')).select, {
             'ProjectName': this.keyword,
             'ProjectProgress': this.progress,
             'HasElement': this.element,
@@ -263,6 +290,14 @@ export default {
             'Style': this.style
           }]
           this.$router.push({name: 'SpecificDemand', params: {SpecificDemand: data}})
+          sessionStorage.setItem('page_demand_data', JSON.stringify({
+            'ProjectName': this.keyword,
+            'ProjectProgress': this.progress,
+            'HasElement': this.element,
+            'TargetUser': this.desc,
+            'Industry': JSON.stringify(this.areaBtnList),
+            'Style': this.style
+          }))
         }
       }
     }
