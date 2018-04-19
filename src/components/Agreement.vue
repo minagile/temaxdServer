@@ -89,9 +89,9 @@
                           <input class="short" type="text" v-model="year" /><span style="display:none">{{ year }}</span>年
                           <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
                           <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日至
-                          <input class="short" type="text" v-model="yearp" /><span style="display:none">{{ yearp }}</span>年
-                          <input class="short" type="text" v-model="monthp" /><span style="display:none">{{ monthp }}</span>月
-                          <input class="short" type="text" v-model="datep" /><span style="display:none">{{ datep }}</span>日，共计 
+                          <input class="short" type="text" v-model="yearp" @input="calcu" /><span style="display:none">{{ yearp }}</span>年
+                          <input class="short" type="text" v-model="monthp" @input="calcu" /><span style="display:none">{{ monthp }}</span>月
+                          <input class="short" type="text" v-model="datep" @input="calcu" /><span style="display:none">{{ datep }}</span>日，共计 
                           <input class="short" type="text" v-model="howLong" /> 个工作日。
                         </p>
                         <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" v-model="workDay" />个工作日内设计出甲方<span class="cash">{{design}}</span>（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
@@ -200,6 +200,7 @@
                     <input class="short" type="text" v-model="SecondPartyyear"/><span style="display:none">{{ SecondPartyyear }}</span>年
                     <input class="short" type="text" v-model="SecondPartymonth"/><span style="display:none">{{ SecondPartymonth }}</span>月
                     <input class="short" type="text" v-model="SecondPartydate"/><span style="display:none">{{ SecondPartydate }}</span>日
+                    <!-- <input type="date"> -->
                   </div>
                 </div>   
               </div>
@@ -280,6 +281,9 @@ export default {
     this.getType()
   },
   methods: {
+    calcu () {
+      this.howLong = datedifference(this.year + '-' + this.month + '-' + this.date, this.yearp + '-' + this.monthp + '-' + this.datep)
+    },
     isPaper (ev) {
       // console.log(ev.path[0].value)
       this.Data = ev.path[0].value
@@ -337,18 +341,18 @@ export default {
           this.$router.push({name: 'SinglePrice'})
         } else {
           let packData = {
-            'first_part': this.cName,
-            'price': this.price,
-            'design': this.design,
-            'paper': this.Data,
-            'cooperation': this.coo,
-            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
-            'Event': this.keyword,
-            'first_part_p': this.FirstPartyName,
-            'second_part_p': this.SecondPartyName,
-            'work_day': this.workDay,
-            'begin_work': this.beginWork,
-            'howlong': this.howLong
+            'first_part': this.cName,//甲方公司
+            'price': this.price,//价格
+            'design': this.design,//选择事项
+            'paper': this.Data,//是否需要纸质版
+            'cooperation': this.coo,// 合作模式
+            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],//其实日期 结束日期 甲方日期 乙方日期
+            'Event': this.keyword,//注意事项
+            'first_part_p': this.FirstPartyName,//甲方授权人
+            'second_part_p': this.SecondPartyName,//一方授权人
+            'work_day': this.workDay,//共计n工作日
+            'begin_work': this.beginWork,//起始工作日
+            'howlong': this.howLong//邮寄工作日
           }
           sessionStorage.setItem('agreement_data', JSON.stringify(packData))
           this.$router.push({name: 'SinglePrice'})
@@ -477,6 +481,15 @@ export default {
       return strOutput
     }
   }
+}
+function datedifference(sDate1, sDate2) {
+  var dateSpan, tempDate, iDays
+  sDate1 = Date.parse(sDate1)
+  sDate2 = Date.parse(sDate2)
+  dateSpan = sDate2 - sDate1
+  dateSpan = Math.abs(dateSpan)
+  iDays = Math.floor(dateSpan / (24 * 3600 * 1000))
+  return iDays
 }
 </script>
 

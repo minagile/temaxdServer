@@ -97,10 +97,17 @@ export default {
       let that = this
       // let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       if (type === 'package') {
-        console.log(JSON.stringify(this.data))
-        that.$http.get('https://www.temaxd.com/addDoc', {
+        let str = JSON.parse(sessionStorage.getItem('total')).select
+        let arr = []
+        str.forEach(v => {
+          arr.push([v.classify, v.second, v.text])
+        })
+        // console.log(JSON.stringify(arr))
+        // console.log(this.data)
+        that.$http.get('https://www.temaxd.com/addDocs', {
           params: {
             docId: sessionStorage.getItem('docId'),
+            offer: '套餐',
             contract: JSON.stringify(this.data),
             payment_state: 0
           }
@@ -113,7 +120,7 @@ export default {
         })
       } else {
         // console.log(JSON.parse(sessionStorage.getItem('quotation_data'))[2])
-        that.$http.get('https://www.temaxd.com/addDoc', {
+        that.$http.get('https://www.temaxd.com/addDocs', {
           params: {
             docId: sessionStorage.getItem('docId'),
             offer: JSON.stringify(JSON.parse(sessionStorage.getItem('quotation_data'))[2]),

@@ -58,7 +58,7 @@
                 <div class="info"><input type="text" placeholder="姓名" v-model="fullname" /></div>
                 <div class="info"><input type="text" placeholder="职位" v-model="position" /></div>
                 <div class="info"><input type="mail" placeholder="邮箱" v-model="mail" /></div>
-                <div class="info"><input type="text" placeholder="电话" v-model="phone" /></div>
+                <div class="info"><input type="text" placeholder="电话" v-model="phone" @blur="phoneChange(phone)" /></div>
               </div>
             </td>
           </tr>
@@ -95,6 +95,12 @@ export default {
     // console.log(JSON.parse(sessionStorage.getItem('file_data')))
   },
   methods: {
+    phoneChange (data) {
+      if (!(/^1[3|4|5|8][0-9]\d{4,8}$/.test(data))) {
+        alert('手机号码填写不正确')
+        this.phone = ''
+      }
+    },
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
@@ -179,6 +185,7 @@ export default {
               contact_information: this.fullname + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
             }
           }).then((res) => {
+            // console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
             this.$router.push({name: 'Quotation'})
           }).catch(err => {

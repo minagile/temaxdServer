@@ -71,10 +71,7 @@ export default {
       } else {
         sessionStorage.setItem('quotation_data', JSON.stringify([this.Total, JSON.parse(sessionStorage.getItem('docId')), this.value]))
         this.$router.push({
-          name: 'Agreement',
-          params: {
-            price: [this.Total, JSON.parse(sessionStorage.getItem('docId')), this.value]
-          }
+          name: 'Agreement'
         })
       }
     },
