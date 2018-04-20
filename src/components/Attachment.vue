@@ -6,8 +6,8 @@
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
+        <span class="circle"></span>
         <span class="circle big"></span>
-        <span class="circle c"></span>
         <span class="circle c"></span>
       </div>
       <div class="progress" v-show="!isPackageShow">

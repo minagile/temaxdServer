@@ -416,7 +416,7 @@ export default {
       if (type === 'package') {
         this.$router.push('/ChoosePage/SimpleSelect')
       } else {
-        this.$router.push('/ChoosePage/quotation')
+        this.$router.push('/ChoosePage/introcompany')
       }
     },
     calculate (ev, data) {

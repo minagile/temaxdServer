@@ -3,8 +3,8 @@
     <p>其次，请简单描述您的创意需求？</p>
     <div class="progress" v-show="isPackageShow">
       <span class="circle"></span>
+      <span class="circle"></span>
       <span class="circle big"></span>
-      <span class="circle c"></span>
       <span class="circle c"></span>
       <span class="circle c"></span>
       <span class="circle c"></span>
@@ -165,7 +165,7 @@ export default {
       if (type === 'package') {
         this.$router.push('/ChoosePage')
       } else {
-        this.$router.push('/ChoosePage/SimpleSelect')
+        this.$router.push('/ChoosePage/quotation')
       }
     },
     getType () {

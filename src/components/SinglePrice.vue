@@ -113,10 +113,10 @@ export default {
           }
         }).then((res) => {
           console.log(res)
-          // let iTimer = setInterval(() => {
-          //   window.location.href = 'https://account.teambition.com/login'
-          //   clearInterval(iTimer)
-          // }, 3000)
+          let iTimer = setInterval(() => {
+            window.location.href = 'https://account.teambition.com/login'
+            clearInterval(iTimer)
+          }, 3000)
         })
       } else {
         // console.log(JSON.parse(sessionStorage.getItem('quotation_data'))[2])
@@ -129,10 +129,10 @@ export default {
           }
         }).then((res) => {
           console.log(res)
-          // let iTimer = setInterval(() => {
-          //   window.location.href = 'https://account.teambition.com/login'
-          //   clearInterval(iTimer)
-          // }, 3000)
+          let iTimer = setInterval(() => {
+            window.location.href = 'https://account.teambition.com/login'
+            clearInterval(iTimer)
+          }, 3000)
         })
       }
     }

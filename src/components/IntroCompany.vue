@@ -7,8 +7,8 @@
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
+        <span class="circle"></span>
         <span class="circle big"></span>
-        <span class="circle c"></span>
       </div>
       <div class="progress" v-show="!isPackageShow">
         <span class="circle"></span>
@@ -187,7 +187,7 @@ export default {
           }).then((res) => {
             // console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
-            this.$router.push({name: 'Quotation'})
+            this.$router.push({name: 'Agreement'})
           }).catch(err => {
             console.log(err)
           })

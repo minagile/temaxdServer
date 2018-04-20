@@ -377,7 +377,7 @@ export default {
             datalist: this.datalist
           }
           sessionStorage.setItem('page_select_data', JSON.stringify(pageData))
-          this.$router.push({name: 'Demand', params: {designs_type: this.selected}})
+          this.$router.push({name: 'Quotation'})
         }
       } else if (type === 'package') {
         if (this.totalPrice === 0) {

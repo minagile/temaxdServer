@@ -4,11 +4,11 @@
       <p>请选择扁诞单项报价</p>
       <div class="progress">
         <span class="circle"></span>
-        <span class="circle"></span>
-        <span class="circle"></span>
-        <span class="circle"></span>
-        <span class="circle"></span>
-        <span class="big-circle"></span>
+        <span class="circle big"></span>
+        <span class="circle c"></span>
+        <span class="circle c"></span>
+        <span class="circle c"></span>
+        <span class="circle c"></span>
       </div>
       <div class="content">
         <div class="kinds" v-for="(item, i) in Data" :key="i">
@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="btn">
-          <router-link class="back" to="introcompany">返回</router-link>
+          <router-link class="back" to="SimpleSelect">返回</router-link>
           <a class="link" @click="nextpage">
             <button>继 续</button>
           </a>
@@ -71,7 +71,7 @@ export default {
       } else {
         sessionStorage.setItem('quotation_data', JSON.stringify([this.Total, JSON.parse(sessionStorage.getItem('docId')), this.value]))
         this.$router.push({
-          name: 'Agreement'
+          name: 'Demand'
         })
       }
     },
@@ -160,12 +160,12 @@ export default {
     height: 0;
     font-size: 0;
     .circle {
-      width: 0.11rem;
-      height: 0.11rem;
+      width: 12px;
+      height: 12px;
       display: block;
       background: #3cc8b4;
       left: 0;
-      top: -0.05rem;
+      top: -5px;
       position: absolute;
       border-radius: 50%;
       &:nth-of-type(2) {
@@ -180,16 +180,21 @@ export default {
       &:nth-of-type(5) {
         left: 648px;
       }
+      &:nth-of-type(6) {
+        left: 810px;
+      }
     }
-    .big-circle {
-      width: 0.18rem;
-      height: 0.18rem;
+    .big {
+      width: 18px;
+      height: 18px;
+      top: -9px;
+    }
+    .c {
+      width: 12px;
+      height: 12px;
+      top: -5px;
       display: block;
-      background: #3cc8b4;
-      left: 810px;
-      top: -0.1rem;
-      position: absolute;
-      border-radius: 50%;
+      background: #eaeaea;
     }
   }
   .kinds {
