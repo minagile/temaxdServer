@@ -179,7 +179,9 @@
                     <p class="indent">3．双方之间发生争议的，双方应当进行友好协商解决，在无法通过协商解决的情况下，任何一方均可向仲裁委员会申请仲裁处理。</p>
                     <p class="indent">4．本协议书未尽事宜，甲乙双方应持积极态度友好协商解决，并达成书面的补充协议。</p>
                     <p class="indent">5．本协议书一式二份，甲乙双方各执一份，具有同等的法律效力。</p>
-                    <p class="indent">6．其他约定事项：<input class="other_things" type="text" v-model="keyword" @input="calculate($event, keyword)" /><span style="display:none">{{ keyword }}</span></p>
+                    <p class="indent">6．其他约定事项：<textarea class="other_things" type="text" v-model="keyword"  ></textarea>
+                      <!-- <input class="other_things" type="text" v-model="keyword" @input="calculate($event, keyword)" /><span style="display:none">{{ keyword }}</span> -->
+                    </p>
                   </div>
                 </div>
               </div>
@@ -221,7 +223,7 @@
           </div>
         </div>
         <div class="btn">
-          <a class="back" @click="backPage">返回</a>
+          <a class="back" @click="backPage"><img src="../assets/img/back.jpg" alt="">返回</a>
           <a class="link" @click="next">
             <button>继 续</button>
           </a>
@@ -418,19 +420,6 @@ export default {
       } else {
         this.$router.push('/ChoosePage/introcompany')
       }
-    },
-    calculate (ev, data) {
-      let oSpan = document.createElement('span')
-      oSpan.style.fontSize = '12px'
-      oSpan.style.visibility = 'hidden'
-      oSpan.textContent = data
-      document.body.appendChild(oSpan)
-      if (oSpan.offsetWidth > 200) {
-        ev.path[0].style.width = oSpan.offsetWidth + 'px'
-        ev.path[0].style.textDecoration = 'underline'
-        ev.path[0].style.border = '0'
-      }
-      oSpan.parentNode.removeChild(oSpan)
     }
   },
   filters: {
@@ -545,7 +534,7 @@ function datedifference(sDate1, sDate2) {
       height: 0.18rem;
       display: block;
       background: #3cc8b4;
-      left: 810px;
+      left: 794px;
       top: -0.08rem;
       position: absolute;
       border-radius: 50%;
@@ -586,17 +575,16 @@ function datedifference(sDate1, sDate2) {
         border: 0;
         border-bottom: 1px solid #000;
         outline: none;
-        &.other_things {
-          min-width: 200px;
-          max-width: 720px;
-          word-wrap: break-word;
-        }
         &.short {
           width: 40px;
           text-align: center;
         }
       }
       .contrat_con {
+        .other_things {
+          width: 500px;
+          height: 60px;
+        }
         .first {
           .choose {
             padding-right: 0.3rem;
@@ -756,6 +744,13 @@ function datedifference(sDate1, sDate2) {
       width: 0.8rem;
       cursor: pointer;
       color: #000;
+      img {
+        width: 0.2rem;
+        position: relative;
+        left: 0;
+        top: 4px;
+        margin-right: 10px;
+      }
     }
     .link {
       width: 1.5rem;

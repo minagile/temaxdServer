@@ -47,7 +47,7 @@
             <td><div>公司网址</div></td>
             <td>
               <div class="company_name">
-                <input type="text" v-model="companyWeb" />
+                <input type="text" v-model="companyWeb"  />
               </div>
             </td>
           </tr>
@@ -64,7 +64,7 @@
           </tr>
         </table>
         <div class="btn">
-          <router-link class="back" to="attachment">返回</router-link>
+          <router-link class="back" to="attachment"><img src="../assets/img/back.jpg" alt="">返回</router-link>
           <a class="link" @click="nextPage">
             <button>继 续</button>
           </a>
@@ -396,6 +396,13 @@ function checkMobile (data) {
     width: 0.8rem;
     cursor: pointer;
     color: #000;
+    img {
+      width: 0.2rem;
+      position: relative;
+      left: 0;
+      top: 4px;
+      margin-right: 10px;
+    }
   }
   .link {
     width: 1.5rem;

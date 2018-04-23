@@ -105,7 +105,7 @@
             <a class="area_btn" v-for="(btn, index) in areaBtnList" :key="index">{{btn.text}}</a>
             <input type="text"
             v-if="isBtnShow"
-            placeholder="最多选择两个行业"
+            placeholder="最多选择一个行业"
             v-model="industry"/>
           </div>
           <div class="industry_field" id="industry_field" v-show="isListShow">
@@ -125,7 +125,7 @@
         </div>
       </div>
       <div class="btn">
-        <a class="back" @click="backPage">返回</a>
+        <a class="back" @click="backPage"><img src="../assets/img/back.jpg" alt="">返回</a>
         <a @click="getData">
           <button>继 续</button>
         </a>
@@ -210,7 +210,7 @@ export default {
       }
     },
     fieldChoose (index, data) {
-      if (this.areaBtnList.length < 2) {
+      if (this.areaBtnList.length < 1) {
         this.areaBtnList.push({'text': data, 'id': index})
       } else {
         this.areaBtnList.splice(0, 1)
@@ -498,7 +498,7 @@ export default {
         width: 4.3rem;
         height: 100%;
         border: 0;
-        line-height: 0.3rem;
+        // line-height: 0.3rem;
         outline: none;
         padding-left: 0.1rem;
       }
@@ -586,6 +586,10 @@ export default {
         box-shadow: #eaeaea 0 0 5px;
         margin-right: 0.43rem;
         line-height: 0.26rem;
+        &:hover {
+          transform: scale(1.05);
+          box-shadow: 0 4px 24px 0 rgba(0, 0, 0, .1);
+        }
       }
       .active:hover {
         border: 1px solid #39beab;
@@ -611,6 +615,13 @@ export default {
       width: 0.8rem;
       cursor: pointer;
       color: #000;
+      img {
+        width: 0.2rem;
+        position: relative;
+        left: 0;
+        top: 4px;
+        margin-right: 10px;
+      }
     }
     a {
       display: block;

@@ -37,7 +37,7 @@
           </div>
         </div>
         <div class="btn">
-          <router-link class="back" to="SimpleSelect">返回</router-link>
+          <router-link class="back" to="SimpleSelect"><img src="../assets/img/back.jpg" alt="">返回</router-link>
           <a class="link" @click="nextpage">
             <button>继 续</button>
           </a>
@@ -229,6 +229,9 @@ export default {
       text-align: center;
       position: relative;
       cursor: pointer;
+      &:hover {
+        background: #eaeaea;
+      }
       div {
         height: 100%;
         line-height: 0.4rem;
@@ -277,6 +280,9 @@ export default {
           text-align: center;
           position: relative;
           cursor: pointer;
+          &:hover {
+            background: #eaeaea;
+          }
           .chooseMoney {
             display: none;
             position: absolute;
@@ -299,13 +305,21 @@ export default {
   height: 0.7rem;
   .back {
     font-size: 0.14rem;
-    padding: 0.4rem 0 0 0.2rem;
+    // padding: 0.4rem 0 0 0.2rem;
+    padding: 0.4rem 0 0 0;
     height: 0.33rem;
     float: left;
     display: block;
     width: 0.8rem;
     cursor: pointer;
     color: #000;
+    img {
+      width: 0.2rem;
+      position: relative;
+      left: 0;
+      top: 4px;
+      margin-right: 10px;
+    }
   }
   .link {
     width: 1.5rem;

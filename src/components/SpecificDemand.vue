@@ -77,7 +77,7 @@
           </div>
         </div>
       </div>
-      <div class="pro-pro ele">
+      <div class="pro-pro ele" v-show="!isPackageShow">
         <div class="title">项目预算</div>
         <div class="progress-con">
           <div class="choose-progress">
@@ -149,9 +149,11 @@
           <div @click="showPlace">
             <input class="choose_place"
             type="text"
-            placeholder="国家/省市/城市"
+            
+            placeholder="如：澳门特别行政区"
             disabled
             v-model="workPlace" />
+            <!-- placeholder="国家/省市/城市" -->
           </div>
           <div class="work_area" v-show="isChoosePlace">
             <div class="country p">
@@ -179,7 +181,7 @@
         </div>
       </div>
       <div class="btn">
-        <router-link class="back" to="Demand">返回</router-link>
+        <router-link class="back" to="Demand"><img src="../assets/img/back.jpg" alt="">返回</router-link>
         <a @click="getData">
           <button>继 续</button>
         </a>
@@ -297,8 +299,6 @@ export default {
         alert('您还没有选择项目开始时间')
       } else if (this.proCycle === '') {
         alert('您还没有选择项目周期')
-      } else if (this.proPrice === '') {
-        alert('您还没有选择项目预算')
       } else if (this.invoice === '') {
         alert('您还没有选择是否需要发票')
       } else if (this.workPlace === '') {
@@ -313,12 +313,16 @@ export default {
           'WorkPlace': this.workPlace
         }
         if (type === 'package') {
-          let SpecificDemandData = [
-            JSON.parse(sessionStorage.getItem('page_demand_data_pack')),
-            specific
-          ]
-          this.$router.push('/ChoosePage/attachment')
-          sessionStorage.setItem('specific_demand_data_pack', JSON.stringify(SpecificDemandData))
+          if (this.proPrice === '') {
+            alert('您还没有选择项目预算')
+          } else {
+            let SpecificDemandData = [
+              JSON.parse(sessionStorage.getItem('page_demand_data_pack')),
+              specific
+            ]
+            this.$router.push('/ChoosePage/attachment')
+            sessionStorage.setItem('specific_demand_data_pack', JSON.stringify(SpecificDemandData))
+          }
         } else {
           let SpecificDemandData = [
             JSON.parse(sessionStorage.getItem('page_select_data')).select,
@@ -606,6 +610,13 @@ export default {
       width: 0.8rem;
       cursor: pointer;
       color: #000;
+      img {
+        width: 0.2rem;
+        position: relative;
+        left: 0;
+        top: 4px;
+        margin-right: 10px;
+      }
     }
     a {
       display: block;

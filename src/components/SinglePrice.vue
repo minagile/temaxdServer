@@ -48,7 +48,7 @@
           </div>
         </div>
         <div class="btn">
-          <router-link class="back" to="agreement">返回</router-link>
+          <router-link class="back" to="agreement"><img src="../assets/img/back.jpg" alt="">返回</router-link>
           <a class="link" @click="payMoney">
             <button>继 续</button>
           </a>
@@ -321,6 +321,13 @@ export default {
       width: 0.8rem;
       cursor: pointer;
       color: #000;
+      img {
+        width: 0.2rem;
+        position: relative;
+        left: 0;
+        top: 4px;
+        margin-right: 10px;
+      }
     }
     .link {
       width: 1.5rem;
