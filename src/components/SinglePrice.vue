@@ -93,7 +93,7 @@ export default {
     },
     payMoney () {
       let type = localStorage.getItem('type')
-      // this.isPay = true
+      this.isPay = true
       let that = this
       // let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       if (type === 'package') {

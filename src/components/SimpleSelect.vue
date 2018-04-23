@@ -765,8 +765,8 @@ export default {
         background: #fff;
         text-align: center;
         img {
-          width: 80px;
-          margin: 20px auto;
+          width: 50px;
+          margin: 30px auto;
           display: block;
         }
         span {
