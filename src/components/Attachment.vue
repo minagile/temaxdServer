@@ -30,6 +30,7 @@
               <input type="file" @change="upLoadFile" multiple>
             </div>
             {{path.name}}
+            <!-- <div class="file_name" v-for="(data, index) in list" :key="index">{{ data }}</div> -->
           </div>
         </div>
         <div class="pro-progress target">
@@ -62,7 +63,8 @@ export default {
       desc: '',
       remnant: 500,
       isPackageShow: true,
-      path: ''
+      path: '',
+      list: []
     }
   },
   mounted () {
@@ -72,9 +74,10 @@ export default {
   methods: {
     upLoadFile (e) {
       this.path = e.target.files[0]
+      this.list.push(e.target.files[0].name)
+      // console.log(this.list)
       let zipFormData = new FormData()
       zipFormData.append('file', e.target.files[0]) //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
-      // this.path.type
       let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       this.$http.post('https://www.temaxd.com/uploadFile?fileName=' + this.path.name, zipFormData, config).then(function (response) {
         console.log(response.data)
@@ -259,13 +262,19 @@ export default {
     }
     .pro-prog {
       overflow: hidden;
-      height: 3.7rem;
+      min-height: 3.7rem;
       border-bottom: 1px solid #eaeaea;
       width: 100%;
       .con {
         font-size: 0.14rem;
         padding-top: 0.4rem;
         position: relative;
+        padding-left: 230px;
+        .file_name {
+          height: 40px;
+          line-height: 40px;
+          clear: both;
+        }
         .choose {
           width: 5.7rem;
           height: 2.6rem;
