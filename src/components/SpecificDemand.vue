@@ -287,7 +287,7 @@ export default {
       let that = this
       that.$http({
         method: 'GET',
-        url: 'http://www.temaxd.com/regionQuery'
+        url: 'https://www.temaxd.com/regionQuery'
       }).then((res) => {
         this.CountryData.push(res.body)
       }).catch(err => {

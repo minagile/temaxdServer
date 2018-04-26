@@ -74,8 +74,16 @@ export default {
   methods: {
     upLoadFile (e) {
       this.path = e.target.files[0]
-      this.list.push(e.target.files[0].name)
-      // console.log(this.list)
+      // this.list.push(e.target.files[0].name)
+      // console.log(e.target.files)
+      // let files = e.target.files
+      // let maxSize = 2040 * 10
+      // for (var i = 0; i < files.length; i++) {
+      //   console.log(files[i].size)
+      //   if (files[i].size > maxSize) {
+      //     console.log('文件大小超过10M')
+      //   }
+      // }
       let zipFormData = new FormData()
       zipFormData.append('file', e.target.files[0]) //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
       let config = { headers: { 'Content-Type': 'multipart/form-data' } }

@@ -222,7 +222,7 @@ export default {
       let that = this
       that.$http({
         method: 'GET',
-        url: 'http://www.temaxd.com/industryJson'
+        url: 'https://www.temaxd.com/industryJson'
       }).then((res) => {
         // console.log(res.body)
         this.item = res.body
