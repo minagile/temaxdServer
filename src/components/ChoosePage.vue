@@ -74,6 +74,11 @@ export default {
       border-radius: 10px;
       cursor: pointer;
       outline: none;
+      transition: 1s;
+      &:hover {
+        transition: 1s;
+        background: #00796d;
+      }
     }
     &:first-of-type {
       float: left;

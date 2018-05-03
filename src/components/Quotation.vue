@@ -57,7 +57,8 @@ export default {
       value: [],
       Data: [],
       Total: 0,
-      imgUrl: Complete
+      imgUrl: Complete,
+      number: []
     }
   },
   mounted () {
@@ -77,8 +78,6 @@ export default {
     },
     handleData () {
       let selectData = JSON.parse(sessionStorage.getItem('select'))
-      // let quotationData = JSON.parse(sessionStorage.getItem('quotation_data'))
-      // console.log(quotationData)
       allPrice.data.forEach(m => {
         m.Code.forEach(n => {
           n.data.forEach(x => {
@@ -89,17 +88,18 @@ export default {
             }
             selectData.forEach((v, k) => {
               if (v.Id === x.id) {
+                this.number.push({id: v.Id, num: v.value})
                 this.Data.push(x)
               }
             })
           })
         })
       })
-      // console.log(this.Data)
     },
     chooseData (e, data, index, iIndex, k, id) {
+      console.log(e.target.parentNode.parentNode.parentNode)
       if (!/[\u4e00-\u9fa5]/.test(data)) {
-        let oTr = e.path[3].children
+        let oTr = e.target.parentNode.parentNode.parentNode.children
         for (var i = 0; i < oTr.length; i++) {
           for (var j = 0; j < oTr[i].children.length; j++) {
             if (index === j && iIndex === i) {
@@ -114,7 +114,7 @@ export default {
             }
           }
         }
-        let correct = e.path[0].nextElementSibling
+        let correct = e.target.nextElementSibling
         if (correct.style.display !== 'block') {
           correct.style.display = 'block'
         }
@@ -123,13 +123,17 @@ export default {
             this.value.splice(n, 1)
           }
         })
-        this.value.push({'Price': data, 'Index': k, 'level': e.path[3].children[0].children[index].textContent, 'first': e.path[4].children[0].children[0].textContent, 'id': id})
-        // console.log(e.path[4].children[0].children[0].textContent)
+        this.value.push({'Price': data, 'Index': k, 'level': e.target.parentNode.parentNode.parentNode.children[0].children[index].textContent, 'first': e.target.parentNode.parentNode.parentNode.parentNode.children[0].children[0].textContent, 'id': id})
+        // console.log(this.value)
+        // console.log(this.number)
         let total = 0
         this.value.forEach((m, n) => {
-          total += Number(m.Price)
+          this.number.forEach((a, b) => {
+            if (m.id === a.id) {
+              total += Number(m.Price) * Number(a.num)
+            }
+          })
         })
-        // console.log(total)
         this.Total = total
       }
     }

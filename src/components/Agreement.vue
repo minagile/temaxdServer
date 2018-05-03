@@ -8,7 +8,7 @@
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
-        <span class="big-circle"></span>
+        <span class="big circle"></span>
       </div>
       <div class="content" >
         <div class="special">
@@ -25,7 +25,8 @@
                     <div class="event">
                       <div class="t">1．委托事项</div>
                       <span class="choose" v-for="(data, index) in list" :key="index">
-                        <input type="checkbox" @click="chooseEvent($event)" />
+                        <!-- <input type="checkbox" @click="chooseEvent($event)" /> -->
+                        <input type="checkbox" v-model="checkNames" :value="data" />
                         <span>{{ data }}</span>
                       </span>
                     </div>
@@ -94,7 +95,7 @@
                           <input class="short" type="text" v-model="datep" @input="calcu" /><span style="display:none">{{ datep }}</span>日，共计 
                           <input class="short" type="text" v-model="howLong" /> 个工作日。
                         </p>
-                        <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" v-model="workDay" />个工作日内设计出甲方<span class="cash">{{design}}</span>（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
+                        <p class="indent">1.3 乙方需在正常设计期间开始后的<input class="short" type="text" v-model="workDay" />个工作日内设计出甲方<span class="cash">{{ design }}</span>（委托事项）初稿，并以电子稿交付方式向甲方交付工作作品。</p>
                         <p class="indent">1.4 经过甲方最终确认的终稿，乙方在收到甲方余款结清后的有关凭据后<input class="short" type="text" v-model="beginWork" />个工作日内通过网络或邮寄快递的方式将设计作品完整电子稿及相关资料交予甲方。</p>
                         <p class="indent">1.5 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
                         <p class="indent">1.6 如发生人力不可抗拒因素或甲方原因导致乙方不能按时开工或者设计期间中止，由双方协商，设计工期顺延。</p>
@@ -179,7 +180,12 @@
                     <p class="indent">3．双方之间发生争议的，双方应当进行友好协商解决，在无法通过协商解决的情况下，任何一方均可向仲裁委员会申请仲裁处理。</p>
                     <p class="indent">4．本协议书未尽事宜，甲乙双方应持积极态度友好协商解决，并达成书面的补充协议。</p>
                     <p class="indent">5．本协议书一式二份，甲乙双方各执一份，具有同等的法律效力。</p>
-                    <p class="indent">6．其他约定事项：<textarea class="other_things" type="text" v-model="keyword"  ></textarea>
+                    <p class="indent">6．其他约定事项：
+                      <input type="text" class="other_things" id="input1" maxlength="40" v-model="keyword1" @input="enter">
+                      <input type="text" class="other_things" id="input2" maxlength="48" v-model="keyword2" @input="enter">
+                      <input type="text" class="other_things" id="input3" maxlength="48" v-model="keyword3" @input="enter">
+                      <input type="text" class="other_things" id="input4" maxlength="48" v-model="keyword4" @input="enter">
+                      <!-- <textarea class="other_things" type="text" v-model="keyword"  ></textarea> -->
                       <!-- <input class="other_things" type="text" v-model="keyword" @input="calculate($event, keyword)" /><span style="display:none">{{ keyword }}</span> -->
                     </p>
                   </div>
@@ -188,20 +194,20 @@
               <div class="confirm">
                 <div class="first_party l">
                   <div>甲方：（签字/盖章）</div>
-                  <div>授权人： <input type="text" v-model="FirstPartyName"/><span style="display:none">{{ FirstPartyName }}</span></div>
+                  <div>授权人： <input type="text" class="author" v-model="FirstPartyName"/><span style="display:none">{{ FirstPartyName }}</span></div>
                   <div>
-                    <input class="short" type="text" v-model="FirstPartyyear"/><span style="display:none">{{ FirstPartyyear }}</span>年
-                    <input class="short" type="text" v-model="FirstPartymonth"/><span style="display:none">{{ FirstPartymonth }}</span>月
-                    <input class="short" type="text" v-model="FirstPartydate"/><span style="display:none">{{ FirstPartydate }}</span>日
+                    <input class="short" type="text" v-model="FirstPartyyear" disabled/><span style="display:none">{{ FirstPartyyear }}</span>年
+                    <input class="short" type="text" v-model="FirstPartymonth" disabled/><span style="display:none">{{ FirstPartymonth }}</span>月
+                    <input class="short" type="text" v-model="FirstPartydate" disabled/><span style="display:none">{{ FirstPartydate }}</span>日
                   </div>
                 </div>
                 <div class="second_party l">
                   <div>乙方：（签字/盖章）</div>
-                  <div>授权人：<input type="text" v-model="SecondPartyName"/><span style="display:none">{{ SecondPartyName }}</span></div>
+                  <div>授权人：<input type="text" class="author" v-model="SecondPartyName"/><span style="display:none">{{ SecondPartyName }}</span></div>
                   <div>
-                    <input class="short" type="text" v-model="SecondPartyyear"/><span style="display:none">{{ SecondPartyyear }}</span>年
-                    <input class="short" type="text" v-model="SecondPartymonth"/><span style="display:none">{{ SecondPartymonth }}</span>月
-                    <input class="short" type="text" v-model="SecondPartydate"/><span style="display:none">{{ SecondPartydate }}</span>日
+                    <input class="short" type="text" v-model="SecondPartyyear" disabled/><span style="display:none">{{ SecondPartyyear }}</span>年
+                    <input class="short" type="text" v-model="SecondPartymonth" disabled/><span style="display:none">{{ SecondPartymonth }}</span>月
+                    <input class="short" type="text" v-model="SecondPartydate" disabled/><span style="display:none">{{ SecondPartydate }}</span>日
                     <!-- <input type="date"> -->
                   </div>
                 </div>   
@@ -211,12 +217,12 @@
           <div class="is_paper">
             <span>是否提供纸质版</span>
             <span class="default">
-              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="是">
+              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="是" v-model="Data">
               <div class="radio_checked"></div>
             </span>
             <span>是</span>
             <span class="default">
-              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="否">
+              <input class="choose_radio" type="radio" name="ispaper" @click="isPaper($event)" value="否" v-model="Data">
               <div class="radio_checked"></div>
             </span>
             <span>否</span>
@@ -242,7 +248,10 @@ export default {
       listco: ['次数合作', '月度合作', '季度合作', '年度合作'],
       price: 0,
       keyword: '',
-      entrustment: [],
+      keyword1: '',
+      keyword2: '',
+      keyword3: '',
+      keyword4: '',
       cooperation: [],
       design: '',
       year: '',
@@ -262,27 +271,46 @@ export default {
       yearp: '',
       monthp: '',
       datep: '',
-      Data: '',
+      Data: '否',
       cName: '',
       coo: '',
       beginWork: '',
-      howLong: ''
+      howLong: '',
+      checkNames: []
     }
   },
   mounted () {
-    let date = new Date()
-    this.year = date.getFullYear()
-    this.month = date.getMonth() + 1
-    this.date = date.getDate()
-    this.FirstPartyyear = date.getFullYear()
-    this.FirstPartymonth = date.getMonth() + 1
-    this.FirstPartydate = date.getDate()
-    this.SecondPartyyear = date.getFullYear()
-    this.SecondPartymonth = date.getMonth() + 1
-    this.SecondPartydate = date.getDate()
     this.getType()
   },
+  watch: {
+    checkNames () {
+      this.design = ''
+      this.checkNames.forEach(v => {
+        this.design += v + ' '
+      })
+    }
+  },
   methods: {
+    enter () {
+      if (this.keyword1.length === 40) {
+        document.getElementById('input1').blur()
+        document.getElementById('input2').style.display = 'block'
+        document.getElementById('input2').focus()
+      }
+      if (this.keyword2.length === 48) {
+        document.getElementById('input2').blur()
+        document.getElementById('input3').style.display = 'block'
+        document.getElementById('input3').focus()
+      }
+      if (this.keyword3.length === 48) {
+        document.getElementById('input3').blur()
+        document.getElementById('input4').style.display = 'block'
+        document.getElementById('input4').focus()
+      }
+      // if (this.keyword4.length >= 48) {
+      //   alert('以达到最大文字输入内容')
+      // }
+    },
     calcu () {
       this.howLong = datedifference(this.year + '-' + this.month + '-' + this.date, this.yearp + '-' + this.monthp + '-' + this.datep)
     },
@@ -291,8 +319,27 @@ export default {
       this.Data = ev.path[0].value
     },
     getType () {
+      let date = new Date()
+      this.year = date.getFullYear()
+      this.month = date.getMonth() + 1
+      this.date = date.getDate()
+      this.FirstPartyyear = date.getFullYear()
+      this.FirstPartymonth = date.getMonth() + 1
+      this.FirstPartydate = date.getDate()
+      this.SecondPartyyear = date.getFullYear()
+      this.SecondPartymonth = date.getMonth() + 1
+      this.SecondPartydate = date.getDate()
       let type = localStorage.getItem('type')
       if (type === 'package') {
+        let checkList = JSON.parse(sessionStorage.getItem('slist'))
+        checkList.forEach(v => {
+          if (v === '网络互动') {
+            v = '网络互动设计'
+          } else if (v === '电子商务') {
+            v = '电子商务设计'
+          }
+          this.checkNames.push(v)
+        })
         this.isPackageShow = false
         this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
         this.sOrP = '套餐'
@@ -306,6 +353,18 @@ export default {
           this.SecondPartyName = agreeData.second_part_p
         }
       } else {
+        let checkList = JSON.parse(sessionStorage.getItem('slist'))
+        // console.log(checkList)
+        checkList.forEach(v => {
+          if (v === '网络互动') {
+            v = '网络互动设计'
+          } else if (v === '电商') {
+            v = '电子商务设计'
+          } else if (v === '包装') {
+            v = '包装设计'
+          }
+          this.checkNames.push(v)
+        })
         this.isPackageShow = true
         this.listco = ['单项合作']
         this.sOrP = '单项'
@@ -324,62 +383,38 @@ export default {
     },
     next () {
       let type = localStorage.getItem('type')
-      if (this.Data === '') {
-        alert('请选择是否需要纸质版')
-      } else {
-        if (type === 'package') {
-          let packData = {
-            'first_part': this.cName,
-            'price': this.price,
-            'design': this.design,
-            'paper': this.Data,
-            'cooperation': this.coo,
-            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
-            'Event': this.keyword,
-            'first_part_p': this.FirstPartyName,
-            'second_part_p': this.SecondPartyName
-          }
-          sessionStorage.setItem('agreement_data_pack', JSON.stringify(packData))
-          this.$router.push({name: 'SinglePrice'})
-        } else {
-          let packData = {
-            'first_part': this.cName,//甲方公司
-            'price': this.price,//价格
-            'design': this.design,//选择事项
-            'paper': this.Data,//是否需要纸质版
-            'cooperation': this.coo,// 合作模式
-            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],//其实日期 结束日期 甲方日期 乙方日期
-            'Event': this.keyword,//注意事项
-            'first_part_p': this.FirstPartyName,//甲方授权人
-            'second_part_p': this.SecondPartyName,//一方授权人
-            'work_day': this.workDay,//共计n工作日
-            'begin_work': this.beginWork,//起始工作日
-            'howlong': this.howLong//邮寄工作日
-          }
-          sessionStorage.setItem('agreement_data', JSON.stringify(packData))
-          this.$router.push({name: 'SinglePrice'})
+      if (type === 'package') {
+        let packData = {
+          'first_part': this.cName,
+          'price': this.price,
+          'design': this.design,
+          'paper': this.Data,
+          'cooperation': this.coo,
+          'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
+          'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,
+          'first_part_p': this.FirstPartyName,
+          'second_part_p': this.SecondPartyName
         }
-      }
-    },
-    chooseEvent (ev) {
-      this.design = ''
-      if (ev.path[0].checked === true) {
-        this.entrustment.push(ev.path[1].innerText)
-        this.entrustment.forEach(v => {
-          this.design += v
-        })
+        sessionStorage.setItem('agreement_data_pack', JSON.stringify(packData))
+        this.$router.push({name: 'SinglePrice'})
       } else {
-        this.entrustment.forEach((v, k) => {
-          if (v === ev.path[1].innerText) {
-            this.entrustment.splice(k, 1)
-          }
-        })
-        this.entrustment.forEach(v => {
-          this.design += v
-        })
-        // console.log(this.entrustment)
+        let packData = {
+          'first_part': this.cName,//甲方公司
+          'price': this.price,//价格
+          'design': this.design,//选择事项
+          'paper': this.Data,//是否需要纸质版
+          'cooperation': this.coo,// 合作模式
+          'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],//其实日期 结束日期 甲方日期 乙方日期
+          'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,//注意事项
+          'first_part_p': this.FirstPartyName,//甲方授权人
+          'second_part_p': this.SecondPartyName,//一方授权人
+          'work_day': this.workDay,//共计n工作日
+          'begin_work': this.beginWork,//起始工作日
+          'howlong': this.howLong//邮寄工作日
+        }
+        sessionStorage.setItem('agreement_data', JSON.stringify(packData))
+        this.$router.push({name: 'SinglePrice'})
       }
-      // console.log(this.design)
     },
     chooseCoopration (ev, index) {
       // console.log(ev)
@@ -508,12 +543,12 @@ function datedifference(sDate1, sDate2) {
     height: 0;
     font-size: 0;
     .circle {
-      width: 0.11rem;
-      height: 0.11rem;
+      width: 12px;
+      height: 12px;
       display: block;
       background: #3cc8b4;
       left: 0;
-      top: -0.05rem;
+      top: -5px;
       position: absolute;
       border-radius: 50%;
       &:nth-of-type(2) {
@@ -528,16 +563,21 @@ function datedifference(sDate1, sDate2) {
       &:nth-of-type(5) {
         left: 648px;
       }
+      &:nth-of-type(6) {
+        left: 810px;
+      }
     }
-    .big-circle {
-      width: 0.18rem;
-      height: 0.18rem;
+    .big {
+      width: 18px;
+      height: 18px;
+      top: -9px;
+    }
+    .c {
+      width: 12px;
+      height: 12px;
+      top: -5px;
       display: block;
-      background: #3cc8b4;
-      left: 794px;
-      top: -0.08rem;
-      position: absolute;
-      border-radius: 50%;
+      background: #eaeaea;
     }
   }
   .contract {
@@ -575,6 +615,9 @@ function datedifference(sDate1, sDate2) {
         border: 0;
         border-bottom: 1px solid #000;
         outline: none;
+        &.author {
+          text-indent: 5px;
+        }
         &.short {
           width: 40px;
           text-align: center;
@@ -582,8 +625,14 @@ function datedifference(sDate1, sDate2) {
       }
       .contrat_con {
         .other_things {
-          width: 500px;
-          height: 60px;
+          width: 560px;
+          height: 20px;
+          &:nth-of-type(2), &:nth-of-type(3), &:nth-of-type(4) {
+            // margin-left: 116px;
+            width: 676px;
+            display: none;
+          }
+          // height: 60px;
         }
         .first {
           .choose {

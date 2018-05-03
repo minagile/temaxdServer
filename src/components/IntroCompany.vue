@@ -56,7 +56,7 @@
             <td>
               <div class="contact">
                 <div class="info"><input type="text" placeholder="姓名" v-model="fullname" /></div>
-                <div class="info"><input type="text" placeholder="职位" v-model="position" /></div>
+                <div class="info"><input type="text" placeholder="微信号" v-model="position" /></div>
                 <div class="info"><input type="mail" placeholder="邮箱" v-model="mail" /></div>
                 <div class="info"><input type="text" placeholder="电话" v-model="phone" @blur="phoneChange(phone)" /></div>
               </div>

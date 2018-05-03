@@ -231,13 +231,13 @@ export default {
       })
     },
     creativeStyle (e) {
-      if (e.path[0].className === 'active') {
-        e.path[0].className = ''
-        let i = this.style.indexOf(e.path[0].innerText)
+      if (e.target.className === 'active') {
+        e.target.className = ''
+        let i = this.style.indexOf(e.target.innerText)
         this.style.splice(i, 1)
       } else {
-        e.path[0].className = 'active'
-        this.style.push(e.path[0].innerText)
+        e.target.className = 'active'
+        this.style.push(e.target.innerText)
       }
     },
     projectName () {

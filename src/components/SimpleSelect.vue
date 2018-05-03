@@ -285,8 +285,7 @@ export default {
       ],
       numberNum: '',
       bLNum: 0,
-      bRNum: '',
-      clickTime: 0
+      bRNum: ''
     }
   },
   mounted () {
@@ -294,9 +293,10 @@ export default {
   },
   methods: {
     writeNumber (event, index) {
-      this.numberNum = event.path[0].value
+      // console.log(event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)
+      this.numberNum = event.target.value
       this.selected.forEach((v, k) => {
-        if (v.text === event.path[6].children[0].textContent) {
+        if (v.text === event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].textContent) {
           v.value = this.numberNum
         }
       })
@@ -367,6 +367,13 @@ export default {
     },
     // 下一页
     nextPage () {
+      sessionStorage.setItem('select', JSON.stringify(this.selected))
+      // console.log(this.chooseList)
+      let slist = []
+      this.chooseList.forEach(v => {
+        slist.push(v.chooseObj.type)
+      })
+      sessionStorage.setItem('slist', JSON.stringify(slist))
       let type = localStorage.getItem('type')
       if (type === 'individual') {
         if (this.selected.length === 0) {
@@ -433,7 +440,6 @@ export default {
     getType () {
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        // console.log(this.$route.params)
         this.isPackageShow = false
         this.Data = PackageData
         this.isSingel = false
@@ -443,14 +449,6 @@ export default {
           [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}],
           [{'text': '初级', 'imgsrc': Category.Primary}, {'text': '中级', 'imgsrc': Category.Middle}, {'text': '高级', 'imgsrc': Category.Senior}, {'text': '特级', 'imgsrc': Category.Super}]
         ]
-        // let pageData = JSON.parse(sessionStorage.getItem('page_select_data_pack'))
-        // if (pageData) {
-        //   this.totalPrice = pageData[0].TotalPrice
-        //   this.selected = pageData[0].select
-        //   this.datalist = pageData[2]
-        //   this.chooseList = pageData[1]
-        //   this.isClick = true
-        // }
       } else {
         this.Data = DataType
         this.isPackageShow = true
@@ -470,14 +468,15 @@ export default {
     },
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
     taskChoose (e, i, index, iIndex, id, data, erdata) {
+      console.log(e)
       this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
       // 判断是否选中
-      if (e.path[0].checked === true) {
+      if (e.target.checked === true) {
         let type = localStorage.getItem('type')
         if (type === 'package') {
-          this.selected.push({'whichBox': index, 'which': i, 'text': e.path[1].innerText, 'classify': e.path[5].children[0].children[0].innerText, 'second': e.path[5].children[0].children[this.indexi + 1].textContent})
+          this.selected.push({'whichBox': index, 'which': i, 'text': e.target.parentNode.innerText, 'classify': e.path[5].children[0].children[0].innerText, 'second': e.path[5].children[0].children[this.indexi + 1].textContent})
         } else {
-          this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.path[1].innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
+          this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.target.parentNode.innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
         }
         this.selected.forEach((m, n) => {
           this.datalist.forEach((v, k) => {
@@ -486,7 +485,7 @@ export default {
             }
           })
         })
-      } else if (e.path[0].checked === false) {
+      } else if (e.target.checked === false) {
         this.selected.forEach((v, k) => {
           if (v.whichBox === index && v.whichOne === iIndex && v.which === i) {
             this.selected.splice(k, 1)
@@ -505,15 +504,14 @@ export default {
       } else {
         this.isclick = true
       }
-      sessionStorage.setItem('select', JSON.stringify(this.selected))
     },
     // 移动鼠标
     move (e, index) {
-      if (e.path[0].children[0].style.display === 'block') {
-        e.path[1].children[4].style.display = 'none'
+      if (e.target.children[0].style.display === 'block') {
+        e.target.parentNode.children[4].style.display = 'none'
       } else {
-        e.path[1].children[4].style.display = 'block'
-        let detailArr = e.path[1].children[4].children
+        e.target.parentNode.children[4].style.display = 'block'
+        let detailArr = e.target.parentNode.children[4].children
         for (var j = 0; j < detailArr.length; j++) {
           if (j === index) {
             detailArr[j].style.display = 'block'
@@ -525,12 +523,12 @@ export default {
       }
     },
     leave (e, index) {
-      e.path[1].children[4].style.display = 'none'
+      e.target.parentNode.children[4].style.display = 'none'
     },
     // 点击左侧列表
     // 单项
     selectType (e, i) {
-      let bgColor = e.path[2].children
+      let bgColor = e.target.parentNode.parentNode.children
       for (var m = 1; m < bgColor.length; m++) {
         if (m - 1 === i) {
           bgColor[m].style.background = '#eaeaea'
@@ -540,7 +538,7 @@ export default {
           bgColor[m].children[0].style.color = '#666'
         }
       }
-      e.path[2].nextElementSibling.children[0].lastChild.style.top = 0.5 - i * 1.5 + 'rem'
+      e.target.parentNode.parentNode.nextElementSibling.children[0].lastChild.style.top = 0.5 - i * 1.5 + 'rem'
     },
     // 套餐
     levelList (e, i) {
@@ -561,8 +559,6 @@ export default {
     },
     // 点击事件
     chooseKind (event, i) {
-      this.clickTime++
-      // console.log(this.clickTime)
       let detail = document.getElementById('detail')
       if (detail.style.display === 'none') {
         detail.style.display = 'block'
@@ -576,17 +572,6 @@ export default {
       if (element.style.display !== 'block') {
         element.style.display = 'block'
         chooseObj = this.Data.data[i]
-        // if (this.clickTime === 1) {
-        //   this.chooseList.forEach((v, k) => {
-        //     if (v.id === i) {
-        //       console.log(v)
-        //     } else {
-        //       this.chooseList.push({chooseObj: chooseObj, id: i})
-        //     }
-        //   })
-        // } else {
-        //   this.chooseList.push({chooseObj: chooseObj, id: i})
-        // }
         this.chooseList.push({chooseObj: chooseObj, id: i})
       } else {
         element.style.display = 'none'
@@ -1005,6 +990,7 @@ export default {
         width: 100%;
         // height: 3.5rem;
         top: 0;
+        transition: 1s;
         background: #fff;
         .all_price {
           width: 100%;
@@ -1014,14 +1000,18 @@ export default {
           height: 3.5rem;
         }
         .price_c {
-          width: 1.3rem;
-          height: 1.5rem;
+          width: 1.2rem;
+          height: 1.4rem;
           // border: 1px solid #eaeaea;
           box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
           // float: left;
           cursor: pointer;
           font-size: 14px;
           text-align: center;
+          &:hover {
+            // background: #eaeaea;
+            transform: scale(1.1);
+          }
           img {
             width: 46%;
             display: block;
@@ -1052,15 +1042,17 @@ export default {
       right: -2.02rem;
       border: 1px solid #eaeaea;
       background: #fff;
-      top: 0;
-      box-shadow: 0 2px 0.12rem 0 rgba(0,0,0,.1);
+      top: -1px;
+      box-shadow: 6px 3px 0.12rem 0 rgba(0,0,0,.1);
       height: 3.45rem;
       overflow: hidden;
+      transition: 1s;      
       p{
         font-size: 12px;
         margin: 0;
       }
       .remarkbox {
+        transition: 1s;
         position: relative;
       }
       .remarks-words {

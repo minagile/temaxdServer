@@ -250,7 +250,7 @@ export default {
     },
     countryMove (e, data) {
       this.dataCountry = data
-      e.path[0].style.background = 'rgb(247, 247, 247)'
+      e.target.style.background = 'rgb(247, 247, 247)'
       this.isProvinceShow = true
       this.isCityShow = false
     },
@@ -258,7 +258,7 @@ export default {
       this.dataProvince = data
       this.oIndex = i
       this.isCityShow = true
-      let bg = ev.path[1].children
+      let bg = ev.target.parentNode.children
       for (var x = 0; x < bg.length; x++) {
         if (x === i) {
           bg[x].style.background = 'rgb(247, 247, 247)'
@@ -268,10 +268,10 @@ export default {
       }
     },
     cityEnter (ev) {
-      ev.path[1].children[1].children[this.oIndex].style.background = 'rgb(247, 247, 247)'
+      ev.target.parentNode.children[1].children[this.oIndex].style.background = 'rgb(247, 247, 247)'
     },
     confirm (data, i, ev) {
-      let bg = ev.path[1].children
+      let bg = ev.target.parentNode.children
       for (var x = 0; x < bg.length; x++) {
         if (x === i) {
           bg[x].style.background = 'rgb(247, 247, 247)'

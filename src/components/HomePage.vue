@@ -30,12 +30,15 @@ export default {
   color: #fff;
   font-size: 0.14rem;
   text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
   p {
     font-size: 28px;
     line-height: 70px;
   }
   .info {
-    padding-top: 300px;
+    // padding-top: 300px;
     width: 600px;
     margin: 0 auto 0;
   }
@@ -57,6 +60,11 @@ export default {
       border-radius: 10px;
       cursor: pointer;
       outline: none;
+      transition: 1s;
+      &:hover {
+        transition: 1s;
+        background: #00796d;
+      }
     }
   }
 }

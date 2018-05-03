@@ -2,13 +2,13 @@
   <div class="single-price">
     <div class="pay">
       <p>请选择扁诞单项价格</p>
-      <div class="progress">
+      <div class="progress" v-if="!isPay">
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
         <span class="circle"></span>
-        <span class="big-circle"></span>
+        <span class="big circle"></span>
       </div>
       <!-- <div class="progress">
         <span class="circle"></span>
@@ -56,7 +56,8 @@
       </div>
     </div>
     <div class="loading" v-if="isPay">
-      扁诞正在确认中...
+      <!-- 扁诞正在确认中... -->
+      <img src="https://spider-x.oss-cn-shanghai.aliyuncs.com/temaxd/temaxdServer.png">
     </div>
   </div>
 </template>
@@ -114,9 +115,9 @@ export default {
         }).then((res) => {
           console.log(res)
           let iTimer = setInterval(() => {
-            window.location.href = 'https://account.teambition.com/login'
+            window.location.href = 'https://www.temaxd.com'
             clearInterval(iTimer)
-          }, 3000)
+          }, 8000)
         })
       } else {
         // console.log(JSON.parse(sessionStorage.getItem('quotation_data'))[2])
@@ -130,9 +131,9 @@ export default {
         }).then((res) => {
           console.log(res)
           let iTimer = setInterval(() => {
-            window.location.href = 'https://account.teambition.com/login'
+            window.location.href = 'https://www.temaxd.com'
             clearInterval(iTimer)
-          }, 3000)
+          }, 8000)
         })
       }
     }
@@ -198,12 +199,12 @@ export default {
     height: 0;
     font-size: 0;
     .circle {
-      width: 0.11rem;
-      height: 0.11rem;
+      width: 12px;
+      height: 12px;
       display: block;
       background: #3cc8b4;
       left: 0;
-      top: -0.05rem;
+      top: -5px;
       position: absolute;
       border-radius: 50%;
       &:nth-of-type(2) {
@@ -218,16 +219,21 @@ export default {
       &:nth-of-type(5) {
         left: 648px;
       }
+      &:nth-of-type(6) {
+        left: 810px;
+      }
     }
-    .big-circle {
-      width: 0.18rem;
-      height: 0.18rem;
+    .big {
+      width: 18px;
+      height: 18px;
+      top: -9px;
+    }
+    .c {
+      width: 12px;
+      height: 12px;
+      top: -5px;
       display: block;
-      background: #3cc8b4;
-      left: 792px;
-      top: -0.08rem;
-      position: absolute;
-      border-radius: 50%;
+      background: #eaeaea;
     }
   }
   .pay {
@@ -362,6 +368,15 @@ export default {
     height: 100%;
     background: #fff;
     top: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+    img {
+      width: 200px;
+      height: 200px;
+      display: block;
+    }
   }
 }
 
