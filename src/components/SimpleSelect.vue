@@ -474,7 +474,7 @@ export default {
       if (e.target.checked === true) {
         let type = localStorage.getItem('type')
         if (type === 'package') {
-          this.selected.push({'whichBox': index, 'which': i, 'text': e.target.parentNode.innerText, 'classify': e.path[5].children[0].children[0].innerText, 'second': e.path[5].children[0].children[this.indexi + 1].textContent})
+          this.selected.push({'whichBox': index, 'which': i, 'text': e.target.parentNode.innerText, 'classify': e.target.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[0].innerText, 'second': e.target.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].children[this.indexi + 1].textContent})
         } else {
           this.selected.push({'whichBox': index, 'whichOne': iIndex, 'which': i, 'text': e.target.parentNode.innerText, 'Id': id, 'classify': data, 'second': erdata.listSingel})
         }
@@ -543,7 +543,7 @@ export default {
     // 套餐
     levelList (e, i) {
       this.indexi = i
-      let bgColor = e.path[2].children
+      let bgColor = e.target.parentNode.parentNode.children
       for (var m = 1; m < bgColor.length; m++) {
         if (m - 1 === i) {
           bgColor[m].style.background = '#eaeaea'
@@ -553,9 +553,9 @@ export default {
           bgColor[m].children[0].style.color = '#666'
         }
       }
-      e.path[3].children[2].children[0].style.top = -i * 3.55 + 'rem'
-      e.path[3].children[1].children[1].style.top = -i * 3.5 + 'rem'
-      e.path[3].children[1].children[1].style.display = 'block'
+      e.target.parentNode.parentNode.parentNode.children[2].children[0].style.top = -i * 3.55 + 'rem'
+      e.target.parentNode.parentNode.parentNode.children[1].children[1].style.top = -i * 3.5 + 'rem'
+      e.target.parentNode.parentNode.parentNode.children[1].children[1].style.display = 'block'
     },
     // 点击事件
     chooseKind (event, i) {
@@ -1046,10 +1046,13 @@ export default {
       box-shadow: 6px 3px 0.12rem 0 rgba(0,0,0,.1);
       height: 3.45rem;
       overflow: hidden;
-      transition: 1s;      
+      transition: 1s;
+      line-height: 24px;
+      font-size: 14px;
       p{
-        font-size: 12px;
+        // font-size: 12px;
         margin: 0;
+        font-size: 14px;
       }
       .remarkbox {
         transition: 1s;

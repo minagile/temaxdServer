@@ -15,7 +15,7 @@
           <div class="contract" id="content">
             <h2>TEMAX设计专用合同</h2>
             <div>
-              <div class="party">甲方：<input class="company_name" type="text" v-model="cName" /><span style="display:none;">{{cName}}</span></div>
+              <div class="party">甲方：<input class="company_name" type="text" v-model="cName" @input="companyNameChange" maxlength="50" /><span style="display:none;">{{cName}}</span></div>
               <div class="party">乙方：上海扁诞网络科技有限公司</div> 
               <div class="contrat_con">
                 <p>依据《中华人民共和国合同法》和有关法规的规定，乙方接受甲方的委托，就委托设计事项，双方经协商一致，签订本合同，信守执行以下内容：</p>
@@ -25,7 +25,6 @@
                     <div class="event">
                       <div class="t">1．委托事项</div>
                       <span class="choose" v-for="(data, index) in list" :key="index">
-                        <!-- <input type="checkbox" @click="chooseEvent($event)" /> -->
                         <input type="checkbox" v-model="checkNames" :value="data" />
                         <span>{{ data }}</span>
                       </span>
@@ -33,7 +32,7 @@
                     <div class="event">
                       <div class="t">2．{{sOrP}}模式</div>
                       <span class="choose" v-for="(data, index) in listco" :key="index">
-                        <input type="radio" @click="chooseCoopration($event, index)" name="choose"/>
+                        <input type="radio" @click="chooseCoopration($event, index)" name="choose" :value="data" v-model="radiodata"/>
                         <span>{{ data }}</span>
                       </span>
                     </div>
@@ -113,9 +112,9 @@
                           <input class="short" type="text" v-model="year"/><span style="display:none">{{ year }}</span>年
                           <input class="short" type="text" v-model="month" /><span style="display:none">{{ month }}</span>月
                           <input class="short" type="text" v-model="date" /><span style="display:none">{{ date }}</span>日
-                          至<input class="short" type="text" v-model="yearp" /><span style="display:none">{{ yearp }}</span>年
-                          <input class="short" type="text" v-model="monthp" /><span style="display:none">{{ monthp }}</span>月
-                          <input class="short" type="text" v-model="datep" /><span style="display:none">{{ datep }}</span>日。
+                          至<input class="short" type="text" v-model="yearp" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  /><span style="display:none">{{ yearp }}</span>年
+                          <input class="short" type="text" v-model="monthp" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  /><span style="display:none">{{ monthp }}</span>月
+                          <input class="short" type="text" v-model="datep" onkeyup="this.value=this.value.replace(/\D/g,'')" onafterpaste="this.value=this.value.replace(/\D/g,'')"  /><span style="display:none">{{ datep }}</span>日。
                         </p>
                         <p class="indent">1.3 甲方在设计工期内需提前1~3天提出设计要求，乙方需根据设计内容制定设计周期并在与甲方确认沟通后开始制作。</p>
                         <p class="indent">1.4 乙方需在双方约定的时间内完成设计方案。因甲方反复提出修改意见导致乙方工作不能按时完成时，可延期执行，延期时间由双方协商确定。</p>
@@ -203,7 +202,7 @@
                 </div>
                 <div class="second_party l">
                   <div>乙方：（签字/盖章）</div>
-                  <div>授权人：<input type="text" class="author" v-model="SecondPartyName"/><span style="display:none">{{ SecondPartyName }}</span></div>
+                  <div>授权人：<input type="text" class="author" disabled v-model="SecondPartyName"/><span style="display:none">{{ SecondPartyName }}</span></div>
                   <div>
                     <input class="short" type="text" v-model="SecondPartyyear" disabled/><span style="display:none">{{ SecondPartyyear }}</span>年
                     <input class="short" type="text" v-model="SecondPartymonth" disabled/><span style="display:none">{{ SecondPartymonth }}</span>月
@@ -257,11 +256,11 @@ export default {
       year: '',
       month: '',
       date: '',
-      workDay: '',
+      workDay: 1,
       isPackageShow: false,
       sOrP: '',
       FirstPartyName: '',
-      SecondPartyName: '',
+      SecondPartyName: '苗晓栋',
       FirstPartyyear: '',
       FirstPartymonth: '',
       FirstPartydate: '',
@@ -274,9 +273,10 @@ export default {
       Data: '否',
       cName: '',
       coo: '',
-      beginWork: '',
+      beginWork: 1,
       howLong: '',
-      checkNames: []
+      checkNames: [],
+      radiodata: ''
     }
   },
   mounted () {
@@ -291,6 +291,10 @@ export default {
     }
   },
   methods: {
+    companyNameChange (data) {
+      // console.log(data.target.value.length)
+      data.target.style.width = data.target.value.length * 16 + 'px'
+    },
     enter () {
       if (this.keyword1.length === 40) {
         document.getElementById('input1').blur()
@@ -312,11 +316,11 @@ export default {
       // }
     },
     calcu () {
-      this.howLong = datedifference(this.year + '-' + this.month + '-' + this.date, this.yearp + '-' + this.monthp + '-' + this.datep)
+      this.howLong = datedifference(this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep)
     },
     isPaper (ev) {
       // console.log(ev.path[0].value)
-      this.Data = ev.path[0].value
+      this.Data = ev.target.value
     },
     getType () {
       let date = new Date()
@@ -348,9 +352,12 @@ export default {
         let agreeData = JSON.parse(sessionStorage.getItem('agreement_data_pack'))
         if (agreeData) {
           this.cName = agreeData.first_part
-          this.keyword = agreeData.Event
+          this.keyword1 = agreeData.Event
           this.FirstPartyName = agreeData.first_part_p
           this.SecondPartyName = agreeData.second_part_p
+          this.yearp = agreeData.time[1].split('/')[0]
+          this.monthp = agreeData.time[1].split('/')[1]
+          this.datep = agreeData.time[1].split('/')[2]
         }
       } else {
         let checkList = JSON.parse(sessionStorage.getItem('slist'))
@@ -367,59 +374,71 @@ export default {
         })
         this.isPackageShow = true
         this.listco = ['单项合作']
+        this.radiodata = '单项合作'
         this.sOrP = '单项'
         this.price = JSON.parse(sessionStorage.getItem('quotation_data'))[0]
         let agreeData = JSON.parse(sessionStorage.getItem('agreement_data'))
         if (agreeData) {
           this.cName = agreeData.first_part
-          this.keyword = agreeData.Event
+          this.keyword1 = agreeData.Event
           this.FirstPartyName = agreeData.first_part_p
           this.SecondPartyName = agreeData.second_part_p
           this.workDay = agreeData.work_day
           this.beginWork = agreeData.begin_work
           this.howLong = agreeData.howlong
+          this.yearp = agreeData.time[1].split('/')[0]
+          this.monthp = agreeData.time[1].split('/')[1]
+          this.datep = agreeData.time[1].split('/')[2]
         }
       }
     },
     next () {
       let type = localStorage.getItem('type')
-      if (type === 'package') {
-        let packData = {
-          'first_part': this.cName,
-          'price': this.price,
-          'design': this.design,
-          'paper': this.Data,
-          'cooperation': this.coo,
-          'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
-          'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,
-          'first_part_p': this.FirstPartyName,
-          'second_part_p': this.SecondPartyName
-        }
-        sessionStorage.setItem('agreement_data_pack', JSON.stringify(packData))
-        this.$router.push({name: 'SinglePrice'})
+      if (this.cName === '') {
+        alert('您还没有填写甲方信息')
+      } else if (this.SecondPartyName === '' || this.FirstPartyName === '') {
+        alert('请完善授权人信息')
+      } else if (this.yearp === '' || this.monthp === '' || this.datep === '') {
+        alert('请完善设计工期')
       } else {
-        let packData = {
-          'first_part': this.cName,//甲方公司
-          'price': this.price,//价格
-          'design': this.design,//选择事项
-          'paper': this.Data,//是否需要纸质版
-          'cooperation': this.coo,// 合作模式
-          'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],//其实日期 结束日期 甲方日期 乙方日期
-          'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,//注意事项
-          'first_part_p': this.FirstPartyName,//甲方授权人
-          'second_part_p': this.SecondPartyName,//一方授权人
-          'work_day': this.workDay,//共计n工作日
-          'begin_work': this.beginWork,//起始工作日
-          'howlong': this.howLong//邮寄工作日
+        if (type === 'package') {
+          let packData = {
+            'first_part': this.cName,
+            'price': this.price,
+            'design': this.design,
+            'paper': this.Data,
+            'cooperation': this.coo,
+            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],
+            'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,
+            'first_part_p': this.FirstPartyName,
+            'second_part_p': this.SecondPartyName
+          }
+          sessionStorage.setItem('agreement_data_pack', JSON.stringify(packData))
+          this.$router.push({name: 'SinglePrice'})
+        } else {
+          let packData = {
+            'first_part': this.cName,//甲方公司
+            'price': this.price,//价格
+            'design': this.design,//选择事项
+            'paper': this.Data,//是否需要纸质版
+            'cooperation': this.coo,// 合作模式
+            'time':[this.year + '/' + this.month + '/' + this.date, this.yearp + '/' + this.monthp + '/' + this.datep, this.FirstPartyyear + '/' + this.FirstPartymonth + '/' + this.FirstPartydate, this.SecondPartyyear + '/' + this.SecondPartymonth + '/' + this.SecondPartydate],//其实日期 结束日期 甲方日期 乙方日期
+            'Event': this.keyword1 + this.keyword2 + this.keyword3 + this.keyword4,//注意事项
+            'first_part_p': this.FirstPartyName,//甲方授权人
+            'second_part_p': this.SecondPartyName,//一方授权人
+            'work_day': this.workDay,//共计n工作日
+            'begin_work': this.beginWork,//起始工作日
+            'howlong': this.howLong//邮寄工作日
+          }
+          sessionStorage.setItem('agreement_data', JSON.stringify(packData))
+          this.$router.push({name: 'SinglePrice'})
         }
-        sessionStorage.setItem('agreement_data', JSON.stringify(packData))
-        this.$router.push({name: 'SinglePrice'})
       }
     },
     chooseCoopration (ev, index) {
       // console.log(ev)
-      this.coo = ev.path[1].innerText
-      if (ev.path[2].children.length > 2) {
+      this.coo = ev.target.parentNode.innerText
+      if (ev.target.parentNode.parentNode.children.length > 2) {
         let date = new Date()
         if (index === 0 || index === 3) {
           this.yearp = date.getFullYear() + 1
@@ -606,7 +625,8 @@ function datedifference(sDate1, sDate2) {
         font-weight: 700;
         font-size: 0.16rem;
         .company_name {
-          width: 2rem;
+          min-width: 2rem;
+          max-width: 6.7rem;
           font-size: 0.16rem;
         }
       }

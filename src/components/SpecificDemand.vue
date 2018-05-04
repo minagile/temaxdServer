@@ -149,9 +149,7 @@
           <div @click="showPlace">
             <input class="choose_place"
             type="text"
-            
             placeholder="如：澳门特别行政区"
-            disabled
             v-model="workPlace" />
             <!-- placeholder="国家/省市/城市" -->
           </div>
@@ -242,6 +240,7 @@ export default {
     },
     // 工作地点
     showPlace () {
+      // console.log(12)
       if (this.isChoosePlace === false) {
         this.isChoosePlace = true
       } else {
@@ -449,8 +448,8 @@ export default {
             border-radius: 0.05rem;
           }
           .coun {
-            height: 20px;
-            padding: 7px 26px 7px 16px;
+            min-height: 20px;
+            padding: 7px 0 7px 16px;
             cursor: pointer;
             &:hover {
               background:  rgb(247, 247, 247);

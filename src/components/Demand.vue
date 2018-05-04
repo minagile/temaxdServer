@@ -43,7 +43,7 @@
               <input class="choose_radio" type="radio" name="progress" value="概念比较清晰，需要扁诞房一起头脑风暴" v-model="progress" />
               <div class="radio_checked"></div>
             </span>
-            <span>概念比较清晰，需要扁诞房一起头脑风暴</span>
+            <span>概念比较清晰，需要扁诞科技一起头脑风暴</span>
           </div>
           <div class="choose-progress">
             <span class="default">

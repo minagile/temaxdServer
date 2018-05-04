@@ -15,6 +15,7 @@ export default {
   margin: 0;
   padding: 0;
   font-size: 14px;
+  outline: none;
 }
 input {
   font-size: 14px;
