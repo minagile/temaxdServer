@@ -15,6 +15,7 @@ import Login from '@/components/Login'
 import Register from '@/components/Register'
 import Forget from '@/components/Forget'
 import MyPros from '@/components/MyPros'
+import ProjectDetail from '@/components/ProjectDetail'
 
 Vue.use(Router)
 
@@ -25,6 +26,11 @@ export default new Router({
       path: '/hello',
       name: 'HelloWorld',
       component: HelloWorld
+    },
+    {
+      path: '/projectdetail',
+      name: 'ProjectDetail',
+      component: ProjectDetail
     },
     {
       path: '/login',

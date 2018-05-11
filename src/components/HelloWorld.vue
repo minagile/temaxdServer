@@ -76,33 +76,51 @@
             <div class="row">
               <div class="col">电子邮箱</div>
               <div class="col-input" v-show="!hasEmail">
-                <span></span>{{ userEmail }}
+                <span>{{ userEmail }}</span>
                 <img src="../assets/write.png" @click="hasEmail = true" />
               </div>
-              <div class="col-input user-name email" v-show="hasEmail">
-                <input type="text" v-model="userEmail" placeholder="请输入你的邮箱地址">
-                <a class="myName" @click="saveEmail">发送验证邮件</a>
-                <a class="myName l" @click="hasEmail = false">取消</a>
+              <div class="col-input email" v-show="hasEmail">
+                <div class="send_code">
+                  <input type="text" v-model="userEmail" placeholder="请输入你的邮箱地址">
+                  <a class="myName" @click="sendEmail">发送验证邮件</a>
+                </div>
+                <div class="user-name">
+                  <input type="text" v-model="emailCode" placeholder="输入你邮箱收到的验证码" />
+                  <a class="myName" @click="saveEmail">保存</a>
+                  <a class="myName l" @click="hasEmail = false">取消</a>
+                </div>
               </div>
             </div>
             <div class="row">
               <div class="col">QQ</div>
-              <div class="col-input">
+              <div class="col-input" v-show="!hasQQ">
                 <div class="wei">
-                  <span>未绑定</span>{{ userQQ }}
-                  <a>绑定QQ</a>
+                  <span v-if="userQQ ? false: true">未绑定</span>
+                  <span v-if="userQQ ? true: false">{{ userQQ }}</span>
+                  <a @click="hasQQ = true">绑定QQ</a>
                 </div>
-                <p>＊绑定微信后，你可以使用微信登录特赞、及时接收留言与通知</p>
+                <p>＊绑定QQ后，你可以使用QQ登录</p>
+              </div>
+              <div class="col-input user-name" v-show="hasQQ">
+                <input type="text" v-model="userQQ" placeholder="输入您的QQ">
+                <a class="myName" @click="saveQQ">保存</a>
+                <a class="myName l" @click="hasQQ = false">取消</a>
               </div>
             </div>
             <div class="row">
               <div class="col">微信</div>
-              <div class="col-input">
+              <div class="col-input" v-show="!hasWeixin">
                 <div class="wei">
-                  <span>未绑定</span>{{ userWeiXin }}
-                  <a>绑定微信</a>
+                  <span v-if="userWeiXin ? false: true">未绑定</span>
+                  <span v-if="userWeiXin ? true: false">{{ userWeiXin }}</span>
+                  <a @click="hasWeixin = true">绑定微信</a>
                 </div>
-                <p>＊绑定微信后，你可以使用微信登录特赞、及时接收留言与通知</p>
+                <p>＊绑定微信后，你可以使用微信登录</p>
+              </div>
+              <div class="col-input user-name" v-show="hasWeixin">
+                <input type="text" v-model="userWeiXin" placeholder="输入您的微信">
+                <a class="myName" @click="saveWeixin">保存</a>
+                <a class="myName l" @click="hasWeixin = false">取消</a>
               </div>
             </div>
           </div>
@@ -132,7 +150,11 @@ export default {
       hasPhone: false,
       phoneCode: '',
       confirmCode: '',
-      hasEmail: false
+      hasEmail: false,
+      emailCode: '',
+      confirmEmailCode: '',
+      hasQQ: false,
+      hasWeixin: false
     }
   },
   mounted () {
@@ -171,7 +193,7 @@ export default {
       image.append('file', file)
       let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       this.$http.post('http://www.temaxd.com/uploadHeadIMG?fileName=' + file.type.split('/')[1] + '&userId=' + localStorage.getItem('userId') + '&oldFileName=' + this.userAvatar, image, config).then(function (response) {
-        console.log(response.data)
+        // console.log(response.data)
         this.avatar = response.data.image
       })
     },
@@ -179,10 +201,10 @@ export default {
     saveName () {
       let that = this
       that.$http.post('http://www.temaxd.com/bindUserName', {
-        userName: this.nickName,
+        userName: JSON.stringify(this.nickName),
         userId: localStorage.getItem('userId')
       }, {emulateJSON: true}).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.code === '200') {
           this.hasName = false
           this.getInfo()
@@ -193,7 +215,7 @@ export default {
     savePosition () {
       let that = this
       that.$http.post('http://www.temaxd.com/bindUserPosition', {
-        userPosition: this.position,
+        userPosition: JSON.stringify(this.position),
         userId: localStorage.getItem('userId')
       }, {emulateJSON: true}).then(res => {
         console.log(res.data)
@@ -231,7 +253,64 @@ export default {
       }
     },
     // 修改邮箱
-    saveEmail () {}
+    sendEmail () {
+      this.$http.post('http://www.temaxd.com/sendEmail', {
+        phone: this.userPhone
+      }, { emulateJSON: true }).then(response => {
+        console.log(response.data[1].RAND)
+        this.confirmEmailCode = response.data[1].RAND
+      }, response => {
+        console.log('error')
+      })
+    },
+    saveEmail () {
+      if (this.emailCode === '') {
+        alert('请输入验证码')
+      } else if (this.confirmEmailCode === this.emailCode) {
+        let that = this
+        that.$http.post('http://www.temaxd.com/bindUserEmail', {
+          userEmail: this.userEmail,
+          userId: localStorage.getItem('userId')
+        }, {emulateJSON: true}).then(res => {
+          console.log(res.data)
+          if (res.data.code === '200') {
+            this.hasEmail = false
+          }
+        })
+      }
+    },
+    saveQQ () {
+      if (this.userQQ === '') {
+        alert('请输入验证码')
+      } else {
+        let that = this
+        that.$http.post('http://www.temaxd.com/bindUserQQ', {
+          userQQ: this.userQQ,
+          userId: localStorage.getItem('userId')
+        }, {emulateJSON: true}).then(res => {
+          console.log(res.data)
+          if (res.data.code === '200') {
+            this.hasQQ = false
+          }
+        })
+      }
+    },
+    saveWeixin () {
+      if (this.userWeiXin === '') {
+        alert('请输入验证码')
+      } else {
+        let that = this
+        that.$http.post('http://www.temaxd.com/bindUserWeiXin', {
+          userWeiXin: this.userWeiXin,
+          userId: localStorage.getItem('userId')
+        }, {emulateJSON: true}).then(res => {
+          console.log(res.data)
+          if (res.data.code === '200') {
+            this.hasWeixin = false
+          }
+        })
+      }
+    }
   },
   components: {
     Sidebar
@@ -364,6 +443,13 @@ export default {
       float: left;
       font-weight: 300;
       overflow: hidden;
+      &.email {
+        .send_code {
+          input {
+            width: 230px;
+          }
+        }
+      }
       .send_code {
         margin-bottom: 15px;
         width: 100%;
@@ -437,11 +523,6 @@ export default {
     }
   }
   .row .user-name {
-    &.email {
-      input {
-        width: 200px;
-      }
-    }
     input {
       float: left;
       display: block;

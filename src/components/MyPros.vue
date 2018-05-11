@@ -4,7 +4,15 @@
     <div class="message">
       <h2>我的项目</h2>
       <div class="pro_list">
-        <div class="figure" v-for="(data, index) in list" :key="index">{{ data.docName }}</div>
+        <div class="figure" v-for="(data, index) in list" :key="index">
+          <div class="tit">{{ data.docName }}</div>
+          <div class="con">
+            <img src="../assets/nav_file_n.png" alt="">
+            <div class="status">{{ data.type }}</div>
+            <div class="time">{{ data.docDate.split(' ')[0].replace('-', '.').replace('-', '.') }}创建</div>
+            <!-- {{ data.docId }} -->
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -32,7 +40,7 @@ export default {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
-        console.log(res.data)
+        console.log(res)
         this.list = res.data
       })
       that.$http.get('http://www.temaxd.com/getUserInfo', {
@@ -86,6 +94,30 @@ export default {
       box-sizing: border-box;
       background: #fff;
       transition: 0.3s;
+      .tit {
+        padding: 20px 15px;
+        line-height: 16px;
+        border-bottom: 1px solid #d4d4d4;
+      }
+      .con {
+        padding: 30px 20px 15px;
+        img {
+          display: block;
+          float: left;
+          width: 45px;
+          margin: 0 22px 30px 0;
+        }
+        .status {
+          font-size: 16px;
+        }
+        .time {
+          margin-top: 15px;
+          font-size: 12px;
+          line-height: 1;
+          letter-spacing: 0.5px;
+          color: #aaaaaa;
+        }
+      }
       &:hover {
         transition: 0.3s;
         box-shadow: 0 6px 12px 0 rgba(0, 0, 0, 0.15);
