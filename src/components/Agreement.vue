@@ -260,7 +260,7 @@ export default {
       isPackageShow: false,
       sOrP: '',
       FirstPartyName: '',
-      SecondPartyName: '苗晓栋',
+      SecondPartyName: '李轩',
       FirstPartyyear: '',
       FirstPartymonth: '',
       FirstPartydate: '',

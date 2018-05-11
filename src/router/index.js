@@ -10,12 +10,42 @@ import IntroCompany from '@/components/IntroCompany'
 import Quotation from '@/components/Quotation'
 import Agreement from '@/components/Agreement'
 import SinglePrice from '@/components/SinglePrice'
+import HelloWorld from '@/components/HelloWorld'
+import Login from '@/components/Login'
+import Register from '@/components/Register'
+import Forget from '@/components/Forget'
+import MyPros from '@/components/MyPros'
 
 Vue.use(Router)
 
 export default new Router({
   // mode: 'history',
   routes: [
+    {
+      path: '/hello',
+      name: 'HelloWorld',
+      component: HelloWorld
+    },
+    {
+      path: '/login',
+      name: 'Login',
+      component: Login
+    },
+    {
+      path: '/register',
+      name: 'Register',
+      component: Register
+    },
+    {
+      path: '/forget',
+      name: 'Forget',
+      component: Forget
+    },
+    {
+      path: '/mypros',
+      name: 'MyPros',
+      component: MyPros
+    },
     {
       path: '/',
       name: 'HomePage',

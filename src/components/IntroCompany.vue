@@ -163,6 +163,7 @@ export default {
           // 存入数据
           let that = this
           let data = JSON.parse(sessionStorage.getItem('file_data'))
+          console.log(localStorage.getItem('userId'))
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
               designs_type: JSON.stringify([['单项'], data[0][0]]), // 设计类型
@@ -182,7 +183,8 @@ export default {
               company_name: this.companyName, // 公司名称
               company_profile: this.desc, // 公司简介
               company_url: this.companyWeb, // 公司网址
-              contact_information: this.fullname + '/' + this.position + '/' + this.mail + '/' + this.phone // 公司联系人信息
+              contact_information: this.fullname + '/' + this.position + '/' + this.mail + '/' + this.phone, // 公司联系人信息
+              userId: localStorage.getItem('userId')
             }
           }).then((res) => {
             // console.log(res)

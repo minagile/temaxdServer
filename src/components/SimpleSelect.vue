@@ -293,23 +293,19 @@ export default {
   },
   methods: {
     writeNumber (event, index) {
-      // console.log(event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode)
       this.numberNum = event.target.value
       this.selected.forEach((v, k) => {
         if (v.text === event.target.parentNode.parentNode.parentNode.parentNode.parentNode.parentNode.children[0].textContent) {
           v.value = this.numberNum
         }
       })
-      // console.log(this.selected)
     },
     writeRange (event, index) {
-      // console.log(event)
       this.bLNum = event.path[1].children[0].value
       this.bRNum = event.path[1].children[2].value
       if (Number(this.bLNum) > Number(this.bRNum)) {
         alert('请填写正确的范围')
       } else  {
-        // console.log(event.path[1].textContent)
         this.selected.forEach((v, k) => {
           if (v.text === event.path[6].children[0].textContent) {
             v.value = event.path[1].textContent + this.bRNum
@@ -421,7 +417,8 @@ export default {
               company_name: data[1].company_name, // 公司名称
               company_profile: data[1].company_profile, // 公司简介
               company_url: data[1].company_url, // 公司网址
-              contact_information: data[1].contact_name + '/' + data[1].contact_position + '/' + data[1].contact_mail + '/' + data[1].contact_phone // 公司联系人信息
+              contact_information: data[1].contact_name + '/' + data[1].contact_position + '/' + data[1].contact_mail + '/' + data[1].contact_phone, // 公司联系人信息
+              userId: localStorage.getItem('userId')
             }
           }).then((res) => {
             console.log(res)

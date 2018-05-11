@@ -77,7 +77,7 @@
           </div>
         </div>
       </div>
-      <div class="pro-pro ele" v-show="!isPackageShow">
+      <!-- <div class="pro-pro ele" v-show="!isPackageShow">
         <div class="title">项目预算</div>
         <div class="progress-con">
           <div class="choose-progress">
@@ -123,7 +123,7 @@
             <span>大于100000</span>
           </div>
         </div>
-      </div>
+      </div> -->
       <div class="pro-pro command">
         <div class="title">发票</div>
         <div class="progress-con">
