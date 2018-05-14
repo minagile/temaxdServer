@@ -25,6 +25,7 @@ export default {
   },
   mounted () {
     // localStorage.setItem('type', 'individual')
+    sessionStorage.clear()
   },
   methods: {
     individual () {

@@ -10,13 +10,13 @@
       <a class="single_item" @click="$router.push('/mypros')">
         <div class="item">我的项目</div>
       </a>
-      <a class="single_item" @click="$router.push('/projectdetail')">
+      <!-- <a class="single_item" @click="$router.push('/projectdetail')">
         <div class="item">项目细节</div>
-      </a>
+      </a> -->
       <div class="bottom">
         <a class="single_item" @mouseenter="briefShow" @mouseleave="briefHidden">
           <img v-show="avatar ? true : false" :src="avatar" alt="">
-          <img v-show="avatar ? false : true" src="../assets/head.png" alt="">
+          <img v-show="avatar ? false : true" src="../assets/img/head.png" alt="">
         </a>
         <div class="brief" id="brief" @mouseenter="briefShow"  @mouseleave="briefHidden">
           <div class="title">
@@ -25,7 +25,7 @@
             <span>{{ data.userPhone }}</span>
           </div>
           <div class="mine" @click="$router.push('/hello')">
-            <img src="../assets/per.png" alt="">
+            <img src="../assets/img/per.png" alt="">
             <span>我的资料</span>
           </div>
         </div>
@@ -35,8 +35,8 @@
 </template>
 
 <script>
-import img from '../assets/menu.png'
-import imgo from '../assets/menu1.png'
+import img from '../assets/img/menu.png'
+import imgo from '../assets/img/menu1.png'
 export default {
   name: 'sidebar',
   data () {
@@ -127,7 +127,7 @@ export default {
   .head {
     .single_item {
       transition: 1s;
-      background-image: url('../assets/menu.png');
+      background-image: url('../assets/img/menu.png');
     }
   }
   .con {
@@ -142,26 +142,26 @@ export default {
     transition: 1s;
     .single_item:nth-of-type(1) {
       transition: 1s;
-      background-image: url('../assets/add1.png');
+      background-image: url('../assets/img/add1.png');
       &:hover {
         transition: 1s;
-        background-image: url('../assets/add.png');
+        background-image: url('../assets/img/add.png');
       }
     }
     .single_item:nth-of-type(2) {
-      background-image: url('../assets/file1.png');
+      background-image: url('../assets/img/file1.png');
       transition: 1s;
       &:hover {
         transition: 1s;
-        background-image: url('../assets/file.png');
+        background-image: url('../assets/img/file.png');
       }
     }
     .single_item:nth-of-type(3) {
-      background-image: url('../assets/nav_file_n.png');
+      background-image: url('../assets/img/nav_file_n.png');
       transition: 1s;
       &:hover {
         transition: 1s;
-        background-image: url('../assets/nav_file_n1.png');
+        background-image: url('../assets/img/nav_file_n1.png');
       }
     }
     .single_item img {

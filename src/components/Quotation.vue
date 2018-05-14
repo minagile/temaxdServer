@@ -97,7 +97,7 @@ export default {
       })
     },
     chooseData (e, data, index, iIndex, k, id) {
-      console.log(e.target.parentNode.parentNode.parentNode)
+      // console.log(e.target.parentNode.parentNode.parentNode)
       if (!/[\u4e00-\u9fa5]/.test(data)) {
         let oTr = e.target.parentNode.parentNode.parentNode.children
         for (var i = 0; i < oTr.length; i++) {

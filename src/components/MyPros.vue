@@ -6,11 +6,10 @@
       <div class="pro_list">
         <div class="figure" v-for="(data, index) in list" :key="index">
           <div class="tit">{{ data.docName }}</div>
-          <div class="con">
-            <img src="../assets/nav_file_n.png" alt="">
+          <div class="con" @click="link(data.docId)">
+            <img src="../assets/img/nav_file_n.png" alt="">
             <div class="status">{{ data.type }}</div>
             <div class="time">{{ data.docDate.split(' ')[0].replace('-', '.').replace('-', '.') }}创建</div>
-            <!-- {{ data.docId }} -->
           </div>
         </div>
       </div>
@@ -40,7 +39,7 @@ export default {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
-        console.log(res)
+        // console.log(res)
         this.list = res.data
       })
       that.$http.get('http://www.temaxd.com/getUserInfo', {
@@ -49,6 +48,12 @@ export default {
         }
       }).then(res => {
         this.avatar = res.data.userAvatar
+      })
+    },
+    link (id) {
+      this.$router.push({
+        name: 'ProjectDetail',
+        query: {id: id}
       })
     }
   },
@@ -94,6 +99,7 @@ export default {
       box-sizing: border-box;
       background: #fff;
       transition: 0.3s;
+      cursor: pointer;
       .tit {
         padding: 20px 15px;
         line-height: 16px;

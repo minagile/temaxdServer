@@ -96,15 +96,12 @@ export default {
       let type = localStorage.getItem('type')
       this.isPay = true
       let that = this
-      // let config = { headers: { 'Content-Type': 'multipart/form-data' } }
       if (type === 'package') {
         let str = JSON.parse(sessionStorage.getItem('total')).select
         let arr = []
         str.forEach(v => {
           arr.push([v.classify, v.second, v.text])
         })
-        // console.log(JSON.stringify(arr))
-        // console.log(this.data)
         that.$http.get('https://www.temaxd.com/addDocs', {
           params: {
             docId: sessionStorage.getItem('docId'),
@@ -115,12 +112,12 @@ export default {
         }).then((res) => {
           console.log(res)
           let iTimer = setInterval(() => {
-            window.location.href = 'https://www.temaxd.com'
+            // window.location.href = 'https://www.temaxd.com'
+            this.$router.push('/hello')
             clearInterval(iTimer)
           }, 8000)
         })
       } else {
-        // console.log(JSON.parse(sessionStorage.getItem('quotation_data'))[2])
         that.$http.get('https://www.temaxd.com/addDocs', {
           params: {
             docId: sessionStorage.getItem('docId'),
@@ -131,7 +128,8 @@ export default {
         }).then((res) => {
           console.log(res)
           let iTimer = setInterval(() => {
-            window.location.href = 'https://www.temaxd.com'
+            // window.location.href = 'https://www.temaxd.com'
+            this.$router.push('/hello')
             clearInterval(iTimer)
           }, 8000)
         })

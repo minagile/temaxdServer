@@ -322,7 +322,7 @@ export default {
       // }
     },
     numberRange (e, data) {
-      console.log(e.path[2].children[0].innerHTML)
+      // console.log(e.path[2].children[0].innerHTML)
       if (data === 0) {
         e.path[2].children[0].innerHTML = '数量'
         e.path[2].children[2].children[0].style.top = '0'
@@ -397,7 +397,7 @@ export default {
           // 存入数据
           let that = this
           let data = JSON.parse(sessionStorage.getItem('intro_data_pack'))
-          console.log(data)
+          // console.log(data)
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
               designs_type: JSON.stringify([['套餐'], sdata]), // 设计类型
@@ -421,7 +421,7 @@ export default {
               userId: localStorage.getItem('userId')
             }
           }).then((res) => {
-            console.log(res)
+            // console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
             sessionStorage.setItem('total', JSON.stringify({
               'TotalPrice': this.totalPrice,
@@ -454,18 +454,10 @@ export default {
         } else {
           this.isNumShow = true
         }
-        // let pageData = JSON.parse(sessionStorage.getItem('page_select_data'))
-        // if (pageData) {
-        //   this.chooseList = pageData.list
-        //   this.selected = pageData.select
-        //   this.datalist = pageData.datalist
-        //   this.isClick = true
-        // }
       }
     },
     // 选中存入数据、、左边第i个、第iIndex个多选项、chooseList中第index个
     taskChoose (e, i, index, iIndex, id, data, erdata) {
-      console.log(e)
       this.datalist = [{'select': []}, {'select': []}, {'select': []}, {'select': []}]
       // 判断是否选中
       if (e.target.checked === true) {

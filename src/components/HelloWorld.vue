@@ -12,10 +12,10 @@
         <div class="info">
           <div class="head-portrait">
             <img v-if="avatar ? true: false" :src="avatar" />
-            <img v-if="avatar ? false: true" src="../assets/head.png" />
+            <img v-if="avatar ? false: true" src="../assets/img/head.png" />
             <div class="head-info">
               <div class="change-head">
-                <img src="../assets/per.png" alt="">
+                <img src="../assets/img/per.png" alt="">
                 <a>修改头像
                   <input type="file"
                   name="avatar"
@@ -32,7 +32,7 @@
               <div class="col-input" v-show="!hasName">
                 <span v-if="userName ? false: true">未命名</span>
                 <span v-if="userName ? true: false">{{ userName }}</span>
-                <img src="../assets/write.png" @click="hasName = true" />
+                <img src="../assets/img/write.png" @click="hasName = true" />
               </div>
               <div class="col-input user-name" v-show="hasName">
                 <input type="text" v-model="nickName">
@@ -46,7 +46,7 @@
                 <div class="tian" style="overflow:hidden;">
                   <span v-if="userPosition ? false: true">暂未填写职位信息</span>
                   <span v-if="userPosition ? true: false">{{ userPosition }}</span>
-                  <img src="../assets/write.png" @click="hasPosition = true" />
+                  <img src="../assets/img/write.png" @click="hasPosition = true" />
                 </div>
               </div>
               <div class="col-input user-name" v-show="hasPosition">
@@ -59,7 +59,7 @@
               <div class="col">手机号码</div>
               <div class="col-input" v-show="!hasPhone">
                 <span>{{ userPhone }}</span>
-                <img src="../assets/write.png" @click="hasPhone = true" />
+                <img src="../assets/img/write.png" @click="hasPhone = true" />
               </div>
               <div class="col-input" v-show="hasPhone">
                 <div class="send_code">
@@ -77,7 +77,7 @@
               <div class="col">电子邮箱</div>
               <div class="col-input" v-show="!hasEmail">
                 <span>{{ userEmail }}</span>
-                <img src="../assets/write.png" @click="hasEmail = true" />
+                <img src="../assets/img/write.png" @click="hasEmail = true" />
               </div>
               <div class="col-input email" v-show="hasEmail">
                 <div class="send_code">
@@ -169,7 +169,7 @@ export default {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         this.avatar = res.data.userAvatar
         this.userEmail = res.data.userEmail
         this.userName = res.data.userName
@@ -183,19 +183,22 @@ export default {
     // 上传头像
     file (e) {
       var file = e.target.files[0]
-      var reader = new FileReader()
-      var that = this
-      reader.onload = function (e) {
-        that.avatar = this.result
+      if (file.size > 1024 * 1024 * 5) {
+        alert('图片大小超过5M，请重新选择')
+      } else {
+        var reader = new FileReader()
+        var that = this
+        reader.onload = function (e) {
+          that.avatar = this.result
+        }
+        reader.readAsDataURL(file)
+        var image = new FormData()
+        image.append('file', file)
+        let config = { headers: { 'Content-Type': 'multipart/form-data' } }
+        this.$http.post('http://www.temaxd.com/uploadHeadIMG?fileName=' + file.type.split('/')[1] + '&userId=' + localStorage.getItem('userId') + '&oldFileName=' + this.userAvatar, image, config).then(function (response) {
+          this.avatar = response.data.image
+        })
       }
-      reader.readAsDataURL(file)
-      var image = new FormData()
-      image.append('file', file)
-      let config = { headers: { 'Content-Type': 'multipart/form-data' } }
-      this.$http.post('http://www.temaxd.com/uploadHeadIMG?fileName=' + file.type.split('/')[1] + '&userId=' + localStorage.getItem('userId') + '&oldFileName=' + this.userAvatar, image, config).then(function (response) {
-        // console.log(response.data)
-        this.avatar = response.data.image
-      })
     },
     // 修改昵称
     saveName () {
@@ -218,7 +221,7 @@ export default {
         userPosition: JSON.stringify(this.position),
         userId: localStorage.getItem('userId')
       }, {emulateJSON: true}).then(res => {
-        console.log(res.data)
+        // console.log(res.data)
         if (res.data.code === '200') {
           this.hasPosition = false
           this.getInfo()
@@ -245,7 +248,7 @@ export default {
           userPhone: this.userPhone,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.data.code === '200') {
             this.hasPhone = false
           }
@@ -272,7 +275,7 @@ export default {
           userEmail: this.userEmail,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.data.code === '200') {
             this.hasEmail = false
           }
@@ -288,7 +291,7 @@ export default {
           userQQ: this.userQQ,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.data.code === '200') {
             this.hasQQ = false
           }
@@ -304,7 +307,7 @@ export default {
           userWeiXin: this.userWeiXin,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
-          console.log(res.data)
+          // console.log(res.data)
           if (res.data.code === '200') {
             this.hasWeixin = false
           }

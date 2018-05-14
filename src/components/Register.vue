@@ -67,7 +67,7 @@ export default {
           this.$http.post('http://www.temaxd.com/sendEmail', {
             email: this.phoneNumber
           }, { emulateJSON: true }).then(response => {
-            console.log(response.data)
+            // console.log(response.data)
             this.timeOut = true
             this.countDown(60, ev.path[0])
             this.confirmCode = response.data[1].RAND
@@ -93,7 +93,7 @@ export default {
               account: this.phoneNumber,
               pwd: this.password
             }, { emulateJSON: true }).then(response => {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data.code === '200') {
                 this.$router.push('/login')
                 localStorage.setItem('userId', response.data.userId)
@@ -120,7 +120,7 @@ export default {
               account: this.phoneNumber,
               pwd: this.password
             }, { emulateJSON: true }).then(response => {
-              console.log(response.data)
+              // console.log(response.data)
               if (response.data.code === '200') {
                 this.$router.push('/login')
                 localStorage.setItem('userId', response.data.userId)
