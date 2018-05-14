@@ -163,7 +163,7 @@ export default {
           // 存入数据
           let that = this
           let data = JSON.parse(sessionStorage.getItem('file_data'))
-          console.log(localStorage.getItem('userId'))
+          console.log(data[1].file)
           that.$http.get('https://www.temaxd.com/addDoc', {
             params: {
               designs_type: JSON.stringify([['单项'], data[0][0]]), // 设计类型
@@ -187,7 +187,7 @@ export default {
               userId: localStorage.getItem('userId')
             }
           }).then((res) => {
-            // console.log(res)
+            console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
             this.$router.push({name: 'Agreement'})
           }).catch(err => {

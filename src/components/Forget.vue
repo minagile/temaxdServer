@@ -57,7 +57,7 @@ export default {
       } else if (this.number.indexOf('@') === -1) {
         if ((/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.number))) {
           if (this.timeOut === false) {
-            this.$http.post('http://www.temaxd.com/sendPhone', {
+            this.$http.post('https://www.temaxd.com/sendPhone', {
               phone: this.number
             }, { emulateJSON: true }).then(response => {
               console.log(response.data.RAND)
@@ -74,7 +74,7 @@ export default {
       } else {
         if ((/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.number))) {
           if (this.timeOut === false) {
-            this.$http.post('http://www.temaxd.com/sendEmail', {
+            this.$http.post('https://www.temaxd.com/sendEmail', {
               email: this.number
             }, { emulateJSON: true }).then(response => {
               console.log(response.data[1].RAND)
@@ -102,7 +102,7 @@ export default {
       } else {
         if (this.password === this.confirmpassword) {
           if (this.code === this.confirmCode) {
-            this.$http.post('http://www.temaxd.com/forgetUser', {
+            this.$http.post('https://www.temaxd.com/forgetUser', {
               account: this.number,
               pwd: this.password
             }, { emulateJSON: true }).then(response => {

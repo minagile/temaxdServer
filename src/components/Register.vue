@@ -51,7 +51,7 @@ export default {
         alert('密码不能为空')
       } else if ((/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.phoneNumber))) {
         if (this.timeOut === false) {
-          this.$http.post('http://www.temaxd.com/sendPhone', {
+          this.$http.post('https://www.temaxd.com/sendPhone', {
             phone: this.phoneNumber
           }, { emulateJSON: true }).then(response => {
             console.log(response.data.RAND)
@@ -64,7 +64,7 @@ export default {
         }
       } else if ((/^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.phoneNumber))) {
         if (this.timeOut === false) {
-          this.$http.post('http://www.temaxd.com/sendEmail', {
+          this.$http.post('https://www.temaxd.com/sendEmail', {
             email: this.phoneNumber
           }, { emulateJSON: true }).then(response => {
             // console.log(response.data)
@@ -89,7 +89,7 @@ export default {
           if (this.code === '') {
             alert('请输入验证码')
           } else if (this.code === this.confirmCode) {
-            this.$http.post('http://www.temaxd.com/addUser', {
+            this.$http.post('https://www.temaxd.com/addUser', {
               account: this.phoneNumber,
               pwd: this.password
             }, { emulateJSON: true }).then(response => {
@@ -116,7 +116,7 @@ export default {
           if (this.code === '') {
             alert('请输入验证码')
           } else if (this.code === this.confirmCode) {
-            this.$http.post('http://www.temaxd.com/addUser', {
+            this.$http.post('https://www.temaxd.com/addUser', {
               account: this.phoneNumber,
               pwd: this.password
             }, { emulateJSON: true }).then(response => {

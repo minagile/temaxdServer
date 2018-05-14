@@ -64,7 +64,8 @@ export default {
       remnant: 500,
       isPackageShow: true,
       path: '',
-      list: []
+      list: [],
+      id: ''
     }
   },
   mounted () {
@@ -85,6 +86,7 @@ export default {
         zipFormData.append('file', e.target.files[0]) //filename是键，file是值，就是要传的文件，test.zip是要传的文件名
         let config = { headers: { 'Content-Type': 'multipart/form-data' } }
         this.$http.post('https://www.temaxd.com/uploadFile?fileName=' + this.path.name, zipFormData, config).then(function (response) {
+          this.id = response.data.wordId
           console.log(response.data)
         })
       }
@@ -114,23 +116,17 @@ export default {
     next () {
       this.$router.push({
         name: 'IntroCompany',
-        // params: {
-        //   Introcompany: [
-        //     JSON.parse(sessionStorage.getItem('specific_demand_data')),
-        //     {'file': this.path.name, 'info': this.desc}
-        //   ]
-        // }
       })
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        sessionStorage.setItem('file_data_pack', JSON.stringify(
+        sessionStorage.setItem(' ', JSON.stringify(
           [JSON.parse(sessionStorage.getItem('specific_demand_data_pack')),
-          {'file': this.path.name, 'info': this.desc}]
+          {'file': this.id, 'info': this.desc}]
         ))
       } else {
         sessionStorage.setItem('file_data', JSON.stringify(
           [JSON.parse(sessionStorage.getItem('specific_demand_data')),
-          {'file': this.path.name, 'info': this.desc}]
+          {'file': this.id, 'info': this.desc}]
         ))
       }
     },

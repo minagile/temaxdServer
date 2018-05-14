@@ -106,7 +106,7 @@ export default {
   methods: {
     getdata () {
       let that = this
-      that.$http.get('http://www.temaxd.com/getUserInfo', {
+      that.$http.get('https://www.temaxd.com/getUserInfo', {
         params: {
           userId: localStorage.getItem('userId')
         }
@@ -114,7 +114,7 @@ export default {
         // console.log(res.data)
         this.avatar = res.data.userAvatar
       })
-      that.$http.get('http://www.temaxd.com/getDocInfo', {
+      that.$http.get('https://www.temaxd.com/getDocInfo', {
         params: {
           docId: this.$route.query.id
         }

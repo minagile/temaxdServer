@@ -4,7 +4,7 @@
       <div class="single_item" id="head" @click="changeMenu"></div>
     </div>
     <div class="con" id="hide">
-      <a class="single_item" @click="$router.push('/')">
+      <a class="single_item" @click="$router.push('/')" :style="{'background-image': 'url(' + add + ')'}">
         <div class="item">发布项目</div>
       </a>
       <a class="single_item" @click="$router.push('/mypros')">
@@ -37,27 +37,33 @@
 <script>
 import img from '../assets/img/menu.png'
 import imgo from '../assets/img/menu1.png'
+import add from '../assets/img/add1.png'
+import addo from '../assets/img/add.png'
 export default {
   name: 'sidebar',
   data () {
     return {
       isHide: false,
-      data: ''
+      data: '',
+      add: add,
+      addo: addo
     }
   },
   mounted () {
     this.getInfo()
+    // console.log(this.avatar)
   },
   methods: {
     getInfo () {
       let that = this
-      that.$http.get('http://www.temaxd.com/getUserInfo', {
+      that.$http.get('https://www.temaxd.com/getUserInfo', {
         params: {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
         // console.log(res.data)
         this.data = res.data
+        // this.avatar = res.data.userAvatar
       })
     },
     changeMenu () {

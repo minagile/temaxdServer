@@ -164,7 +164,7 @@ export default {
     // 获取用户基本信息
     getInfo () {
       let that = this
-      that.$http.get('http://www.temaxd.com/getUserInfo', {
+      that.$http.get('https://www.temaxd.com/getUserInfo', {
         params: {
           userId: localStorage.getItem('userId')
         }
@@ -183,6 +183,7 @@ export default {
     // 上传头像
     file (e) {
       var file = e.target.files[0]
+      // console.log(file)
       if (file.size > 1024 * 1024 * 5) {
         alert('图片大小超过5M，请重新选择')
       } else {
@@ -195,7 +196,7 @@ export default {
         var image = new FormData()
         image.append('file', file)
         let config = { headers: { 'Content-Type': 'multipart/form-data' } }
-        this.$http.post('http://www.temaxd.com/uploadHeadIMG?fileName=' + file.type.split('/')[1] + '&userId=' + localStorage.getItem('userId') + '&oldFileName=' + this.userAvatar, image, config).then(function (response) {
+        this.$http.post('https://www.temaxd.com/uploadHeadIMG?fileName=' + file.type.split('/')[1] + '&userId=' + localStorage.getItem('userId') + '&oldFileName=' + this.userAvatar, image, config).then(function (response) {
           this.avatar = response.data.image
         })
       }
@@ -203,7 +204,7 @@ export default {
     // 修改昵称
     saveName () {
       let that = this
-      that.$http.post('http://www.temaxd.com/bindUserName', {
+      that.$http.post('https://www.temaxd.com/bindUserName', {
         userName: JSON.stringify(this.nickName),
         userId: localStorage.getItem('userId')
       }, {emulateJSON: true}).then(res => {
@@ -230,7 +231,7 @@ export default {
     },
     // 修改电话号码
     sendCodeChange () {
-      this.$http.post('http://www.temaxd.com/sendPhone', {
+      this.$http.post('https://www.temaxd.com/sendPhone', {
         phone: this.userPhone
       }, { emulateJSON: true }).then(response => {
         console.log(response.data.RAND)
@@ -244,7 +245,7 @@ export default {
         alert('请输入验证码')
       } else if (this.confirmCode === this.phoneCode) {
         let that = this
-        that.$http.post('http://www.temaxd.com/bindUserPhone', {
+        that.$http.post('https://www.temaxd.com/bindUserPhone', {
           userPhone: this.userPhone,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
@@ -257,7 +258,7 @@ export default {
     },
     // 修改邮箱
     sendEmail () {
-      this.$http.post('http://www.temaxd.com/sendEmail', {
+      this.$http.post('https://www.temaxd.com/sendEmail', {
         phone: this.userPhone
       }, { emulateJSON: true }).then(response => {
         console.log(response.data[1].RAND)
@@ -271,7 +272,7 @@ export default {
         alert('请输入验证码')
       } else if (this.confirmEmailCode === this.emailCode) {
         let that = this
-        that.$http.post('http://www.temaxd.com/bindUserEmail', {
+        that.$http.post('https://www.temaxd.com/bindUserEmail', {
           userEmail: this.userEmail,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
@@ -287,7 +288,7 @@ export default {
         alert('请输入验证码')
       } else {
         let that = this
-        that.$http.post('http://www.temaxd.com/bindUserQQ', {
+        that.$http.post('https://www.temaxd.com/bindUserQQ', {
           userQQ: this.userQQ,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {
@@ -303,7 +304,7 @@ export default {
         alert('请输入验证码')
       } else {
         let that = this
-        that.$http.post('http://www.temaxd.com/bindUserWeiXin', {
+        that.$http.post('https://www.temaxd.com/bindUserWeiXin', {
           userWeiXin: this.userWeiXin,
           userId: localStorage.getItem('userId')
         }, {emulateJSON: true}).then(res => {

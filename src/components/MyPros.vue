@@ -34,19 +34,22 @@ export default {
     // 获取用户基本信息
     getInfo () {
       let that = this
-      that.$http.get('http://www.temaxd.com/getUserDoc', {
+      that.$http.get('https://www.temaxd.com/getUserDoc', {
         params: {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
         // console.log(res)
-        this.list = res.data
+        if (res.data) {
+          this.list = res.data
+        }
       })
-      that.$http.get('http://www.temaxd.com/getUserInfo', {
+      that.$http.get('https://www.temaxd.com/getUserInfo', {
         params: {
           userId: localStorage.getItem('userId')
         }
       }).then(res => {
+        // console.log(res.data.userAvatar)
         this.avatar = res.data.userAvatar
       })
     },

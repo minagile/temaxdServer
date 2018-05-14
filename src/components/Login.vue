@@ -30,7 +30,7 @@ export default {
       } else if (this.password === '') {
         alert('请输入密码')
       } else if (/^1[3|4|5|8][0-9]\d{4,8}$/.test(this.user) || /^[A-Za-z0-9\u4e00-\u9fa5]+@[a-zA-Z0-9_-]+(\.[a-zA-Z0-9_-]+)+$/.test(this.user)) {
-        this.$http.post('http://www.temaxd.com/doLogin', {
+        this.$http.post('https://www.temaxd.com/doLogin', {
           account: this.user,
           pwd: this.password
         }, { emulateJSON: true }).then(response => {
@@ -39,8 +39,8 @@ export default {
           if (response.data.code === '200') {
             // alert('登录成功')
             localStorage.setItem('userId', response.data.userId)
-            this.$router.push('/hello')
-            // window.location.href = 'file://Users/sushanshan/Desktop/Temaxd/index.html'
+            // this.$router.push('/hello')
+            window.location.href = 'https://www.temaxd.com/'
           } else {
             alert(response.data.message)
           }
