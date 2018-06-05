@@ -4,7 +4,7 @@
       <div class="single_item" id="head" @click="changeMenu"></div>
     </div>
     <div class="con" id="hide">
-      <a class="single_item" @click="$router.push('/')" :style="{'background-image': 'url(' + add + ')'}">
+      <a class="single_item" @click="$router.push('/choose')" :style="{'background-image': 'url(' + add + ')'}">
         <div class="item">发布项目</div>
       </a>
       <a class="single_item" @click="$router.push('/mypros')">

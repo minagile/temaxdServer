@@ -67,7 +67,7 @@
                   </div>
                 </div>
               </div>
-              <div class="right_bottom" v-if="isclick">
+              <div class="right_bottom" v-show="isclick">
                 <h6>可填写确定数量和大概范围</h6>
                 <div class="range" v-for="(num, n) in datalist[index].select" :key="n">
                   <div class="tit">{{num.text}}</div>
@@ -111,7 +111,7 @@
             <div class="right_part">
               <div class="right_top">
                 <h6>请选择任务明细</h6>
-                <div class="task">
+                <div class="task" id="task">
                   <div class="checkbox" v-for="(data, k) in data.chooseObj.list" :key="k">
                     <input type="checkbox" name="logo" :value="data" @click="taskChoose($event, k, index)" />{{data}}
                   </div>
@@ -227,7 +227,7 @@ export default {
           }
         ],
         [
-          {'text': '品牌形象', 'imgsrc': Retailers.onlineOne}
+          {'text': '电商创意', 'imgsrc': Retailers.onlineOne}
         ],
         [
           {
@@ -421,7 +421,7 @@ export default {
               userId: localStorage.getItem('userId')
             }
           }).then((res) => {
-            // console.log(res)
+            console.log(res)
             sessionStorage.setItem('docId', JSON.stringify(res.data.split(':')[1]))
             sessionStorage.setItem('total', JSON.stringify({
               'TotalPrice': this.totalPrice,
@@ -531,6 +531,12 @@ export default {
     },
     // 套餐
     levelList (e, i) {
+      // console.log(document.getElementById('task').children)
+      let data = document.getElementById('task').children
+      for (var v = 0; v < data.length; v++) {
+        data[v].children[0].checked = false
+        this.selected = []
+      }
       this.indexi = i
       let bgColor = e.target.parentNode.parentNode.children
       for (var m = 1; m < bgColor.length; m++) {
@@ -548,32 +554,70 @@ export default {
     },
     // 点击事件
     chooseKind (event, i) {
-      let detail = document.getElementById('detail')
-      if (detail.style.display === 'none') {
-        detail.style.display = 'block'
-      } else {
-        detail.style.display = 'none'
-      }
-      let kinds = document.getElementById('kinds')
-      let element = kinds.children[i].children[0]
-      // 勾选按钮
-      let chooseObj = {}
-      if (element.style.display !== 'block') {
-        element.style.display = 'block'
-        chooseObj = this.Data.data[i]
-        this.chooseList.push({chooseObj: chooseObj, id: i})
-      } else {
-        element.style.display = 'none'
-        this.chooseList.forEach((v, k) => {
-          if (v.id === i) {
-            this.chooseList.splice(k, 1)
+      let type = localStorage.getItem('type')
+      if (type === 'package') {
+        let detail = document.getElementById('detail')
+        if (detail.style.display === 'none') {
+          detail.style.display = 'block'
+        } else {
+          detail.style.display = 'none'
+        }
+        let kinds = document.getElementById('kinds')
+        let element = kinds.children[i].children[0]
+        // 勾选按钮
+        let chooseObj = {}
+        if (element.style.display !== 'block') {
+          element.style.display = 'block'
+          for (var x = 0; x < 4; x++) {
+            if (i !== x) {
+              kinds.children[x].children[0].style.display = 'none'
+            }
           }
-        })
-      }
-      if (this.chooseList.length === 0) {
-        this.isClick = false
+          chooseObj = this.Data.data[i]
+          this.selected = []
+          this.chooseList = []
+          this.chooseList.push({chooseObj: chooseObj, id: i})
+        }
+        if (this.chooseList.length === 0) {
+          this.isClick = false
+        } else {
+          this.isClick = true
+        }
+        if (document.getElementById('task')) {
+          let data = document.getElementById('task').children
+          for (var v = 0; v < data.length; v++) {
+            data[v].children[0].checked = false
+            this.selected = []
+          }
+        }
       } else {
-        this.isClick = true
+        let detail = document.getElementById('detail')
+        if (detail.style.display === 'none') {
+          detail.style.display = 'block'
+        } else {
+          detail.style.display = 'none'
+        }
+        let kinds = document.getElementById('kinds')
+        let element = kinds.children[i].children[0]
+        // 勾选按钮
+        let chooseObj = {}
+        if (element.style.display !== 'block') {
+          element.style.display = 'block'
+          chooseObj = this.Data.data[i]
+          this.chooseList.push({chooseObj: chooseObj, id: i})
+        } else {
+          element.style.display = 'none'
+          this.chooseList.forEach((v, k) => {
+            if (v.id === i) {
+              this.chooseList.splice(k, 1)
+            }
+          })
+        }
+        if (this.chooseList.length === 0) {
+          this.isClick = false
+        } else {
+          this.isClick = true
+        }
       }
     }
   }

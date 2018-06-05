@@ -29,12 +29,20 @@ export default {
   },
   methods: {
     individual () {
-      this.$router.push('/ChoosePage/SimpleSelect')
-      localStorage.setItem('type', 'individual')
+      if (localStorage.getItem('userId')) {
+        this.$router.push('/ChoosePage/SimpleSelect')
+        localStorage.setItem('type', 'individual')
+      } else {
+        this.$router.push('login')
+      }
     },
     setMeal () {
-      this.$router.push('/ChoosePage/Demand')
-      localStorage.setItem('type', 'package')
+      if (localStorage.getItem('userId')) {
+        this.$router.push('/ChoosePage/Demand')
+        localStorage.setItem('type', 'package')
+      } else {
+        this.$router.push('login')
+      }
     }
   }
 }

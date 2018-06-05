@@ -312,16 +312,12 @@ export default {
           'WorkPlace': this.workPlace
         }
         if (type === 'package') {
-          if (this.proPrice === '') {
-            alert('您还没有选择项目预算')
-          } else {
-            let SpecificDemandData = [
-              JSON.parse(sessionStorage.getItem('page_demand_data_pack')),
-              specific
-            ]
-            this.$router.push('/ChoosePage/attachment')
-            sessionStorage.setItem('specific_demand_data_pack', JSON.stringify(SpecificDemandData))
-          }
+          let SpecificDemandData = [
+            JSON.parse(sessionStorage.getItem('page_demand_data_pack')),
+            specific
+          ]
+          this.$router.push('/ChoosePage/attachment')
+          sessionStorage.setItem('specific_demand_data_pack', JSON.stringify(SpecificDemandData))
         } else {
           let SpecificDemandData = [
             JSON.parse(sessionStorage.getItem('page_select_data')).select,

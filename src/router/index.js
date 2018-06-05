@@ -16,6 +16,8 @@ import Register from '@/components/Register'
 import Forget from '@/components/Forget'
 import MyPros from '@/components/MyPros'
 import ProjectDetail from '@/components/ProjectDetail'
+import ModelHomePage from "@/components/model/ModelHomePage"
+import ModelSecond from "@/components/model/ModelSecond"
 
 Vue.use(Router)
 
@@ -23,92 +25,102 @@ export default new Router({
   // mode: 'history',
   routes: [
     {
-      path: '/hello',
-      name: 'HelloWorld',
+      path: "/hello",
+      name: "HelloWorld",
       component: HelloWorld
     },
     {
-      path: '/projectdetail',
-      name: 'ProjectDetail',
+      path: "/projectdetail",
+      name: "ProjectDetail",
       component: ProjectDetail
     },
     {
-      path: '/login',
-      name: 'Login',
+      path: "/login",
+      name: "Login",
       component: Login
     },
     {
-      path: '/register',
-      name: 'Register',
+      path: "/register",
+      name: "Register",
       component: Register
     },
     {
-      path: '/forget',
-      name: 'Forget',
+      path: "/forget",
+      name: "Forget",
       component: Forget
     },
     {
-      path: '/mypros',
-      name: 'MyPros',
+      path: "/mypros",
+      name: "MyPros",
       component: MyPros
     },
     {
-      path: '/',
-      name: 'HomePage',
+      path: "/choose",
+      name: "HomePage",
       component: HomePage
     },
     {
-      path: '/ChoosePage',
-      name: 'ChoosePage',
+      path: "/ChoosePage",
+      name: "ChoosePage",
       component: ChoosePage
     },
     // 单项选择
     {
-      path: '/ChoosePage/SimpleSelect',
-      name: 'SimpleSelect',
+      path: "/ChoosePage/SimpleSelect",
+      name: "SimpleSelect",
       component: SimpleSelect
     },
     // 需求
     {
-      path: '/ChoosePage/Demand',
-      name: 'Demand',
+      path: "/ChoosePage/Demand",
+      name: "Demand",
       component: Demand
     },
     // 具体需求
     {
-      path: '/ChoosePage/SpecificDemand',
-      name: 'SpecificDemand',
+      path: "/ChoosePage/SpecificDemand",
+      name: "SpecificDemand",
       component: SpecificDemand
     },
     // 附件
     {
-      path: '/ChoosePage/attachment',
-      name: 'Attachment',
+      path: "/ChoosePage/attachment",
+      name: "Attachment",
       component: Attachment
     },
     // 介绍公司
     {
-      path: '/ChoosePage/introcompany',
-      name: 'IntroCompany',
+      path: "/ChoosePage/introcompany",
+      name: "IntroCompany",
       component: IntroCompany
     },
     // 单项报价
     {
-      path: '/ChoosePage/quotation',
-      name: 'Quotation',
+      path: "/ChoosePage/quotation",
+      name: "Quotation",
       component: Quotation
     },
     // 合同
     {
-      path: '/ChoosePage/agreement',
-      name: 'Agreement',
+      path: "/ChoosePage/agreement",
+      name: "Agreement",
       component: Agreement
     },
     // 单项价格 报价 支付
     {
-      path: '/ChoosePage/singleprice',
-      name: 'SinglePrice',
+      path: "/ChoosePage/singleprice",
+      name: "SinglePrice",
       component: SinglePrice
+    },
+    {
+      path: "/",
+      name: "ModelHomePage",
+      component: ModelHomePage
+    },
+    {
+      path: "/model/ModelSecond",
+      name: "ModelSecond",
+      component: ModelSecond
     }
   ]
-})
+});

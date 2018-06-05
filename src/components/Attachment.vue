@@ -119,7 +119,7 @@ export default {
       })
       let type = localStorage.getItem('type')
       if (type === 'package') {
-        sessionStorage.setItem(' ', JSON.stringify(
+        sessionStorage.setItem('file_data_pack', JSON.stringify(
           [JSON.parse(sessionStorage.getItem('specific_demand_data_pack')),
           {'file': this.id, 'info': this.desc}]
         ))

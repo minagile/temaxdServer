@@ -25,14 +25,14 @@
                     <div class="event">
                       <div class="t">1．委托事项</div>
                       <span class="choose" v-for="(data, index) in list" :key="index">
-                        <input type="checkbox" v-model="checkNames" :value="data" />
+                        <input type="checkbox" v-model="checkNames" :value="data" disabled/>
                         <span>{{ data }}</span>
                       </span>
                     </div>
                     <div class="event">
                       <div class="t">2．{{sOrP}}模式</div>
                       <span class="choose" v-for="(data, index) in listco" :key="index">
-                        <input type="radio" @click="chooseCoopration($event, index)" name="choose" :value="data" v-model="radiodata"/>
+                        <input type="radio" @click="chooseCoopration($event, index)" name="choose" :value="data" v-model="radiodata" />
                         <span>{{ data }}</span>
                       </span>
                     </div>
@@ -347,6 +347,7 @@ export default {
         this.isPackageShow = false
         this.listco = ['次数合作', '月度合作', '季度合作', '年度合作']
         this.sOrP = '套餐'
+        // this.radiodata = '次数合作'
         let total = JSON.parse(sessionStorage.getItem('total'))
         this.price = total.TotalPrice
         let agreeData = JSON.parse(sessionStorage.getItem('agreement_data_pack'))

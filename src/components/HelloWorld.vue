@@ -158,7 +158,11 @@ export default {
     }
   },
   mounted () {
-    this.getInfo()
+    if (localStorage.getItem('userId')) {
+      this.getInfo()
+    } else {
+      this.$router.push('login')
+    }
   },
   methods: {
     // 获取用户基本信息
